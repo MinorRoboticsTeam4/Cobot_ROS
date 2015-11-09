@@ -42,14 +42,15 @@ workspace_folder/         -- WORKSPACE
 Also, src packages (usually) follows this structure:
 
 package_x /
-	msg/			-- Contains Message(msg) types
-	srv/			-- Contains Service(srv) types
-	info/			-- Contains parameter(.yaml) files	
-	launch/			-- Contains launch files
+	msg/					-- Contains Message(msg) types
+	srv/					-- Contains Service(srv) types
+	info/					-- Contains parameter(.yaml) files	
+	launch/					-- Contains launch files
 
-	include/package_name_1	-- Contains C++ include headers, "package_name" is for additional readability if package is large	
+	include/package_name_x/ package_name_1	-- Contains C++ include headers, "package_name" is 
+						-- for additional readability if code needed to be seperate	
 	...
-	include/package_name_n	
+	include/package_name_x/ package_name_n	
 
 	src/package_name_1	-- Contains source files
 	...

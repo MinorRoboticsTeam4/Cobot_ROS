@@ -1,0 +1,30 @@
+Execute following command on top level directory
+
+catkin_make --force-cmake -G"Eclipse CDT4 - Unix Makefiles"
+
+Next run the following command to pass the current shell environment into the make process in Eclipse.
+
+awk -f $(rospack find mk)/eclipse.awk build/.project > build/.project_with_env && mv build/.project_with_env build/.project
+
+For adding debugging execute the following line
+
+cmake ../src -DCMAKE_BUILD_TYPE=Debug
+
+
+Import the project into Eclipse by selecting "import existing project" 
+and navigate to the "build" folder.
+
+
+After importing, right click on the project and click properties -> C/C++ general -> Preprocessor Include Paths, Macros etc. Click the tab "Providers" and check the box next to "CDT GCC Built-in Compiler Settings [ Shared ]".
+
+Afterwards, right click the project, select Index -> Rebuild. This will rebuild your index. Once this is done, usually all includes will resolve. 
+
+
+
+
+###TODO
+
+-add building process with CMakelists reminder
+-add running inside of eclipse for debugging
+
+
