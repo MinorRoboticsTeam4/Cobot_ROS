@@ -9,4 +9,5 @@ This document records all changes from the Movement package of [GitHub repo of C
 
 * Inital creation of this package
 * Added gamecontroller code
+* Added Doxygen
 
