@@ -14,9 +14,11 @@ Coming soon...
 
 Execute following command on top level directory
 
+
 '''bash
 catkin_make --force-cmake -G"Eclipse CDT4 - Unix Makefiles"
 '''
+
 
 Next run the following command to pass the current shell environment into the make process in Eclipse.
 
