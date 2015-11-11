@@ -15,22 +15,22 @@ Coming soon...
 Execute following command on top level directory
 
 
-'''bash
+```shell
 catkin_make --force-cmake -G"Eclipse CDT4 - Unix Makefiles"
-'''
+```
 
 
 Next run the following command to pass the current shell environment into the make process in Eclipse.
 
-´´´bash
+```shell
 awk -f $(rospack find mk)/eclipse.awk build/.project > build/.project_with_env && mv build/.project_with_env build/.project
-´´´
+```
 
 For adding debugging execute the following line
 
-´´´bash
+```shell
 cmake ../src -DCMAKE_BUILD_TYPE=Debug
-´´´
+```
 
 ### Importing
 
