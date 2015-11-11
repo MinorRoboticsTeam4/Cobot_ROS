@@ -1,6 +1,10 @@
 var classGamePadTeleop =
 [
     [ "GamePadTeleop", "classGamePadTeleop.html#af2a8ef6bcb2cdb124b1ecfb8ede60e22", null ],
+    [ "getAngularAxis", "classGamePadTeleop.html#acec7b6fba5ba56f41e9803f04fce06e1", null ],
+    [ "getAngularScale", "classGamePadTeleop.html#acb9336a04a104a6b1a5c00e453a02027", null ],
+    [ "getLinearAxis", "classGamePadTeleop.html#a98790b3fdcbca6dbf4b61ada6a9b6ec5", null ],
+    [ "getLinearScale", "classGamePadTeleop.html#abcd8b9d0685c1883cd8bfae585295995", null ],
     [ "joyCallback", "classGamePadTeleop.html#a75307b21a2ad204571bee1699f596307", null ],
     [ "angular", "classGamePadTeleop.html#aecf31787ed4f8eb93fb2889736937b04", null ],
     [ "angular_scale", "classGamePadTeleop.html#a4109dd79e7927e424cf81721f67ce517", null ],

@@ -1,8 +1,15 @@
 /*
  * gamepad_controller.h
  *
+ *  Created on: Nov 10, 2015
  *      Author: aclangerak
  */
+
+#ifndef MOVEMENT_INCLUDE_MOVEMENT_GAMEPAD_CONTROLLER_H_
+#define MOVEMENT_INCLUDE_MOVEMENT_GAMEPAD_CONTROLLER_H_
+
+#include <sensor_msgs/Joy.h>
+#include <ros/ros.h>
 
 
 /**
@@ -18,6 +25,26 @@ public:
 	 * Default Consctructor
 	 */
 	GamePadTeleop();
+
+	/**
+	 * Returns the set linear axis(from teleop.yaml)
+	 */
+	int getLinearAxis();
+
+	/**
+	 * Returns the set angular axis(from teleop.yaml)
+	 */
+	int getAngularAxis();
+
+	/**
+	 * Returns the set linear scale(from teleop.yaml)
+	 */
+	double getLinearScale();
+
+	/**
+	 * Returns the set angular scale(from teleop.yaml)
+	 */
+	double getAngularScale();
 
 private:
 	/**
@@ -52,3 +79,8 @@ private:
 
 };
 
+
+
+
+
+#endif /* MOVEMENT_INCLUDE_MOVEMENT_GAMEPAD_CONTROLLER_H_ */

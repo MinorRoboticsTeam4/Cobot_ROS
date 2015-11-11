@@ -4,14 +4,14 @@
   <node pkg="turtlesim" type="turtlesim_node" name="sim"/>
 
  
- <!-- Joy Node -->
-  <node respawn="true" pkg="joy" name="turtle_joy" type="joy_node">
+ <!-- Gamepad Joy Node -->
+  <node respawn="true" pkg="joy" name="gamepad" type="joy_node">
    <rosparam file="$(find movement)/info/gamepad.yaml" command="load" />
   </node>
 
 
  <!-- Gamepad Node -->  
-  <node pkg="movement" name="gamepad_controller" type="gamepad_controller">
+  <node pkg="movement" name="gamepad_controller" type="gamepad_controller" output="screen">
    <rosparam file="$(find movement)/info/teleop.yaml" command="load" />
   </node>
 

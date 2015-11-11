@@ -1,19 +1,80 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(movement)
+set(PROJECT_NAME movement)
+project(${PROJECT_NAME})
+
+
+####################################################
+## Installation of Google Test and Mock framework ##
+####################################################
+
+# We need thread support
+#find_package(Threads REQUIRED)
+
+# Enable ExternalProject CMake module
+#include(ExternalProject)
+
+#set(GTEST_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/gtest")
+
+# Download and install GoogleTest
+#ExternalProject_Add(GTestExternal 
+    # Download version 1.7.0
+#    URL https://github.com/google/googletest/archive/release-1.7.0.zip
+    # Disable install step
+#    INSTALL_COMMAND "")
+
+
+#Set handy variables
+#set(LIBPREFIX "${CMAKE_STATIC_LIBRARY_PREFIX}")
+#set(LIBSUFFIX "${CMAKE_STATIC_LIBRARY_SUFFIX}")
+#set(GTEST_LOCATION "${GTEST_PREFIX}/src/GTestExternal-build")
+#set(GTEST_INCLUDES "${GTEST_PREFIX}/src/GTestExternal/include")
+#set(GTEST_LIBRARY  "${GTEST_LOCATION}/${LIBPREFIX}gtest${LIBSUFFIX}")
+#set(GTEST_MAINLIB  "${GTEST_LOCATION}/${LIBPREFIX}gtest_main${LIBSUFFIX}")
+
+# Create a libgtest target to be used as a dependency by test programs
+#add_library(GTest IMPORTED STATIC GLOBAL)
+#add_dependencies(GTest GTestExternal)
+
+# Set gtest properties
+#set_target_properties(GTest PROPERTIES
+#    IMPORTED_LOCATION                 "${GTEST_LIBRARY}"
+#    INTERFACE_INCLUDE_DIRECTORIES     "${GTEST_INCLUDES}"
+#    IMPORTED_LINK_INTERFACE_LIBRARIES "${CMAKE_THREAD_LIBS_INIT}")
+
+# Set gtest properties with main included
+# Dont know how to use this with catkin though
+
+#add_library(GTestMain IMPORTED STATIC GLOBAL)
+#set_target_properties(GTestMain PROPERTIES
+#    IMPORTED_LOCATION 		       "${GTEST_MAINLIB}"
+#    IMPORTED_LINK_INTERFACE_LIBRARIES  "${GTEST_LIBRARY};${CMAKE_THREAD_LIBS_INIT}")
+
+
+################################################
+## End Google Installation		      ##
+################################################
+
+
+
+
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(
-  catkin REQUIRED COMPONENTS
+
+find_package(catkin REQUIRED)
+
+find_package(catkin COMPONENTS
   joy
   roscpp
   turtlesim
+  geometry_msgs
+  REQUIRED
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
+ 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -102,8 +163,8 @@ find_package(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS joy roscpp turtlesim
 #  LIBRARIES movement
+  CATKIN_DEPENDS joy roscpp turtlesim geometry_msgs
 #  DEPENDS system_lib
 )
 
@@ -114,15 +175,21 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 # include_directories(include)
-include_directories(
-  include
-  ${catkin_INCLUDE_DIRS}
+include_directories(SYSTEM 	 
+							${catkin_INCLUDE_DIRS}
 )
 
+include_directories(include)
+link_directories(${catkin_LIBRARY_DIRS})
+
 ## Declare a C++ library
-# add_library(movement
-#   src/${PROJECT_NAME}/movement.cpp
-# )
+add_library(${PROJECT_NAME}
+  src/gamepad_controller.cpp
+)
+target_link_libraries(${PROJECT_NAME}
+	${catkin_LIBRARIES}
+	
+)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -133,13 +200,17 @@ include_directories(
 
 ## Declare a C++ executable
 # add_executable(movement_node src/movement_node.cpp)
-add_executable(gamepad_controller src/gamepad_controller.cpp)
+add_executable(gamepad_controller 
+	src/gamepad_controller.cpp
+)
 
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(movement_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(gamepad_controller ${catkin_EXPORTED_TARGETS})
+add_dependencies(gamepad_controller 
+	${catkin_EXPORTED_TARGETS}
+)
 
 
 ## Specify libraries to link a library or executable target against
@@ -147,13 +218,8 @@ add_dependencies(gamepad_controller ${catkin_EXPORTED_TARGETS})
 #   ${catkin_LIBRARIES}
 # )
 target_link_libraries(gamepad_controller 
-    ${catkin_LIBRARIES}
+	${catkin_LIBRARIES}
 )
-
-
-
-
-
 
 
 #############
@@ -200,6 +266,21 @@ target_link_libraries(gamepad_controller
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
+if(CATKIN_ENABLE_TESTING)
+
+  find_package(rostest)
+
+  #Create gamepad test file
+  catkin_add_gtest(gamepad-test 
+	test/gamepad_controllerTest.cpp)  
+  target_link_libraries(gamepad-test 
+	${catkin_LIBRARIES} 
+	${PROJECT_NAME}
+  )
+ 
+
+endif()
+
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)

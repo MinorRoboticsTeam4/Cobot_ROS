@@ -110,40 +110,64 @@ $(document).ready(function(){initNavTree('gamepad__controller_8h_source.html',''
 <a href="gamepad__controller_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * gamepad_controller.h</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *      Author: aclangerak</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *  Created on: Nov 10, 2015</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> *      Author: aclangerak</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classGamePadTeleop.html">   14</a></span>&#160;<span class="keyword">class </span><a class="code" href="classGamePadTeleop.html">GamePadTeleop</a></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;{</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <a class="code" href="classGamePadTeleop.html#af2a8ef6bcb2cdb124b1ecfb8ede60e22">GamePadTeleop</a>();</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classGamePadTeleop.html#a75307b21a2ad204571bee1699f596307">joyCallback</a>(<span class="keyword">const</span> sensor_msgs::Joy::ConstPtr&amp; joy);</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classGamePadTeleop.html#ad4079a2971b08b7d98efae5332a80d2b">   31</a></span>&#160;  ros::NodeHandle <a class="code" href="classGamePadTeleop.html#ad4079a2971b08b7d98efae5332a80d2b">nh</a>;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classGamePadTeleop.html#ae0f45620eb4071115280bc3b949d768c">   36</a></span>&#160;  <span class="keywordtype">int</span> <a class="code" href="classGamePadTeleop.html#ae0f45620eb4071115280bc3b949d768c">linear</a>, <a class="code" href="classGamePadTeleop.html#aecf31787ed4f8eb93fb2889736937b04">angular</a>;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classGamePadTeleop.html#a1dedf6aaeda70d5be937f9e204bbc8b6">   41</a></span>&#160;  <span class="keywordtype">double</span> <a class="code" href="classGamePadTeleop.html#a1dedf6aaeda70d5be937f9e204bbc8b6">linear_scale</a>, <a class="code" href="classGamePadTeleop.html#a4109dd79e7927e424cf81721f67ce517">angular_scale</a>;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classGamePadTeleop.html#ab721f26737470d0b74b99b33f243f919">   46</a></span>&#160;  ros::Publisher <a class="code" href="classGamePadTeleop.html#ab721f26737470d0b74b99b33f243f919">vel_pub</a>;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classGamePadTeleop.html#adf27a7d52d904a669122769de477e528">   51</a></span>&#160;  ros::Subscriber <a class="code" href="classGamePadTeleop.html#adf27a7d52d904a669122769de477e528">joy_sub</a>;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;};</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#ifndef MOVEMENT_INCLUDE_MOVEMENT_GAMEPAD_CONTROLLER_H_</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define MOVEMENT_INCLUDE_MOVEMENT_GAMEPAD_CONTROLLER_H_</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;sensor_msgs/Joy.h&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;ros/ros.h&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classGamePadTeleop.html">   21</a></span>&#160;<span class="keyword">class </span><a class="code" href="classGamePadTeleop.html">GamePadTeleop</a></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;{</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <a class="code" href="classGamePadTeleop.html#af2a8ef6bcb2cdb124b1ecfb8ede60e22">GamePadTeleop</a>();</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classGamePadTeleop.html#a98790b3fdcbca6dbf4b61ada6a9b6ec5">getLinearAxis</a>();</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classGamePadTeleop.html#acec7b6fba5ba56f41e9803f04fce06e1">getAngularAxis</a>();</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classGamePadTeleop.html#abcd8b9d0685c1883cd8bfae585295995">getLinearScale</a>();</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classGamePadTeleop.html#acb9336a04a104a6b1a5c00e453a02027">getAngularScale</a>();</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classGamePadTeleop.html#a75307b21a2ad204571bee1699f596307">joyCallback</a>(<span class="keyword">const</span> sensor_msgs::Joy::ConstPtr&amp; joy);</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="ttc" id="classGamePadTeleop_html_af2a8ef6bcb2cdb124b1ecfb8ede60e22"><div class="ttname"><a href="classGamePadTeleop.html#af2a8ef6bcb2cdb124b1ecfb8ede60e22">GamePadTeleop::GamePadTeleop</a></div><div class="ttdeci">GamePadTeleop()</div><div class="ttdef"><b>Definition:</b> gamepad_controller.cpp:21</div></div>
-<div class="ttc" id="classGamePadTeleop_html_a75307b21a2ad204571bee1699f596307"><div class="ttname"><a href="classGamePadTeleop.html#a75307b21a2ad204571bee1699f596307">GamePadTeleop::joyCallback</a></div><div class="ttdeci">void joyCallback(const sensor_msgs::Joy::ConstPtr &amp;joy)</div><div class="ttdef"><b>Definition:</b> gamepad_controller.cpp:46</div></div>
-<div class="ttc" id="classGamePadTeleop_html"><div class="ttname"><a href="classGamePadTeleop.html">GamePadTeleop</a></div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:14</div></div>
-<div class="ttc" id="classGamePadTeleop_html_ad4079a2971b08b7d98efae5332a80d2b"><div class="ttname"><a href="classGamePadTeleop.html#ad4079a2971b08b7d98efae5332a80d2b">GamePadTeleop::nh</a></div><div class="ttdeci">ros::NodeHandle nh</div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:31</div></div>
-<div class="ttc" id="classGamePadTeleop_html_adf27a7d52d904a669122769de477e528"><div class="ttname"><a href="classGamePadTeleop.html#adf27a7d52d904a669122769de477e528">GamePadTeleop::joy_sub</a></div><div class="ttdeci">ros::Subscriber joy_sub</div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:51</div></div>
-<div class="ttc" id="classGamePadTeleop_html_a1dedf6aaeda70d5be937f9e204bbc8b6"><div class="ttname"><a href="classGamePadTeleop.html#a1dedf6aaeda70d5be937f9e204bbc8b6">GamePadTeleop::linear_scale</a></div><div class="ttdeci">double linear_scale</div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:41</div></div>
-<div class="ttc" id="classGamePadTeleop_html_a4109dd79e7927e424cf81721f67ce517"><div class="ttname"><a href="classGamePadTeleop.html#a4109dd79e7927e424cf81721f67ce517">GamePadTeleop::angular_scale</a></div><div class="ttdeci">double angular_scale</div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:41</div></div>
-<div class="ttc" id="classGamePadTeleop_html_ab721f26737470d0b74b99b33f243f919"><div class="ttname"><a href="classGamePadTeleop.html#ab721f26737470d0b74b99b33f243f919">GamePadTeleop::vel_pub</a></div><div class="ttdeci">ros::Publisher vel_pub</div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:46</div></div>
-<div class="ttc" id="classGamePadTeleop_html_aecf31787ed4f8eb93fb2889736937b04"><div class="ttname"><a href="classGamePadTeleop.html#aecf31787ed4f8eb93fb2889736937b04">GamePadTeleop::angular</a></div><div class="ttdeci">int angular</div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:36</div></div>
-<div class="ttc" id="classGamePadTeleop_html_ae0f45620eb4071115280bc3b949d768c"><div class="ttname"><a href="classGamePadTeleop.html#ae0f45620eb4071115280bc3b949d768c">GamePadTeleop::linear</a></div><div class="ttdeci">int linear</div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:36</div></div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classGamePadTeleop.html#ad4079a2971b08b7d98efae5332a80d2b">   58</a></span>&#160;  ros::NodeHandle <a class="code" href="classGamePadTeleop.html#ad4079a2971b08b7d98efae5332a80d2b">nh</a>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classGamePadTeleop.html#ae0f45620eb4071115280bc3b949d768c">   63</a></span>&#160;  <span class="keywordtype">int</span> <a class="code" href="classGamePadTeleop.html#ae0f45620eb4071115280bc3b949d768c">linear</a>, <a class="code" href="classGamePadTeleop.html#aecf31787ed4f8eb93fb2889736937b04">angular</a>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classGamePadTeleop.html#a1dedf6aaeda70d5be937f9e204bbc8b6">   68</a></span>&#160;  <span class="keywordtype">double</span> <a class="code" href="classGamePadTeleop.html#a1dedf6aaeda70d5be937f9e204bbc8b6">linear_scale</a>, <a class="code" href="classGamePadTeleop.html#a4109dd79e7927e424cf81721f67ce517">angular_scale</a>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classGamePadTeleop.html#ab721f26737470d0b74b99b33f243f919">   73</a></span>&#160;  ros::Publisher <a class="code" href="classGamePadTeleop.html#ab721f26737470d0b74b99b33f243f919">vel_pub</a>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="classGamePadTeleop.html#adf27a7d52d904a669122769de477e528">   78</a></span>&#160;  ros::Subscriber <a class="code" href="classGamePadTeleop.html#adf27a7d52d904a669122769de477e528">joy_sub</a>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;};</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* MOVEMENT_INCLUDE_MOVEMENT_GAMEPAD_CONTROLLER_H_ */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="classGamePadTeleop_html_af2a8ef6bcb2cdb124b1ecfb8ede60e22"><div class="ttname"><a href="classGamePadTeleop.html#af2a8ef6bcb2cdb124b1ecfb8ede60e22">GamePadTeleop::GamePadTeleop</a></div><div class="ttdeci">GamePadTeleop()</div><div class="ttdef"><b>Definition:</b> gamepad_controller.cpp:23</div></div>
+<div class="ttc" id="classGamePadTeleop_html_a75307b21a2ad204571bee1699f596307"><div class="ttname"><a href="classGamePadTeleop.html#a75307b21a2ad204571bee1699f596307">GamePadTeleop::joyCallback</a></div><div class="ttdeci">void joyCallback(const sensor_msgs::Joy::ConstPtr &amp;joy)</div><div class="ttdef"><b>Definition:</b> gamepad_controller.cpp:86</div></div>
+<div class="ttc" id="classGamePadTeleop_html"><div class="ttname"><a href="classGamePadTeleop.html">GamePadTeleop</a></div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:21</div></div>
+<div class="ttc" id="classGamePadTeleop_html_abcd8b9d0685c1883cd8bfae585295995"><div class="ttname"><a href="classGamePadTeleop.html#abcd8b9d0685c1883cd8bfae585295995">GamePadTeleop::getLinearScale</a></div><div class="ttdeci">double getLinearScale()</div><div class="ttdef"><b>Definition:</b> gamepad_controller.cpp:68</div></div>
+<div class="ttc" id="classGamePadTeleop_html_ad4079a2971b08b7d98efae5332a80d2b"><div class="ttname"><a href="classGamePadTeleop.html#ad4079a2971b08b7d98efae5332a80d2b">GamePadTeleop::nh</a></div><div class="ttdeci">ros::NodeHandle nh</div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:58</div></div>
+<div class="ttc" id="classGamePadTeleop_html_a98790b3fdcbca6dbf4b61ada6a9b6ec5"><div class="ttname"><a href="classGamePadTeleop.html#a98790b3fdcbca6dbf4b61ada6a9b6ec5">GamePadTeleop::getLinearAxis</a></div><div class="ttdeci">int getLinearAxis()</div><div class="ttdef"><b>Definition:</b> gamepad_controller.cpp:53</div></div>
+<div class="ttc" id="classGamePadTeleop_html_adf27a7d52d904a669122769de477e528"><div class="ttname"><a href="classGamePadTeleop.html#adf27a7d52d904a669122769de477e528">GamePadTeleop::joy_sub</a></div><div class="ttdeci">ros::Subscriber joy_sub</div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:78</div></div>
+<div class="ttc" id="classGamePadTeleop_html_a1dedf6aaeda70d5be937f9e204bbc8b6"><div class="ttname"><a href="classGamePadTeleop.html#a1dedf6aaeda70d5be937f9e204bbc8b6">GamePadTeleop::linear_scale</a></div><div class="ttdeci">double linear_scale</div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:68</div></div>
+<div class="ttc" id="classGamePadTeleop_html_a4109dd79e7927e424cf81721f67ce517"><div class="ttname"><a href="classGamePadTeleop.html#a4109dd79e7927e424cf81721f67ce517">GamePadTeleop::angular_scale</a></div><div class="ttdeci">double angular_scale</div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:68</div></div>
+<div class="ttc" id="classGamePadTeleop_html_ab721f26737470d0b74b99b33f243f919"><div class="ttname"><a href="classGamePadTeleop.html#ab721f26737470d0b74b99b33f243f919">GamePadTeleop::vel_pub</a></div><div class="ttdeci">ros::Publisher vel_pub</div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:73</div></div>
+<div class="ttc" id="classGamePadTeleop_html_acec7b6fba5ba56f41e9803f04fce06e1"><div class="ttname"><a href="classGamePadTeleop.html#acec7b6fba5ba56f41e9803f04fce06e1">GamePadTeleop::getAngularAxis</a></div><div class="ttdeci">int getAngularAxis()</div><div class="ttdef"><b>Definition:</b> gamepad_controller.cpp:60</div></div>
+<div class="ttc" id="classGamePadTeleop_html_acb9336a04a104a6b1a5c00e453a02027"><div class="ttname"><a href="classGamePadTeleop.html#acb9336a04a104a6b1a5c00e453a02027">GamePadTeleop::getAngularScale</a></div><div class="ttdeci">double getAngularScale()</div><div class="ttdef"><b>Definition:</b> gamepad_controller.cpp:76</div></div>
+<div class="ttc" id="classGamePadTeleop_html_aecf31787ed4f8eb93fb2889736937b04"><div class="ttname"><a href="classGamePadTeleop.html#aecf31787ed4f8eb93fb2889736937b04">GamePadTeleop::angular</a></div><div class="ttdeci">int angular</div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:63</div></div>
+<div class="ttc" id="classGamePadTeleop_html_ae0f45620eb4071115280bc3b949d768c"><div class="ttname"><a href="classGamePadTeleop.html#ae0f45620eb4071115280bc3b949d768c">GamePadTeleop::linear</a></div><div class="ttdeci">int linear</div><div class="ttdef"><b>Definition:</b> gamepad_controller.h:63</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
