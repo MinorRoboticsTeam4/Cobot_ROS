@@ -7,6 +7,9 @@
 
 #include "movement/gamepad_controller.h"
 
+/*
+ * Test class
+ */
 class TwistSubscriber
 {
 	public:
@@ -25,7 +28,7 @@ class TwistSubscriber
 
 
 TEST(GamepadTest, CallbackFunc){
-	GamePadTeleop gamepad;
+	movement::GamePadTeleop gamepad;
 
 	ros::NodeHandle test_nh;
 	TwistSubscriber subscriber;

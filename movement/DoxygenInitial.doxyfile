@@ -434,7 +434,7 @@ EXTRACT_PACKAGE = NO
 # included in the documentation.
 # The default value is: NO.
 
-EXTRACT_STATIC = YES
+EXTRACT_STATIC = NO
 
 # If the EXTRACT_LOCAL_CLASSES tag is set to YES, classes (and structs) defined
 # locally in source files will be included in the documentation. If set to NO,
@@ -992,7 +992,7 @@ USE_HTAGS = NO
 # See also: Section \class.
 # The default value is: YES.
 
-VERBATIM_HEADERS = YES
+VERBATIM_HEADERS = NO
 
 # If the CLANG_ASSISTED_PARSING tag is set to YES then doxygen will use the
 # clang parser (see: http://clang.llvm.org/) for more accurate parsing at the
@@ -1516,7 +1516,7 @@ MATHJAX_CODEFILE =
 # The default value is: YES.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-SEARCHENGINE = YES
+SEARCHENGINE = NO
 
 # When the SERVER_BASED_SEARCH tag is enabled the search engine will be
 # implemented using a web server instead of a web client using Javascript. There
@@ -1700,7 +1700,7 @@ LATEX_EXTRA_FILES =
 # The default value is: YES.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-PDF_HYPERLINKS = YES
+PDF_HYPERLINKS = NO
 
 # If the USE_PDFLATEX tag is set to YES, doxygen will use pdflatex to generate
 # the PDF file directly from the LaTeX files. Set this option to YES, to get a
@@ -2099,7 +2099,7 @@ PERL_PATH = /usr/bin/perl
 # powerful graphs.
 # The default value is: YES.
 
-CLASS_DIAGRAMS = YES
+CLASS_DIAGRAMS = NO
 
 # You can define message sequence charts within doxygen comments using the \msc
 # command. Doxygen will then run the mscgen tool (see:
@@ -2130,7 +2130,7 @@ HIDE_UNDOC_RELATIONS = YES
 # set to NO
 # The default value is: NO.
 
-HAVE_DOT = NO
+HAVE_DOT = YES
 
 # The DOT_NUM_THREADS specifies the number of dot invocations doxygen is allowed
 # to run in parallel. When set to 0 doxygen will base this on the number of

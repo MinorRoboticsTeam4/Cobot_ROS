@@ -29,3 +29,6 @@
 
 # Backup files
 *~
+
+#Ignore Doxygen html generation
+html/

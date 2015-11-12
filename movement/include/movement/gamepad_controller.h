@@ -1,84 +1,105 @@
 /*
  * gamepad_controller.h
  *
- *  Created on: Nov 10, 2015
- *      Author: aclangerak
  */
 
+//=======================================================
+// include guard
 #ifndef MOVEMENT_INCLUDE_MOVEMENT_GAMEPAD_CONTROLLER_H_
 #define MOVEMENT_INCLUDE_MOVEMENT_GAMEPAD_CONTROLLER_H_
 
+//=======================================================
+// predefined headers
 #include <sensor_msgs/Joy.h>
 #include <ros/ros.h>
 
-
-/**
- * This class contains the needed Nodehandler and related code.
- * Also it contains a callback function to convert joy -> twist messages.
- * Lastly, it holds the linear, angular and the scaling factors of
- * the gamepad.
- */
-class GamePadTeleop
+namespace movement
 {
-public:
-	/**
-	 * Default Consctructor
-	 */
-	GamePadTeleop();
 
 	/**
-	 * Returns the set linear axis(from teleop.yaml)
+	 * This class contains the following:
+	 * <li> A Nodehlander for interfacing with ROS
+	 * <li> A callback function to convert joy -> twist messages.
+	 * <li> Parameters read from teleop.yaml: linear,angular and scale
 	 */
-	int getLinearAxis();
+	class GamePadTeleop
+	{
+	public:
 
-	/**
-	 * Returns the set angular axis(from teleop.yaml)
-	 */
-	int getAngularAxis();
+		/**
+		 * Default (empty) constructor
+		 */
+		GamePadTeleop();
 
-	/**
-	 * Returns the set linear scale(from teleop.yaml)
-	 */
-	double getLinearScale();
+		/**
+		 * Get the linear axis
+		 * @return linear axis value
+		 */
+		const int getLinearAxis();
 
-	/**
-	 * Returns the set angular scale(from teleop.yaml)
-	 */
-	double getAngularScale();
+		/**
+		 * Get the angular axis
+		 * @return angular axis value
+		 */
+		const int getAngularAxis();
 
-private:
-	/**
-	 * Callback function to convert joy -> twist messages.
-	 */
-  void joyCallback(const sensor_msgs::Joy::ConstPtr& joy);
+		/**
+		 * Get the linear scale
+		 * @return linear scale value
+		 */
+		const double getLinearScale();
 
-  /**
-   * NodeHandler for ROS usage
-   */
-  ros::NodeHandle nh;
+		/**
+		 * Get the angular scale
+		 * @return angular scale value
+		 */
+		const double getAngularScale();
 
-  /**
-   * holds linear and angular values
-   */
-  int linear, angular;
+	private:
 
-  /**
-   * scaling factors
-   */
-  double linear_scale, angular_scale;
+		/**
+		 * (Callback) Function to convert Joy -> Twist messages.
+		 * @param joy  incoming joy message
+		 */
+	  void joyCallback(const sensor_msgs::Joy::ConstPtr& joy);
 
-  /**
-   * Publisher published messages.
-   */
-  ros::Publisher vel_pub;
+	  /**
+	   * NodeHandler for ROS usage
+	   */
+	  ros::NodeHandle nh;
 
-  /**
-   * Subscriber listens to messages and calls a callback messages.
-   */
-  ros::Subscriber joy_sub;
+	  /**
+	   * current linear value
+	   */
+	  int linear;
 
-};
+	  /**
+	   * current angular value
+	   */
+	  int angular;
 
+	  /**
+	   * linear scale factors
+	   */
+	  double linear_scale;
+
+	  /**
+	   * angular scale factors
+	   */
+	  double angular_scale;
+
+	  /**
+	   * Publisher published messages.
+	   */
+	  ros::Publisher vel_pub;
+
+	  /**
+	   * Subscriber listens to messages and calls a callback messages.
+	   */
+	  ros::Subscriber joy_sub;
+
+	};
+}
 
 
 

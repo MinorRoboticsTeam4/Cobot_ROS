@@ -1,4 +1,4 @@
 var annotated_dup =
 [
-    [ "GamePadTeleop", "classGamePadTeleop.html", "classGamePadTeleop" ]
+    [ "movement", "namespacemovement.html", "namespacemovement" ]
 ];
