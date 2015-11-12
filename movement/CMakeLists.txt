@@ -1,67 +1,12 @@
 cmake_minimum_required(VERSION 2.8.3)
+
+#Set project name as variable
 set(PROJECT_NAME movement)
 project(${PROJECT_NAME})
-
-
-####################################################
-## Installation of Google Test and Mock framework ##
-####################################################
-
-# We need thread support
-#find_package(Threads REQUIRED)
-
-# Enable ExternalProject CMake module
-#include(ExternalProject)
-
-#set(GTEST_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/gtest")
-
-# Download and install GoogleTest
-#ExternalProject_Add(GTestExternal 
-    # Download version 1.7.0
-#    URL https://github.com/google/googletest/archive/release-1.7.0.zip
-    # Disable install step
-#    INSTALL_COMMAND "")
-
-
-#Set handy variables
-#set(LIBPREFIX "${CMAKE_STATIC_LIBRARY_PREFIX}")
-#set(LIBSUFFIX "${CMAKE_STATIC_LIBRARY_SUFFIX}")
-#set(GTEST_LOCATION "${GTEST_PREFIX}/src/GTestExternal-build")
-#set(GTEST_INCLUDES "${GTEST_PREFIX}/src/GTestExternal/include")
-#set(GTEST_LIBRARY  "${GTEST_LOCATION}/${LIBPREFIX}gtest${LIBSUFFIX}")
-#set(GTEST_MAINLIB  "${GTEST_LOCATION}/${LIBPREFIX}gtest_main${LIBSUFFIX}")
-
-# Create a libgtest target to be used as a dependency by test programs
-#add_library(GTest IMPORTED STATIC GLOBAL)
-#add_dependencies(GTest GTestExternal)
-
-# Set gtest properties
-#set_target_properties(GTest PROPERTIES
-#    IMPORTED_LOCATION                 "${GTEST_LIBRARY}"
-#    INTERFACE_INCLUDE_DIRECTORIES     "${GTEST_INCLUDES}"
-#    IMPORTED_LINK_INTERFACE_LIBRARIES "${CMAKE_THREAD_LIBS_INIT}")
-
-# Set gtest properties with main included
-# Dont know how to use this with catkin though
-
-#add_library(GTestMain IMPORTED STATIC GLOBAL)
-#set_target_properties(GTestMain PROPERTIES
-#    IMPORTED_LOCATION 		       "${GTEST_MAINLIB}"
-#    IMPORTED_LINK_INTERFACE_LIBRARIES  "${GTEST_LIBRARY};${CMAKE_THREAD_LIBS_INIT}")
-
-
-################################################
-## End Google Installation		      ##
-################################################
-
-
-
-
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-
 find_package(catkin REQUIRED)
 
 find_package(catkin COMPONENTS
@@ -163,7 +108,7 @@ find_package(catkin COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-#  LIBRARIES movement
+  LIBRARIES ${PROJECT_NAME}
   CATKIN_DEPENDS joy roscpp turtlesim geometry_msgs
 #  DEPENDS system_lib
 )
@@ -175,10 +120,8 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 # include_directories(include)
-include_directories(SYSTEM 	 
-							${catkin_INCLUDE_DIRS}
-)
-
+include_directories(SYSTEM ${catkin_INCLUDE_DIRS})
+#Include header files of the "include" directory
 include_directories(include)
 link_directories(${catkin_LIBRARY_DIRS})
 
@@ -262,21 +205,29 @@ target_link_libraries(gamepad_controller
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_movement.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
+# if(CATKIN_ENABLE_TESTING)
+#	find_package(rostest REQUIRED)
+#
+#	#Only gtest
+#	catkin_add_gtest($(PROJECT_NAME)-test test/testfile.cpp)
+#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME} ${catkin_LIBRARIES})
+#
+#	#Only rostest
+#   add_executable($(PROJECT_NAME)-test test/testfile.cpp)
+#	target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME} ${catkin_LIBRARIES} ${GTEST_LIBRARIES})
+#	add_rostest(test/testfile.launch)
+#
+#	#Both
+#	add_rostest_gtest({PROJECT_NAME}-test test/testfile.launch test/testfile.cpp)
+#	target_link_libraries({PROJECT_NAME}-test ${PROJECT_NAME} ${catkin_LIBRARIES} )
 # endif()
 if(CATKIN_ENABLE_TESTING)
 
-  find_package(rostest)
+  find_package(rostest REQUIRED)
 
   #Create gamepad test file
-  catkin_add_gtest(gamepad-test 
-	test/gamepad_controllerTest.cpp)  
-  target_link_libraries(gamepad-test 
-	${catkin_LIBRARIES} 
-	${PROJECT_NAME}
-  )
+    add_rostest_gtest(gamepad-test test/gamepad_controllerTest.launch test/gamepad_controllerTest.cpp)
+	target_link_libraries(gamepad-test ${PROJECT_NAME} ${catkin_LIBRARIES} )
  
 
 endif()

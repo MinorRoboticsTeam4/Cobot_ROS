@@ -34,11 +34,11 @@ GamePadTeleop::GamePadTeleop() :
   //Read in the params from teleop.yaml
   //cannot get private namespaces to work,
   //so using this method instead
-  nh.param<int>("gamepad_controller/axis_linear", linear, linear);
-  nh.param<int>("gamepad_controller/axis_angular", angular, angular);
-  nh.param<double>("gamepad_controller/scale_linear", linear_scale, linear_scale);
-  nh.param<double>("gamepad_controller/scale_angular", angular_scale, angular_scale);
-  nh.param<std::string>("gamepad_controller/pub_topic", pub_name, pub_name);
+  nh.param<int>("/gamepad_controller/axis_linear", linear, linear);
+  nh.param<int>("/gamepad_controller/axis_angular", angular, angular);
+  nh.param<double>("/gamepad_controller/scale_linear", linear_scale, linear_scale);
+  nh.param<double>("/gamepad_controller/scale_angular", angular_scale, angular_scale);
+  nh.param<std::string>("/gamepad_controller/pub_topic", pub_name, pub_name);
 
   vel_pub = nh.advertise<geometry_msgs::Twist>(pub_name, 1);
 
@@ -94,6 +94,17 @@ const double GamePadTeleop::getLinearScale()
 const double GamePadTeleop::getAngularScale()
 {
   return angular_scale;
+}
+
+/**
+ * Get the topic where this is publishing to.
+ * This value is either "controller_vel"(default) or from
+ * config file(teleop.yaml)
+ * @return publishing topic
+ */
+const std::string GamePadTeleop::getPublishTopic()
+{
+  return pub_name;
 }
 
 /**

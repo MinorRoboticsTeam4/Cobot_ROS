@@ -55,6 +55,12 @@ public:
    */
   const double getAngularScale();
 
+  /**
+   * Get the topic where this is publishing to
+   * @return publishing topic
+   */
+  const std::string getPublishTopic();
+
 private:
 
   /**

@@ -29,6 +29,34 @@ public:
 
 };
 
+TEST(GamepadTest, LoadParam)
+{
+  movement::GamePadTeleop gamepad;
+
+  ros::NodeHandle test_nh;
+  int linearAxis;
+  test_nh.getParam("/gamepad_controller/axis_linear", linearAxis);
+  EXPECT_EQ(linearAxis,gamepad.getLinearAxis());
+
+  int angularAxis;
+  test_nh.getParam("/gamepad_controller/axis_angular", angularAxis);
+  EXPECT_EQ(angularAxis,gamepad.getAngularAxis());
+
+  int linearScale;
+  test_nh.getParam("/gamepad_controller/scale_linear", linearScale);
+  EXPECT_EQ(linearScale,gamepad.getLinearScale());
+
+  int angularScale;
+  test_nh.getParam("/gamepad_controller/scale_angular", angularScale);
+  EXPECT_EQ(angularScale,gamepad.getAngularScale());
+
+  std::string pubName;
+  test_nh.getParam("/gamepad_controller/pub_topic", pubName);
+  EXPECT_EQ(pubName,gamepad.getPublishTopic());
+
+}
+
+
 TEST(GamepadTest, CallbackFunc)
 {
   movement::GamePadTeleop gamepad;
@@ -36,7 +64,7 @@ TEST(GamepadTest, CallbackFunc)
   ros::NodeHandle test_nh;
   TwistSubscriber subscriber;
 
-  ros::Subscriber rosSubscriber = test_nh.subscribe("turtle1/cmd_vel", 100, &TwistSubscriber::callback, &subscriber);
+  ros::Subscriber rosSubscriber = test_nh.subscribe("test_vel", 100, &TwistSubscriber::callback, &subscriber);
 
   ASSERT_EQ(1, rosSubscriber.getNumPublishers());
 
@@ -58,7 +86,7 @@ TEST(GamepadTest, CallbackFunc)
   ros::spinOnce();
 
   //Test message received and value
-  EXPECT_TRUE(subscriber.received);
+  ASSERT_TRUE(subscriber.received);
   EXPECT_FLOAT_EQ(4e+16, subscriber.message.linear.x);
   EXPECT_FLOAT_EQ(2e+16, subscriber.message.angular.z);
 

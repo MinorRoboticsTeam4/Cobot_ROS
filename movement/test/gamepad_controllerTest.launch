@@ -1,0 +1,11 @@
+<launch>
+
+ <!-- Test Node -->
+ <!-- Name is the same as "original node" because of parameters -->  
+  <test pkg="movement" test-name="gamepad_controller" type="gamepad-test">
+   <rosparam file="$(find movement)/info/teleop.yaml" command="load" />
+      <!-- Publish on test vel -->
+   <param name="pub_topic" value="test_vel" type="str"/>
+  </test>
+
+</launch>
