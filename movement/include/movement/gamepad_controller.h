@@ -16,92 +16,94 @@
 namespace movement
 {
 
-	/**
-	 * This class contains the following:
-	 * <li> A Nodehlander for interfacing with ROS
-	 * <li> A callback function to convert joy -> twist messages.
-	 * <li> Parameters read from teleop.yaml: linear,angular and scale
-	 */
-	class GamePadTeleop
-	{
-	public:
+/**
+ * This class contains the following:
+ * <li> A Nodehlander for interfacing with ROS
+ * <li> A callback function to convert joy -> twist messages.
+ * <li> Parameters read from teleop.yaml: linear,angular and scale
+ */
+class GamePadTeleop
+{
+public:
 
-		/**
-		 * Default (empty) constructor
-		 */
-		GamePadTeleop();
+  /**
+   * Default (empty) constructor
+   */
+  GamePadTeleop();
 
-		/**
-		 * Get the linear axis
-		 * @return linear axis value
-		 */
-		const int getLinearAxis();
+  /**
+   * Get the linear axis
+   * @return linear axis value
+   */
+  const int getLinearAxis();
 
-		/**
-		 * Get the angular axis
-		 * @return angular axis value
-		 */
-		const int getAngularAxis();
+  /**
+   * Get the angular axis
+   * @return angular axis value
+   */
+  const int getAngularAxis();
 
-		/**
-		 * Get the linear scale
-		 * @return linear scale value
-		 */
-		const double getLinearScale();
+  /**
+   * Get the linear scale
+   * @return linear scale value
+   */
+  const double getLinearScale();
 
-		/**
-		 * Get the angular scale
-		 * @return angular scale value
-		 */
-		const double getAngularScale();
+  /**
+   * Get the angular scale
+   * @return angular scale value
+   */
+  const double getAngularScale();
 
-	private:
+private:
 
-		/**
-		 * (Callback) Function to convert Joy -> Twist messages.
-		 * @param joy  incoming joy message
-		 */
-	  void joyCallback(const sensor_msgs::Joy::ConstPtr& joy);
+  /**
+   * (Callback) Function to convert Joy -> Twist messages.
+   * @param joy  incoming joy message
+   */
+  void joyCallback(const sensor_msgs::Joy::ConstPtr& joy);
 
-	  /**
-	   * NodeHandler for ROS usage
-	   */
-	  ros::NodeHandle nh;
+  /**
+   * NodeHandler for ROS usage
+   */
+  ros::NodeHandle nh;
 
-	  /**
-	   * current linear value
-	   */
-	  int linear;
+  /**
+   * current linear value
+   */
+  int linear;
 
-	  /**
-	   * current angular value
-	   */
-	  int angular;
+  /**
+   * current angular value
+   */
+  int angular;
 
-	  /**
-	   * linear scale factors
-	   */
-	  double linear_scale;
+  /**
+   * linear scale factors
+   */
+  double linear_scale;
 
-	  /**
-	   * angular scale factors
-	   */
-	  double angular_scale;
+  /**
+   * angular scale factors
+   */
+  double angular_scale;
 
-	  /**
-	   * Publisher published messages.
-	   */
-	  ros::Publisher vel_pub;
+  /**
+   * Publisher published messages.
+   */
+  ros::Publisher vel_pub;
 
-	  /**
-	   * Subscriber listens to messages and calls a callback messages.
-	   */
-	  ros::Subscriber joy_sub;
+  /**
+   * (Default) publisher topic for vel_pub
+   */
+  std::string pub_name;
 
-	};
+  /**
+   * Subscriber listens to messages and calls a callback messages.
+   */
+  ros::Subscriber joy_sub;
+
+};
 }
-
-
-
 
 #endif /* MOVEMENT_INCLUDE_MOVEMENT_GAMEPAD_CONTROLLER_H_ */
