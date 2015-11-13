@@ -1,0 +1,6 @@
+# input of the joystick
+# find it with the bash command:
+# ls /dev/input/
+dev: /dev/input/js0
+
+
