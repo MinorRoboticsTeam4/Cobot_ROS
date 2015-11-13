@@ -22,14 +22,14 @@ namespace movement
  * <li> A callback function to convert joy -> twist messages.
  * <li> Parameters read from teleop.yaml: linear,angular and scale
  */
-class GamePadTeleop
+class GamePad_controller
 {
 public:
 
   /**
    * Default (empty) constructor
    */
-  GamePadTeleop();
+  GamePad_controller();
 
   /**
    * Get the linear axis

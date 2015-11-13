@@ -31,27 +31,27 @@ public:
 
 TEST(GamepadTest, LoadParam)
 {
-  movement::GamePadTeleop gamepad;
+  movement::GamePad_controller gamepad;
 
   ros::NodeHandle test_nh;
   int linearAxis;
-  test_nh.getParam("/gamepad_controller/axis_linear", linearAxis);
+  test_nh.getParam("gamepad_controller/linear_axis", linearAxis);
   EXPECT_EQ(linearAxis,gamepad.getLinearAxis());
 
   int angularAxis;
-  test_nh.getParam("/gamepad_controller/axis_angular", angularAxis);
+  test_nh.getParam("gamepad_controller/angular_axis", angularAxis);
   EXPECT_EQ(angularAxis,gamepad.getAngularAxis());
 
   int linearScale;
-  test_nh.getParam("/gamepad_controller/scale_linear", linearScale);
+  test_nh.getParam("gamepad_controller/linear_scale", linearScale);
   EXPECT_EQ(linearScale,gamepad.getLinearScale());
 
   int angularScale;
-  test_nh.getParam("/gamepad_controller/scale_angular", angularScale);
+  test_nh.getParam("gamepad_controller/angular_scale", angularScale);
   EXPECT_EQ(angularScale,gamepad.getAngularScale());
 
   std::string pubName;
-  test_nh.getParam("/gamepad_controller/pub_topic", pubName);
+  test_nh.getParam("gamepad_controller/pub_topic", pubName);
   EXPECT_EQ(pubName,gamepad.getPublishTopic());
 
 }
@@ -59,7 +59,7 @@ TEST(GamepadTest, LoadParam)
 
 TEST(GamepadTest, CallbackFunc)
 {
-  movement::GamePadTeleop gamepad;
+  movement::GamePad_controller gamepad;
 
   ros::NodeHandle test_nh;
   TwistSubscriber subscriber;

@@ -28,17 +28,17 @@ namespace movement
  * the desired topic name.
  *
  */
-GamePadTeleop::GamePadTeleop() :
+GamePad_controller::GamePad_controller() :
     linear(0), angular(1), linear_scale(1.0), angular_scale(1.0), pub_name("controller_vel")
 {
   //Read in the params from teleop.yaml
   //cannot get private namespaces to work,
   //so using this method instead
-  nh.param<int>("/gamepad_controller/axis_linear", linear, linear);
-  nh.param<int>("/gamepad_controller/axis_angular", angular, angular);
-  nh.param<double>("/gamepad_controller/scale_linear", linear_scale, linear_scale);
-  nh.param<double>("/gamepad_controller/scale_angular", angular_scale, angular_scale);
-  nh.param<std::string>("/gamepad_controller/pub_topic", pub_name, pub_name);
+  nh.param<int>("gamepad_controller/linear_axis", linear, linear);
+  nh.param<int>("gamepad_controller/angular_axis", angular, angular);
+  nh.param<double>("gamepad_controller/linear_scale", linear_scale, linear_scale);
+  nh.param<double>("gamepad_controller/angular_scale", angular_scale, angular_scale);
+  nh.param<std::string>("gamepad_controller/pub_topic", pub_name, pub_name);
 
   vel_pub = nh.advertise<geometry_msgs::Twist>(pub_name, 1);
 
@@ -46,7 +46,7 @@ GamePadTeleop::GamePadTeleop() :
 
   //Subscribe to the messages of the gamepad
   //and call joyCallback with incoming messages.
-  joy_sub = nh.subscribe<sensor_msgs::Joy>("joy", 10, &GamePadTeleop::joyCallback, this);
+  joy_sub = nh.subscribe<sensor_msgs::Joy>("joy", 10, &GamePad_controller::joyCallback, this);
 
   ROS_INFO("Starting gamepad with: linear %d, angular %d, "
            "linear scale %f, angular scale %f",
@@ -59,7 +59,7 @@ GamePadTeleop::GamePadTeleop() :
  * config file(teleop.yaml)
  * @return linear axis value
  */
-const int GamePadTeleop::getLinearAxis()
+const int GamePad_controller::getLinearAxis()
 {
   return linear;
 }
@@ -69,7 +69,7 @@ const int GamePadTeleop::getLinearAxis()
  * config file(teleop.yaml)
  * @return angular axis value
  */
-const int GamePadTeleop::getAngularAxis()
+const int GamePad_controller::getAngularAxis()
 {
   return angular;
 }
@@ -80,7 +80,7 @@ const int GamePadTeleop::getAngularAxis()
  * config file(teleop.yaml)
  * @return linear scale value
  */
-const double GamePadTeleop::getLinearScale()
+const double GamePad_controller::getLinearScale()
 {
   return linear_scale;
 }
@@ -91,7 +91,7 @@ const double GamePadTeleop::getLinearScale()
  * config file(teleop.yaml)
  * @return angular scale value
  */
-const double GamePadTeleop::getAngularScale()
+const double GamePad_controller::getAngularScale()
 {
   return angular_scale;
 }
@@ -102,7 +102,7 @@ const double GamePadTeleop::getAngularScale()
  * config file(teleop.yaml)
  * @return publishing topic
  */
-const std::string GamePadTeleop::getPublishTopic()
+const std::string GamePad_controller::getPublishTopic()
 {
   return pub_name;
 }
@@ -118,7 +118,7 @@ const std::string GamePadTeleop::getPublishTopic()
  *
  * @param joy   incoming joy message
  */
-void GamePadTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
+void GamePad_controller::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 {
 
   ROS_DEBUG("Read gamepad command: linear %f angular %f ", joy->axes[this->getLinearAxis()],
@@ -146,10 +146,10 @@ void GamePadTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 int main(int argc, char** argv)
 {
   //Initialize ros node
-  ros::init(argc, argv, "gamepad_teleop");
+  ros::init(argc, argv, "gamepad_controller");
 
-  //Initialize gamepad_teleop class
-  movement::GamePadTeleop gamepad_teleop;
+  //Initialize gamepad_controller class
+  movement::GamePad_controller gamepad_controller;
 
   ROS_INFO("Started gamepad_controller Node");
 
