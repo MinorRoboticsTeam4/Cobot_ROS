@@ -18,7 +18,7 @@ namespace movement
 
 /**
  * This class contains the following:
- * <li> A Nodehlander for interfacing with ROS
+ * <li> A Nodehandler for interfacing with ROS
  * <li> A callback function to convert joy -> twist messages.
  * <li> Parameters read from teleop.yaml: linear,angular and scale
  */
@@ -27,9 +27,15 @@ class GamePad_controller
 public:
 
   /**
-   * Default (empty) constructor
+   * Default constructor
    */
   GamePad_controller();
+
+  /**
+   * Default destructor
+   */
+  ~GamePad_controller();
+
 
   /**
    * Get the linear axis

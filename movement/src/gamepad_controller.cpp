@@ -56,6 +56,15 @@ GamePad_controller::GamePad_controller() :
 }
 
 /**
+ * Shutdowns internal NodeHandler and connections (ROS does this)
+ */
+GamePad_controller::~GamePad_controller()
+{
+  nh.shutdown();
+
+}
+
+/**
  * Get the value of the linear axis.
  * This value is either 0(default) or from
  * config file(teleop.yaml)
