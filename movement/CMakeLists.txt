@@ -226,8 +226,8 @@ if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
 
   #Create gamepad test file
-    add_rostest_gtest(gamepad_control-test test/gamepad_controllerTest.launch test/gamepad_controllerTest.cpp)
-	target_link_libraries(gamepad_control-test ${PROJECT_NAME} ${catkin_LIBRARIES} )
+    add_rostest_gtest(gamepad-test test/gamepad_controllerTest.launch test/gamepad_controllerTest.cpp)
+	target_link_libraries(gamepad-test ${PROJECT_NAME} ${catkin_LIBRARIES} )
  
 
 endif()

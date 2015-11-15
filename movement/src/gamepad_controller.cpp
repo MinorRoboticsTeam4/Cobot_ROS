@@ -29,24 +29,26 @@ namespace movement
  *
  */
 GamePad_controller::GamePad_controller() :
-    linear(0), angular(1), linear_scale(1.0), angular_scale(1.0), pub_name("controller_vel")
+    linear(0), angular(1), linear_scale(1.0), angular_scale(1.0), pub_name("controller_vel"), nh("~")
 {
   //Read in the params from teleop.yaml
   //cannot get private namespaces to work,
   //so using this method instead
-  nh.param<int>("gamepad_controller/linear_axis", linear, linear);
-  nh.param<int>("gamepad_controller/angular_axis", angular, angular);
-  nh.param<double>("gamepad_controller/linear_scale", linear_scale, linear_scale);
-  nh.param<double>("gamepad_controller/angular_scale", angular_scale, angular_scale);
-  nh.param<std::string>("gamepad_controller/pub_topic", pub_name, pub_name);
+  nh.param<int>("linear_axis", linear, linear);
+  nh.param<int>("angular_axis", angular, angular);
+  nh.param<double>("linear_scale", linear_scale, linear_scale);
+  nh.param<double>("angular_scale", angular_scale, angular_scale);
+  nh.param<std::string>("pub_topic", pub_name, pub_name);
 
-  vel_pub = nh.advertise<geometry_msgs::Twist>(pub_name, 1);
+  //Publish on a global topic
+  vel_pub = nh.advertise<geometry_msgs::Twist>("/" + pub_name, 1);
 
   ROS_INFO("Publishing on topic: %s", pub_name.c_str());
 
   //Subscribe to the messages of the gamepad
   //and call joyCallback with incoming messages.
-  joy_sub = nh.subscribe<sensor_msgs::Joy>("joy", 10, &GamePad_controller::joyCallback, this);
+  //Listen to global topic "joy"
+  joy_sub = nh.subscribe<sensor_msgs::Joy>("/joy", 10, &GamePad_controller::joyCallback, this);
 
   ROS_INFO("Starting gamepad with: linear %d, angular %d, "
            "linear scale %f, angular scale %f",
@@ -133,7 +135,7 @@ void GamePad_controller::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
   //Publish the message
   vel_pub.publish(twist);
 
-  ROS_DEBUG("Publish twist message: linear %f, angular %f", twist.linear.x, twist.angular.z);
+  ROS_DEBUG("Publish twist message on topic %s, with values: linear %f, angular %f", pub_name.c_str(), twist.linear.x, twist.angular.z);
 }
 
 /**

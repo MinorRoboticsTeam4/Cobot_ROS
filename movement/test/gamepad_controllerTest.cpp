@@ -29,6 +29,7 @@ public:
 
 };
 
+//Test uses default name of gamepad controller "gamepad_controller"
 TEST(GamepadTest, LoadParam)
 {
   movement::GamePad_controller gamepad;

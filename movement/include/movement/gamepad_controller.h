@@ -74,10 +74,6 @@ private:
    */
   void joyCallback(const sensor_msgs::Joy::ConstPtr& joy);
 
-  /**
-   * NodeHandler for ROS usage
-   */
-  ros::NodeHandle nh;
 
   /**
    * current linear value
@@ -100,19 +96,26 @@ private:
   double angular_scale;
 
   /**
-   * Publisher published messages.
-   */
-  ros::Publisher vel_pub;
-
-  /**
    * (Default) publisher topic for vel_pub
    */
   std::string pub_name;
 
   /**
+   * Personal NodeHandler for ROS usage
+   */
+  ros::NodeHandle nh;
+
+  /**
+   * Publisher published messages.
+   */
+  ros::Publisher vel_pub;
+
+  /**
    * Subscriber listens to messages and calls a callback messages.
    */
   ros::Subscriber joy_sub;
+
+
 
 };
 }
