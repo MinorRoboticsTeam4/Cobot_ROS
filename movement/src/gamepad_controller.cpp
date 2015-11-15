@@ -147,6 +147,9 @@ void GamePad_controller::spin()
   ros::Rate loop_rate(10);       //10 Hz
   while (ros::ok())
   {
+    // If gamepad_controller needs additional things to run
+    // Place it in here
+
     ros::spinOnce();
     loop_rate.sleep();
   }
