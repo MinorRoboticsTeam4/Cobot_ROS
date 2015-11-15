@@ -136,6 +136,22 @@ void GamePad_controller::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
   ROS_DEBUG("Publish twist message: linear %f, angular %f", twist.linear.x, twist.angular.z);
 }
 
+/**
+ * Run this ROS node.
+ * The (default) frequency that it will run is 10 Hz
+ */
+void GamePad_controller::spin()
+{
+  ROS_INFO("Started gamepad_controller Node");
+
+  ros::Rate loop_rate(10);       //10 Hz
+  while (ros::ok())
+  {
+    ros::spinOnce();
+    loop_rate.sleep();
+  }
+}
+
 }
 /** @brief Main function
  *
@@ -150,14 +166,7 @@ int main(int argc, char** argv)
 
   //Initialize gamepad_controller class
   movement::GamePad_controller gamepad_controller;
-
-  ROS_INFO("Started gamepad_controller Node");
-
-  //Run ros node
-  while (ros::ok())
-  {
-    ros::spin();
-  }
+  gamepad_controller.spin();
 
   return EXIT_SUCCESS;
 }
