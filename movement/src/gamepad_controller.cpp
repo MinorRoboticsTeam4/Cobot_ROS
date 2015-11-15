@@ -138,7 +138,7 @@ void GamePad_controller::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 
 /**
  * Run this ROS node.
- * The (default) frequency that it will run is 10 Hz
+ * The (default) frequency that it will run is 10 Hz.
  */
 void GamePad_controller::spin()
 {
@@ -147,6 +147,7 @@ void GamePad_controller::spin()
   ros::Rate loop_rate(10);       //10 Hz
   while (ros::ok())
   {
+    //Place additional run code for ROS here.
     ros::spinOnce();
     loop_rate.sleep();
   }
