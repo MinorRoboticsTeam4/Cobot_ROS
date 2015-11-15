@@ -61,6 +61,11 @@ public:
    */
   const std::string getPublishTopic();
 
+  /**
+   * Run the ROS node.
+   */
+  void spin();
+
 private:
 
   /**
