@@ -23,7 +23,7 @@ namespace movement
  * GamePadTeleop initializes the variables inside and
  * setups the NodeHandler for publishing and listening.
  *
- * The default publish topic is "controller_vel".
+ * The default publish topic is "/controller_vel".
  * This can be changed by adding the parameter "pub_topic" with
  * the desired topic name.
  *

@@ -17,17 +17,13 @@
 // new defined headers
 
 
-//AutoStop robot if no command has received (ms)
-#define AUTO_STOP_INTERVAL 2000
-long lastMotorCommand = AUTO_STOP_INTERVAL;
-
-
-
 //Robot parameters, pulled of Technical Manual
 //TODO verify
 const double AXLE_TRACK = 0.600d;                         //(m)
 const double WHEEL_DIAMETER = 0.297d;                     //(m)
 
+const uint32_t CMD_VEL_TIMEOUT = 2;                       //(s)
+const double UPDATE_RATE = 1.0d;                          //(Hz)
 
 
 

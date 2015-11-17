@@ -21,9 +21,18 @@
 namespace movement
 {
 
-
+/**
+ * Default constructor, setups the Nodehandler for publishing / listening.
+ *
+ * The default topic to listen to is "/cmd_vel"
+ * This can be changed by adding the parameter "sub_topic" with
+ * the desired topic name.
+ *
+ * Additionally, it defines the base frame("/base_link") and the odometry frame("/odom") needed for tf
+ */
 Motor_controller::Motor_controller() :
-    motorL(), motorR(), serial_port(), sub_name("cmd_vel"), nh("~"), baseFrame("/base_link"), odomFrame("/odom")
+    motorL(), motorR(), serial_port(), sub_name("cmd_vel"), nh("~"), baseFrame("/base_link"), odomFrame("/odom"), last_cmd_vel_time(
+        0)
 {
 
   nh.param<std::string>("sub_topic", sub_name, sub_name);
@@ -36,6 +45,14 @@ Motor_controller::Motor_controller() :
 
 }
 
+/**
+ * The destructor closes the serial port if it is open.
+ *
+ * It also deletes the left and right motor interfaces,
+ * serial port.
+ *
+ * Closes down the Nodehandler
+ */
 Motor_controller::~Motor_controller()
 {
   if (serial_port->is_port_open())
@@ -54,6 +71,14 @@ Motor_controller::~Motor_controller()
 
 }
 
+/**
+ * Open a new connection to the 3Mxel board.
+ * You can find the port_address by typing  "lsusb" in the Linux terminal.
+ *
+ * @param port_address  USB ID of the board
+ * @param baudrate  the baud rate(default = 921600)
+ * @return true if connection was successful
+ */
 bool Motor_controller::init_connection(std::string port_address, int baudrate)
 {
   ROS_INFO("Opening connection to: %s ; baudrate: %d", port_address.c_str(), baudrate);
@@ -64,6 +89,16 @@ bool Motor_controller::init_connection(std::string port_address, int baudrate)
   return port_open;
 }
 
+/**
+ * Initialize the motors with serial port, id, set3MxlMode
+ *
+ * <li> left motor id:
+ * <li> right motor id:
+ *
+ *  3MxlMode: SPEED_MODE
+ *
+ * @return true if succesful
+ */
 bool Motor_controller::init_Motors()
 {
   if (serial_port->is_port_open())
@@ -75,11 +110,15 @@ bool Motor_controller::init_Motors()
     motorR->setSerialPort(serial_port);
 
     //TODO find IDs of the motors
+
     /*    motorL->setConfig(config->setID(100));
      motorL->init(false);
+     motorL->set3MxlMode(SPEED_MODE);
 
      motorR->setConfig(config->setID(101));
-     motorR->init(false);*/
+     motorR->init(false);
+     motorR->set3MxlMode(SPEED_MODE);
+     */
 
     delete configL;
     delete configR;
@@ -94,6 +133,14 @@ bool Motor_controller::init_Motors()
   return true;
 }
 
+/**
+ * (Callback) Function to convert Twist->motor velocity commands
+ *
+ * It only uses the linear.x and angular.z information, because
+ * this robot can only move forwar/backward and can do rotations.
+ *
+ * @param twist  Twist message to respond to
+ */
 void Motor_controller::cmdVelCallback(const geometry_msgs::Twist::ConstPtr &twist)
 {
   double v = twist->linear.x;                           //(m/s)
@@ -102,19 +149,36 @@ void Motor_controller::cmdVelCallback(const geometry_msgs::Twist::ConstPtr &twis
   double v_left = v - th * (AXLE_TRACK / 2.0);          //(m/s)
   double v_right = v + th * (AXLE_TRACK / 2.0);         //(m/s)
 
+  //Reset time for timeout
+  last_cmd_vel_time = ros::Time::now();
+
   drive(v_left, v_right);
 }
 
+/**
+ * Give the command to drive this robot.
+ *
+ * It checks if the bumper(outer shell) is touched
+ * It checks if the emergency button is checked.
+ *
+ * @param v_left speed of left motor (m/s)
+ * @param v_right speed of right motor (m/s)
+ */
 void Motor_controller::drive(double v_left, double v_right)
 {
-
-  //TODO Clamping to maximum speed
   //TODO Check bumper is hit
-  //TODO Check for emergency button
-  //TODO Timeout when no commands are received in x time
 
-  motorL->setLinearSpeed(v_left);
-  motorR->setLinearSpeed(v_right);
+  //TODO Test if this works
+  if (motorL->getLastError() == M3XL_STATUS_EM_STOP_ERROR || motorR->getLastError() == M3XL_STATUS_EM_STOP_ERROR)
+  {
+    ROS_WARN("Emergency Button pressed, can't set speed");
+  }
+  else
+  {
+    //Maybe check if speed is clamped?
+    motorL->setLinearSpeed(v_left);
+    motorR->setLinearSpeed(v_right);
+  }
 }
 
 void Motor_controller::updateOdomTF()
@@ -122,16 +186,29 @@ void Motor_controller::updateOdomTF()
 
 }
 
+/**
+ * Run this node
+ */
 void Motor_controller::spin()
 {
 
-  ros::Rate loop_rate(1); // 1 Hz
+  ros::Rate loop_rate(UPDATE_RATE);
 
   while (ros::ok())
   {
     ros::spinOnce();
 
     //Do additional work here
+
+    ros::Time current_time = ros::Time::now();
+
+    //Timeout has occurred, stop
+    //TODO needs verification
+    if (current_time.sec - last_cmd_vel_time.sec > CMD_VEL_TIMEOUT)
+    {
+      drive(0, 0);
+      ROS_DEBUG("No cmd_vel received, Timeout");
+    }
 
     loop_rate.sleep();
   }

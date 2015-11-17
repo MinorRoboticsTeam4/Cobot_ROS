@@ -47,14 +47,22 @@ public:
   /**
    * Open a new connection to the 3Mxel board.
    *
-   * @param port_address  USB ID of the board, (use lsusb to find it)
+   * @param port_address  USB ID of the board
    * @param baudrate  the baud rate(default = 921600)
    * @return true if connection was successful
    */
   bool init_connection(std::string port_address, int baudrate = 921600);
 
+  /**
+   * Initialize the motors with serial port, id, set3MxlMode
+   *
+   * @return true if succesful
+   */
   bool init_Motors();
 
+  /**
+   * Run this node
+   */
   void spin();
 
 private:
@@ -65,7 +73,11 @@ private:
    */
   void cmdVelCallback(const geometry_msgs::Twist::ConstPtr &twist);
 
-
+  /**
+   * Give the command to drive this robot.
+   * @param v_left speed of left motor (m/s)
+   * @param v_right speed of right motor (m/s)
+   */
   void drive(double v_left, double v_right);
 
 
@@ -118,6 +130,11 @@ private:
    * A Publisher that sends odometry data
    */
   ros::Publisher odom_pub;
+
+  /**
+   * Time that last velocty command is send.
+   */
+  ros::Time last_cmd_vel_time;
 
 
 };
