@@ -14,6 +14,7 @@ find_package(catkin COMPONENTS
   roscpp
   turtlesim
   geometry_msgs
+  threemxl
   REQUIRED
 )
 
@@ -109,7 +110,7 @@ find_package(catkin COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS joy roscpp turtlesim geometry_msgs
+  CATKIN_DEPENDS joy roscpp turtlesim geometry_msgs threemxl
 #  DEPENDS system_lib
 )
 
@@ -123,46 +124,48 @@ catkin_package(
 include_directories(SYSTEM ${catkin_INCLUDE_DIRS})
 #Include header files of the "include" directory
 include_directories(include)
+
 link_directories(${catkin_LIBRARY_DIRS})
 
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
   src/gamepad_controller.cpp
 )
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(
+	${PROJECT_NAME}
 	${catkin_LIBRARIES}
-	
 )
+##############################################
+### Usage comments of Catkin CMake
+##############################################
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
 # add_dependencies(movement ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-
-
 ## Declare a C++ executable
 # add_executable(movement_node src/movement_node.cpp)
-add_executable(gamepad_controller 
-	src/gamepad_controller.cpp
-)
-
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(movement_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(gamepad_controller 
-	${catkin_EXPORTED_TARGETS}
-)
-
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(movement_node
 #   ${catkin_LIBRARIES}
 # )
-target_link_libraries(gamepad_controller 
-	${catkin_LIBRARIES}
-)
+
+
+add_executable(gamepad_controller src/gamepad_controller.cpp)
+target_link_libraries(gamepad_controller ${catkin_LIBRARIES})
+
+add_executable(motor_controller src/motor_controller.cpp)
+target_link_libraries(motor_controller ${catkin_LIBRARIES})
+
+
+
+
 
 
 #############

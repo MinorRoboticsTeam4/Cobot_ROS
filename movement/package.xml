@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
   <name>movement</name>
-  <version>0.0.0</version>
-  <description>The movement package</description>
+  <version>0.0.1</version>
+  <description>Movement package contains code for moving the robot base.</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->
@@ -47,12 +47,13 @@
   <build_depend>roscpp</build_depend>
   <build_depend>turtlesim</build_depend>
   <build_depend>geometry_msgs</build_depend>
-
+  <build_depend>threemxl</build_depend>
+  
   <run_depend>joy</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>turtlesim</run_depend>
   <run_depend>geometry_msgs</run_depend>
-
+  <run_depend>threemxl</run_depend>
 
   <test_depend>gtest</test_depend>
   <test_depend>rostest</test_depend>
