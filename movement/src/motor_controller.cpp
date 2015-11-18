@@ -1,16 +1,22 @@
 /*
  * motor_controller.cpp
  *
- *  Created on: Nov 12, 2015
- *      Author: aclangerak
+ * Code is based on the turtlebot for the IRobot
+ * https://github.com/turtlebot/turtlebot_create/blob/indigo/create_node/nodes/turtlebot_node.py
  */
 
 //=======================================================
 // predefined headers
 #include <ros/ros.h>
+#include <tf/tf.h>
+#include <tf/transform_broadcaster.h>
+
 #include <nav_msgs/Odometry.h>
+
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/Twist.h>
+#include <geometry_msgs/Vector3.h>
+#include <geometry_msgs/Point.h>
 
 #include <threemxl/platform/hardware/dynamixel/CDxlConfig.h>
 
@@ -32,7 +38,7 @@ namespace movement
  */
 Motor_controller::Motor_controller() :
     motorL(), motorR(), serial_port(), sub_name("cmd_vel"), nh("~"), baseFrame("/base_link"), odomFrame("/odom"), last_cmd_vel_time(
-        0)
+        0), prev_dist_left(0), prev_dist_right(0)
 {
 
   nh.param<std::string>("sub_topic", sub_name, sub_name);
@@ -48,24 +54,20 @@ Motor_controller::Motor_controller() :
 /**
  * The destructor closes the serial port if it is open.
  *
- * It also deletes the left and right motor interfaces,
- * serial port.
+ * It also deletes the left and right motor interfaces.
  *
  * Closes down the Nodehandler
  */
 Motor_controller::~Motor_controller()
 {
-  if (serial_port->is_port_open())
+  if (serial_port.is_port_open())
   {
-    serial_port->port_close();
+    serial_port.port_close();
   }
 
   //Remove motors
   delete motorL;
   delete motorR;
-
-  //Remove connection
-  delete serial_port;
 
   nh.shutdown();
 
@@ -83,8 +85,8 @@ bool Motor_controller::init_connection(std::string port_address, int baudrate)
 {
   ROS_INFO("Opening connection to: %s ; baudrate: %d", port_address.c_str(), baudrate);
 
-  bool port_open = serial_port->port_open(port_address, LxSerial::RS485_FTDI);
-  serial_port->set_speed_int(baudrate);
+  bool port_open = serial_port.port_open(port_address, LxSerial::RS485_FTDI);
+  serial_port.set_speed_int(baudrate);
 
   return port_open;
 }
@@ -101,13 +103,13 @@ bool Motor_controller::init_connection(std::string port_address, int baudrate)
  */
 bool Motor_controller::init_Motors()
 {
-  if (serial_port->is_port_open())
+  if (serial_port.is_port_open())
   {
     CDxlConfig *configL = new CDxlConfig();
     CDxlConfig *configR = new CDxlConfig();
 
-    motorL->setSerialPort(serial_port);
-    motorR->setSerialPort(serial_port);
+    motorL->setSerialPort(&serial_port);
+    motorR->setSerialPort(&serial_port);
 
     //TODO find IDs of the motors
 
@@ -168,8 +170,11 @@ void Motor_controller::drive(double v_left, double v_right)
 {
   //TODO Check bumper is hit
 
-  //TODO Test if this works
-  if (motorL->getLastError() == M3XL_STATUS_EM_STOP_ERROR || motorR->getLastError() == M3XL_STATUS_EM_STOP_ERROR)
+  //TODO Test if stop status works
+  motorL->getStatus();
+  motorR->getStatus();
+
+  if (motorL->presentStatus() == M3XL_STATUS_EM_STOP_ERROR || motorR->presentStatus() == M3XL_STATUS_EM_STOP_ERROR)
   {
     ROS_WARN("Emergency Button pressed, can't set speed");
   }
@@ -181,9 +186,137 @@ void Motor_controller::drive(double v_left, double v_right)
   }
 }
 
-void Motor_controller::updateOdomTF()
+/**
+ * Calculates Odometry and TF information for ROS.
+ *
+ * It also publish both the odometry and tf transform.
+ */
+void Motor_controller::updateOdom()
 {
+  //################################
+  // Calculate information needed //
+  //################################
 
+  ros::Time now = ros::Time::now();
+
+  //Time between last measurement and now
+  double dt = (now - last_odom_time).toSec();
+  last_odom_time = now;
+
+  //TODO check if delta distance travelled of wheels needed
+  /*
+   motorL->getLinearPos();
+   double dist_left = motorL->presentLinearPos();
+   prev_dist_left = dist_left;
+   double dt_dist_left = dist_lef - prev_dist_left;
+
+   motorR->getLinearPos();
+   double dist_right = motorL->presentLinearPos();
+   prev_dist_right = dist_right;
+   double dt_dist_right = dist_right - prev_dist_right;
+
+   double dist_avg = (dt_dist_left - dt_dist_right) / 2.0d;
+
+   */
+
+  motorL->getLinearPos();                               //(m/s)
+  double dist_left = motorL->presentLinearPos();
+
+  motorR->getLinearPos();                               //(m/s)
+  double dist_right = motorR->presentLinearPos();
+
+  //Average linear distance of both wheels
+  //TODO Maybe use delta version instead
+  double dist_avg = (dist_left + dist_right) / 2.0d;    //(m/s)
+
+  //Angle rotated
+  //TODO Seems there are 2 options, test them both, check also if delta needed
+  /*
+   motorL->getPos();
+   motorR->getPos();
+   double ang_left = motorL->presentPos();
+   double ang_right = motorR->presentPos();
+   double dt_angle = (ang_left + ang_right) / 2.0d;
+
+
+   double dt_angle_left = (ang_left - prev_ang_left);
+   double prev_ang_left = ang_left;
+
+   double dt_angle_left = (ang_left - prev_ang_left);
+   double prev_ang_right = ang_right;
+
+   double dt_angle = (dt_angle_left - dt_angle_right) / 2.0d;
+   */
+
+
+  //TODO Maybe use delta version instead
+  double dt_angle = (dist_right - dist_left) / AXLE_TRACK;
+
+  //Delta distances x and y direction(how far did the robot move)
+  double dx = cos(dt_angle) * dist_avg;
+  double dy = -sin(dt_angle) * dist_avg;
+
+  double last_angle = pos2d.theta;
+  pos2d.x += cos(last_angle) * dx - sin(last_angle) * dy;
+  pos2d.y += sin(last_angle) * dx + cos(last_angle) * dy;
+  pos2d.theta += dt_angle;
+
+  //Linear velocity
+  //TODO maybe use delta version instead
+  geometry_msgs::Vector3 linearVel;
+  linearVel.x = dist_avg / dt;
+  linearVel.y = 0;
+  linearVel.z = 0;
+
+  //Angular velocity
+  geometry_msgs::Vector3 angularVel;
+  linearVel.x = 0;
+  linearVel.y = 0;
+  linearVel.z = dt_angle / dt;
+
+  //##############################
+  // Odom publisher information //
+  //##############################
+
+  nav_msgs::Odometry odom;
+  geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(pos2d.theta);
+  //Header + Time stamp
+  odom.header.frame_id = odomFrame;
+  odom.child_frame_id = baseFrame;
+  //TODO Specifiy ros::Time stamp, see also above for delta time
+  odom.header.stamp = ros::Time(0.0d);
+
+  //"Actual" information
+  odom.pose.pose.position.x = pos2d.x;
+  odom.pose.pose.position.y = pos2d.y;
+  odom.pose.pose.position.z = 0.0d;
+
+  odom.pose.pose.orientation = odom_quat;
+
+  odom.twist.twist.linear = linearVel;
+  odom.twist.twist.angular = angularVel;
+
+  odom_pub.publish(odom);
+
+  //###################################
+  // Odom TF broadcaster information //
+  //###################################
+  tf::TransformBroadcaster odom_tf;
+
+  geometry_msgs::TransformStamped transform;
+  //Header + Time stamp  (same data as above)
+  transform.header.frame_id = odomFrame;
+  transform.child_frame_id = baseFrame;
+  //TODO Specifiy ros::Time stamp, see also above for delta time
+  transform.header.stamp = ros::Time(0.0d);
+
+  //"Actual" information
+  transform.transform.translation.x = pos2d.x;
+  transform.transform.translation.y = pos2d.y;
+  transform.transform.translation.z = 0.0d;
+  transform.transform.rotation = odom_quat;
+
+  odom_tf.sendTransform(transform);
 }
 
 /**
@@ -196,23 +329,25 @@ void Motor_controller::spin()
 
   while (ros::ok())
   {
-    ros::spinOnce();
-
     //Do additional work here
 
     ros::Time current_time = ros::Time::now();
 
     //Timeout has occurred, stop
     //TODO needs verification
-    if (current_time.sec - last_cmd_vel_time.sec > CMD_VEL_TIMEOUT)
+    if (current_time.toSec() - last_cmd_vel_time.toSec() > CMD_VEL_TIMEOUT)
     {
       drive(0, 0);
       ROS_DEBUG("No cmd_vel received, Timeout");
     }
 
+    ros::spinOnce();
     loop_rate.sleep();
   }
 
+  //Node is stopped, stop also the motors
+  motorL->set3MxlMode(STOP_MODE);
+  motorR->set3MxlMode(STOP_MODE);
 }
 
 }

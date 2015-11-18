@@ -14,6 +14,7 @@ find_package(catkin COMPONENTS
   roscpp
   turtlesim
   geometry_msgs
+  tf
   threemxl
   REQUIRED
 )
@@ -130,6 +131,7 @@ link_directories(${catkin_LIBRARY_DIRS})
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
   src/gamepad_controller.cpp
+# src/motor_controller.cpp
 )
 target_link_libraries(
 	${PROJECT_NAME}
@@ -163,7 +165,8 @@ target_link_libraries(gamepad_controller ${catkin_LIBRARIES})
 add_executable(motor_controller src/motor_controller.cpp)
 target_link_libraries(motor_controller ${catkin_LIBRARIES})
 
-
+add_executable(testBoardNode src/test3MxlBoard.cpp)
+target_link_libraries(testBoardNode ${catkin_LIBRARIES})
 
 
 

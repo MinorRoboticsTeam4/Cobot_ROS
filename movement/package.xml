@@ -48,12 +48,15 @@
   <build_depend>turtlesim</build_depend>
   <build_depend>geometry_msgs</build_depend>
   <build_depend>threemxl</build_depend>
+  <build_depend>tf</build_depend>
+  
   
   <run_depend>joy</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>turtlesim</run_depend>
   <run_depend>geometry_msgs</run_depend>
   <run_depend>threemxl</run_depend>
+  <run_depend>tf</run_depend>
 
   <test_depend>gtest</test_depend>
   <test_depend>rostest</test_depend>

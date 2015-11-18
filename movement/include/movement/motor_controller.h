@@ -14,11 +14,11 @@
 // predefined headers
 #include <threemxl/C3mxl.h>
 #include <threemxl/LxFTDI.h>
+#include <geometry_msgs/Pose2D.h>
 
 //=======================================================
 // new defined headers
 #include "robot_params.h"
-
 
 namespace movement
 {
@@ -80,11 +80,10 @@ private:
    */
   void drive(double v_left, double v_right);
 
-
   /**
-   * Calculate the odometry + tf and publish the result
+   * Calculates Odometry information and publishes both Odom and tf transform
    */
-  void updateOdomTF();
+  void updateOdom();
 
   /**
    * The name of the Twist topic to listen to
@@ -101,20 +100,27 @@ private:
    */
   std::string odomFrame;
 
+
+
+  //TODO Maybe not Needed
+  double prev_dist_left;
+  double prev_dist_right;
+
+
   /**
-   * The left motor object
+   * The left motor interface
    */
   C3mxl *motorL;
 
   /**
-   * The right motor object
+   * The right motor interface
    */
   C3mxl *motorR;
 
   /**
    * Serial port for communication
    */
-  LxSerial *serial_port;
+  LxSerial serial_port;
 
   /**
    * NodeHandler for ROS usage
@@ -136,6 +142,15 @@ private:
    */
   ros::Time last_cmd_vel_time;
 
+  /**
+   * Last time Odometry was updated.
+   */
+  ros::Time last_odom_time;
+
+  /**
+   * Current position of the robot
+   */
+  geometry_msgs::Pose2D pos2d;
 
 };
 
