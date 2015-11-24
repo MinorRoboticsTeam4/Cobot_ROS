@@ -23,7 +23,7 @@ const double AXLE_TRACK = 0.600d;                         //(m)
 const double WHEEL_DIAMETER = 0.297d;                     //(m)
 
 const double CMD_VEL_TIMEOUT = 5.0d;                         //(s)
-const double UPDATE_RATE = 100.0d;                          //(Hz)
+const double UPDATE_RATE = 1.0d;                          //(Hz)
 
 
 

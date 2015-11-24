@@ -166,11 +166,6 @@ target_link_libraries(gamepad_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
 add_executable(motor_controller src/motor_controllerNode.cpp)
 target_link_libraries(motor_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
 
-add_executable(example src/example.cpp)
-target_link_libraries(example ${catkin_LIBRARIES} ${PROJECT_NAME})
-
-
-
 #############
 ## Install ##
 #############

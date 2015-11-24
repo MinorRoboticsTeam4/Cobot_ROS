@@ -80,7 +80,14 @@ private:
    * @param v_left speed of left motor (m/s)
    * @param v_right speed of right motor (m/s)
    */
-  void drive(double v_left, double v_right);
+  void drive_linearSpeed(double v_left, double v_right);
+
+  /**
+   * Give the command to drive this robot.
+   * @param v_left speed of left motor (rad/s)
+   * @param v_right speed of right motor (rad/s)
+   */
+  void drive_angularSpeed(double v_left, double v_right);
 
   /**
    * Calculates Odometry information and publishes both Odom and tf transform

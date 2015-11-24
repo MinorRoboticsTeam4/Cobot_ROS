@@ -31,4 +31,4 @@
 *~
 
 #Ignore Doxygen html generation
-*/html/
+*/html/**

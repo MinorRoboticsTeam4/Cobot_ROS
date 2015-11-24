@@ -28,6 +28,20 @@ namespace movement
 {
 
 /**
+ * Clip the value between min<=x<=max
+ *
+ * @param n value to be clipped
+ * @param lower lower bound
+ * @param upper upper bound
+ * @return clipped value
+ */
+template<typename T>
+  T clip(const T& n, const T& lower, const T& upper)
+  {
+    return std::max(lower, std::min(n, upper));
+  }
+
+/**
  * Default constructor, setups the Nodehandler for publishing / listening.
  *
  * The default topic to listen to is "/cmd_vel"
@@ -38,7 +52,7 @@ namespace movement
  */
 Motor_controller::Motor_controller() :
     serial_port(), sub_name("cmd_vel"), nh("~"), baseFrame("/base_link"), odomFrame("/odom"), last_cmd_vel_time(0), last_dist_left(
-        0), last_dist_right(0), motors(), v_left(0), v_right(0),last_angle_left(0),last_angle_right(0)
+        0), last_dist_right(0), motors(), v_left(0), v_right(0), last_angle_left(0), last_angle_right(0)
 {
 
   nh.param<std::string>("sub_topic", sub_name, sub_name);
@@ -174,7 +188,10 @@ void Motor_controller::cmdVelCallback(const geometry_msgs::Twist::ConstPtr &twis
   //Reset time for timeout
   last_cmd_vel_time = ros::Time::now();
 
-  drive(v_left, v_right);
+  drive_linearSpeed(v_left, v_right);
+
+//  drive_angularSpeed(v_left / (0.5*WHEEL_DIAMETER) , v_right / (0.5*WHEEL_DIAMETER));
+
 }
 
 /**
@@ -186,7 +203,7 @@ void Motor_controller::cmdVelCallback(const geometry_msgs::Twist::ConstPtr &twis
  * @param v_left speed of left motor (m/s)
  * @param v_right speed of right motor (m/s)
  */
-void Motor_controller::drive(double v_left, double v_right)
+void Motor_controller::drive_linearSpeed(double v_left, double v_right)
 {
   //TODO Check bumper is hit
 
@@ -198,25 +215,27 @@ void Motor_controller::drive(double v_left, double v_right)
 
   if (motors->getDynamixel(0)->presentStatus() == M3XL_STATUS_EM_STOP_ERROR)
   {
-      ROS_WARN("Left says: Emergency Button pressed, can't set speed");
+    ROS_WARN("Left says: Emergency Button pressed, can't set speed");
   }
 
   if (motors->getDynamixel(1)->presentStatus() == M3XL_STATUS_EM_STOP_ERROR)
   {
-       ROS_WARN("Right says: Emergency Button pressed, can't set speed");
+    ROS_WARN("Right says: Emergency Button pressed, can't set speed");
   }
   else
   {
-    //Maybe check if speed is clamped?
+    //TODO is clip needed?
+    v_left = clip(v_left, -1.0, 1.0);
+    v_right = clip(v_right, -1.0, 1.0);
 
- //   ROS_INFO("Setting speed for robot Left: %f m/s, Right: %f m/s", v_left, v_right);
+    ROS_INFO("Setting speed for robot Left: %f m/s, Right: %f m/s", v_left, v_right);
 
     if (v_left == 0 && v_right == 0)
     {
       motors->getDynamixel(0)->set3MxlMode(STOP_MODE);
       motors->getDynamixel(1)->set3MxlMode(STOP_MODE);
 
-     // ROS_INFO("Robot stop");
+      // ROS_INFO("Robot stop");
     }
     else
     {
@@ -232,6 +251,67 @@ void Motor_controller::drive(double v_left, double v_right)
 
       motors->getDynamixel(0)->setLinearSpeed(v_left);
       motors->getDynamixel(1)->setLinearSpeed(v_right);
+    }
+  }
+}
+
+/**
+ * Give the command to drive this robot.
+ *
+ * It checks if the bumper(outer shell) is touched
+ * It checks if the emergency button is checked.
+ *
+ * @param v_left speed of left motor (rad/s)
+ * @param v_right speed of right motor (rad/s)
+ */
+void Motor_controller::drive_angularSpeed(double v_left, double v_right)
+{
+  //TODO Check bumper is hit
+
+  //TODO Test if stop status works
+  motors->getDynamixel(0)->getStatus();
+  motors->getDynamixel(1)->getStatus();
+
+  motors->getDynamixel(0)->translateErrorCode(motors->getLastError());
+
+  if (motors->getDynamixel(0)->presentStatus() == M3XL_STATUS_EM_STOP_ERROR)
+  {
+    ROS_WARN("Left says: Emergency Button pressed, can't set speed");
+  }
+
+  if (motors->getDynamixel(1)->presentStatus() == M3XL_STATUS_EM_STOP_ERROR)
+  {
+    ROS_WARN("Right says: Emergency Button pressed, can't set speed");
+  }
+  else
+  {
+    //Maybe check if speed is clamped?
+    v_left = clip(v_left, -5.0, 5.0);
+    v_right = clip(v_right, -5.0, 5.0);
+
+    ROS_INFO("Setting speed for robot Left: %f rad/s, Right: %f rad/s", v_left, v_right);
+
+    if (v_left == 0 && v_right == 0)
+    {
+      motors->getDynamixel(0)->set3MxlMode(STOP_MODE);
+      motors->getDynamixel(1)->set3MxlMode(STOP_MODE);
+
+      // ROS_INFO("Robot stop");
+    }
+    else
+    {
+      motors->getDynamixel(0)->get3MxlMode();
+      if (motors->getDynamixel(0)->present3MxlMode() != SPEED_MODE)
+      {
+        motors->getDynamixel(0)->set3MxlMode(SPEED_MODE);
+      }
+      if (motors->getDynamixel(1)->present3MxlMode() != SPEED_MODE)
+      {
+        motors->getDynamixel(1)->set3MxlMode(SPEED_MODE);
+      }
+
+      motors->getDynamixel(0)->setSpeed(v_left);
+      motors->getDynamixel(1)->setSpeed(v_right);
     }
   }
 }
@@ -385,12 +465,12 @@ void Motor_controller::spin()
     //TODO needs verification
     if (current_time.toSec() - last_cmd_vel_time.toSec() > CMD_VEL_TIMEOUT)
     {
-      drive(0, 0);
+      drive_linearSpeed(0, 0);
       ROS_DEBUG("No cmd_vel received, Timeout");
     }
     else
     {
-      drive(v_left, v_right);
+      drive_linearSpeed(v_left, v_right);
     }
 
     ros::spinOnce();
@@ -403,6 +483,4 @@ void Motor_controller::spin()
 }
 
 }
-
-
 

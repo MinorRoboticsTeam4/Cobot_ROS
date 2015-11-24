@@ -25,8 +25,8 @@ int main(int argc, char** argv)
 
 //Initialize motor controller and open port
   movement::Motor_controller motor_controller;
-  motor_controller.init_connection("/dev/ttyUSB0");
-  motor_controller.init_Motors();
+  //motor_controller.init_connection("/dev/ttyUSB0");
+  //motor_controller.init_Motors();
 
 //Run ros node
   motor_controller.spin();
