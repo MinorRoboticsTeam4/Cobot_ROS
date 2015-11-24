@@ -1,4 +1,6 @@
 [![Stories in Ready](https://badge.waffle.io/MinorRoboticsTeam4/Cobot_ROS.svg?label=ready&title=Ready)](http://waffle.io/MinorRoboticsTeam4/Cobot_ROS)
+[![Build Status](https://travis-ci.org/MinorRoboticsTeam4/Cobot_ROS.svg)](https://travis-ci.org/MinorRoboticsTeam4/Cobot_ROS)
+[![codecov.io](https://codecov.io/github/MinorRoboticsTeam4/Cobot_ROS/coverage.svg?branch=master)](https://github.com/MinorRoboticsTeam4/Cobot_ROS?branch=master)
 
 For more details about this project, team members and the robot, please visit the [Wiki pages](https://github.com/MinorRoboticsTeam4/CoffeeBot/wiki) 
 
