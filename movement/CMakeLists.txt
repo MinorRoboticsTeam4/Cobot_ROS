@@ -165,8 +165,9 @@ target_link_libraries(gamepad_controller ${catkin_LIBRARIES})
 add_executable(motor_controller src/motor_controller.cpp)
 target_link_libraries(motor_controller ${catkin_LIBRARIES})
 
-add_executable(testBoardNode src/test3MxlBoard.cpp)
-target_link_libraries(testBoardNode ${catkin_LIBRARIES})
+#Source code is not included!!
+#add_executable(testBoardNode src/test3MxlBoard.cpp)
+#target_link_libraries(testBoardNode ${catkin_LIBRARIES})
 
 
 
