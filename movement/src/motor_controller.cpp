@@ -37,8 +37,8 @@ namespace movement
  * Additionally, it defines the base frame("/base_link") and the odometry frame("/odom") needed for tf
  */
 Motor_controller::Motor_controller() :
-    motorL(), motorR(), serial_port(), sub_name("cmd_vel"), nh("~"), baseFrame("/base_link"), odomFrame("/odom"), last_cmd_vel_time(
-        0), prev_dist_left(0), prev_dist_right(0)
+    serial_port(), sub_name("cmd_vel"), nh("~"), baseFrame("/base_link"), odomFrame("/odom"), last_cmd_vel_time(0), last_dist_left(
+        0), last_dist_right(0), motors(), v_left(0), v_right(0),last_angle_left(0),last_angle_right(0)
 {
 
   nh.param<std::string>("sub_topic", sub_name, sub_name);
@@ -66,8 +66,8 @@ Motor_controller::~Motor_controller()
   }
 
   //Remove motors
-  delete motorL;
-  delete motorR;
+  /* delete motorL;
+   delete motorR;*/
 
   nh.shutdown();
 
@@ -105,11 +105,27 @@ bool Motor_controller::init_Motors()
 {
   if (serial_port.is_port_open())
   {
-    CDxlConfig *configL = new CDxlConfig();
-    CDxlConfig *configR = new CDxlConfig();
+    /*   CDxlConfig *configL = new CDxlConfig();
+     CDxlConfig *configR = new CDxlConfig();*/
 
-    motorL->setSerialPort(&serial_port);
-    motorR->setSerialPort(&serial_port);
+    CDxlConfig *config = new CDxlConfig();
+
+    config->mDxlTypeStr = "3MXL";
+    motors = new CDxlGroup();
+    motors->addNewDynamixel(config->setID(107));
+    motors->addNewDynamixel(config->setID(106));
+
+    motors->setSerialPort(&serial_port);
+
+    ROS_ASSERT(motors->init());
+    ROS_ASSERT(motors->getDynamixel(0)->set3MxlMode(SPEED_MODE) == DXL_SUCCESS);
+    ROS_ASSERT(motors->getDynamixel(1)->set3MxlMode(SPEED_MODE) == DXL_SUCCESS);
+
+    motors->getDynamixel(0)->setLinearSpeed(0);
+    motors->getDynamixel(1)->setLinearSpeed(0);
+
+    //   motorL->setSerialPort(&serial_port);
+    //  motorR->setSerialPort(&serial_port);
 
     //TODO find IDs of the motors
 
@@ -122,8 +138,8 @@ bool Motor_controller::init_Motors()
      motorR->set3MxlMode(SPEED_MODE);
      */
 
-    delete configL;
-    delete configR;
+    /*  delete configL;
+     delete configR;*/
 
   }
   else
@@ -148,8 +164,12 @@ void Motor_controller::cmdVelCallback(const geometry_msgs::Twist::ConstPtr &twis
   double v = twist->linear.x;                           //(m/s)
   double th = twist->angular.z;                         //(rad/s)
 
-  double v_left = v - th * (AXLE_TRACK / 2.0);          //(m/s)
-  double v_right = v + th * (AXLE_TRACK / 2.0);         //(m/s)
+  std::cout << "v is for " << v << std::endl;
+
+  v_left = v - th * ((double)AXLE_TRACK / (double)2.0d);          //(m/s)
+  v_right = v + th * ((double)AXLE_TRACK / (double)2.0d);         //(m/s)
+
+  std::cout << "v left is " << v_left << std::endl;
 
   //Reset time for timeout
   last_cmd_vel_time = ros::Time::now();
@@ -171,18 +191,48 @@ void Motor_controller::drive(double v_left, double v_right)
   //TODO Check bumper is hit
 
   //TODO Test if stop status works
-  motorL->getStatus();
-  motorR->getStatus();
+  motors->getDynamixel(0)->getStatus();
+  motors->getDynamixel(1)->getStatus();
 
-  if (motorL->presentStatus() == M3XL_STATUS_EM_STOP_ERROR || motorR->presentStatus() == M3XL_STATUS_EM_STOP_ERROR)
+  motors->getDynamixel(0)->translateErrorCode(motors->getLastError());
+
+  if (motors->getDynamixel(0)->presentStatus() == M3XL_STATUS_EM_STOP_ERROR)
   {
-    ROS_WARN("Emergency Button pressed, can't set speed");
+      ROS_WARN("Left says: Emergency Button pressed, can't set speed");
+  }
+
+  if (motors->getDynamixel(1)->presentStatus() == M3XL_STATUS_EM_STOP_ERROR)
+  {
+       ROS_WARN("Right says: Emergency Button pressed, can't set speed");
   }
   else
   {
     //Maybe check if speed is clamped?
-    motorL->setLinearSpeed(v_left);
-    motorR->setLinearSpeed(v_right);
+
+ //   ROS_INFO("Setting speed for robot Left: %f m/s, Right: %f m/s", v_left, v_right);
+
+    if (v_left == 0 && v_right == 0)
+    {
+      motors->getDynamixel(0)->set3MxlMode(STOP_MODE);
+      motors->getDynamixel(1)->set3MxlMode(STOP_MODE);
+
+     // ROS_INFO("Robot stop");
+    }
+    else
+    {
+      motors->getDynamixel(0)->get3MxlMode();
+      if (motors->getDynamixel(0)->present3MxlMode() != SPEED_MODE)
+      {
+        motors->getDynamixel(0)->set3MxlMode(SPEED_MODE);
+      }
+      if (motors->getDynamixel(1)->present3MxlMode() != SPEED_MODE)
+      {
+        motors->getDynamixel(1)->set3MxlMode(SPEED_MODE);
+      }
+
+      motors->getDynamixel(0)->setLinearSpeed(v_left);
+      motors->getDynamixel(1)->setLinearSpeed(v_right);
+    }
   }
 }
 
@@ -200,6 +250,7 @@ void Motor_controller::updateOdom()
   ros::Time now = ros::Time::now();
 
   //Time between last measurement and now
+  //TODO Check if time is correct
   double dt = (now - last_odom_time).toSec();
   last_odom_time = now;
 
@@ -219,11 +270,11 @@ void Motor_controller::updateOdom()
 
    */
 
-  motorL->getLinearPos();                               //(m/s)
-  double dist_left = motorL->presentLinearPos();
+  motors->getDynamixel(0)->getLinearPos();               //(m/s)
+  double dist_left = motors->getDynamixel(0)->presentLinearPos();
 
-  motorR->getLinearPos();                               //(m/s)
-  double dist_right = motorR->presentLinearPos();
+  motors->getDynamixel(1)->getLinearPos();                               //(m/s)
+  double dist_right = motors->getDynamixel(1)->presentLinearPos();
 
   //Average linear distance of both wheels
   //TODO Maybe use delta version instead
@@ -247,7 +298,6 @@ void Motor_controller::updateOdom()
 
    double dt_angle = (dt_angle_left - dt_angle_right) / 2.0d;
    */
-
 
   //TODO Maybe use delta version instead
   double dt_angle = (dist_right - dist_left) / AXLE_TRACK;
@@ -283,8 +333,7 @@ void Motor_controller::updateOdom()
   //Header + Time stamp
   odom.header.frame_id = odomFrame;
   odom.child_frame_id = baseFrame;
-  //TODO Specifiy ros::Time stamp, see also above for delta time
-  odom.header.stamp = ros::Time(0.0d);
+  odom.header.stamp = now;
 
   //"Actual" information
   odom.pose.pose.position.x = pos2d.x;
@@ -307,8 +356,7 @@ void Motor_controller::updateOdom()
   //Header + Time stamp  (same data as above)
   transform.header.frame_id = odomFrame;
   transform.child_frame_id = baseFrame;
-  //TODO Specifiy ros::Time stamp, see also above for delta time
-  transform.header.stamp = ros::Time(0.0d);
+  transform.header.stamp = now;
 
   //"Actual" information
   transform.transform.translation.x = pos2d.x;
@@ -340,37 +388,21 @@ void Motor_controller::spin()
       drive(0, 0);
       ROS_DEBUG("No cmd_vel received, Timeout");
     }
+    else
+    {
+      drive(v_left, v_right);
+    }
 
     ros::spinOnce();
     loop_rate.sleep();
   }
 
   //Node is stopped, stop also the motors
-  motorL->set3MxlMode(STOP_MODE);
-  motorR->set3MxlMode(STOP_MODE);
+  motors->getDynamixel(0)->set3MxlMode(STOP_MODE);
+  motors->getDynamixel(1)->set3MxlMode(STOP_MODE);
 }
 
 }
 
-/** @brief Main function
- *
- * @param argc  An integer argument count of the command line arguments
- * @param argv  An argument vector of the command line arguments
- * @return  EXIT_SUCCESS if exit is success
- */
-int main(int argc, char** argv)
-{
-//Initialize ros node
-  ros::init(argc, argv, "motor_controller");
 
-//Initialize motor controller and open port
-  movement::Motor_controller motor_controller;
-  motor_controller.init_connection("USB ID");
-  motor_controller.init_Motors();
-
-//Run ros node
-  motor_controller.spin();
-
-  return EXIT_SUCCESS;
-}
 

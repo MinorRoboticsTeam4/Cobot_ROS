@@ -1,7 +1,8 @@
 <launch>
 
  <!-- Turtlesim Node-->
-  <node pkg="turtlesim" type="turtlesim_node" name="sim"/> 
+ <!-- For Direction Testing -->
+  <node pkg="turtlesim" type="turtlesim_node" name="sim"/>
 
  
  <!-- Gamepad Joy Node -->
@@ -16,5 +17,11 @@
    <!-- Publish on turtle cmd_vel -->
    <param name="pub_topic" value="turtle1/cmd_vel" type="str" />
   </node>
+  
+  <!-- MotorController Node -->
+   <node pkg="movement" name="motor_controller" type="motor_controller" output="screen">
+   <!--Subscribe to Turtle cmd_vel for Testing -->
+   <param name="sub_topic" value="turtle1/cmd_vel" type="str" />
+   </node>
 
 </launch>

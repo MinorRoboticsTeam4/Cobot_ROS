@@ -14,7 +14,9 @@
 // predefined headers
 #include <threemxl/C3mxl.h>
 #include <threemxl/LxFTDI.h>
+
 #include <geometry_msgs/Pose2D.h>
+#include <geometry_msgs/Twist.h>
 
 //=======================================================
 // new defined headers
@@ -102,24 +104,21 @@ private:
 
 
 
-  //TODO Maybe not Needed
-  double prev_dist_left;
-  double prev_dist_right;
+  //TODO For Delta distances maybe not Needed
+  double last_dist_left;
+  double last_dist_right;
+  double last_angle_left;
+  double last_angle_right;
 
+  CDxlGroup *motors;
 
-  /**
-   * The left motor interface
-   */
-  C3mxl *motorL;
-
-  /**
-   * The right motor interface
-   */
-  C3mxl *motorR;
+  double v_left;
+  double v_right;
 
   /**
    * Serial port for communication
    */
+  //LxSerial serial_port;
   LxSerial serial_port;
 
   /**

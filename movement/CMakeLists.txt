@@ -131,7 +131,7 @@ link_directories(${catkin_LIBRARY_DIRS})
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
   src/gamepad_controller.cpp
-# src/motor_controller.cpp
+  src/motor_controller.cpp
 )
 target_link_libraries(
 	${PROJECT_NAME}
@@ -159,15 +159,18 @@ target_link_libraries(
 # )
 
 
-add_executable(gamepad_controller src/gamepad_controller.cpp)
-target_link_libraries(gamepad_controller ${catkin_LIBRARIES})
+#Created Executables of the Nodes
+add_executable(gamepad_controller src/gamepad_controllerNode.cpp)
+target_link_libraries(gamepad_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
 
-add_executable(motor_controller src/motor_controller.cpp)
-target_link_libraries(motor_controller ${catkin_LIBRARIES})
+add_executable(motor_controller src/motor_controllerNode.cpp)
+target_link_libraries(motor_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
 
-add_executable(testBoardNode src/test3MxlBoard.cpp)
-target_link_libraries(testBoardNode ${catkin_LIBRARIES})
+add_executable(testBoard src/test3MxlBoard.cpp)
+target_link_libraries(testBoard ${catkin_LIBRARIES} ${PROJECT_NAME})
 
+add_executable(example src/example.cpp)
+target_link_libraries(example ${catkin_LIBRARIES} ${PROJECT_NAME})
 
 
 
