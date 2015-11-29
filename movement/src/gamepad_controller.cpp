@@ -1,7 +1,6 @@
 /*
  * gamepad_controller.cpp
  *
- *      Author: aclangerak
  */
 
 //=======================================================
@@ -29,11 +28,9 @@ namespace movement
  *
  */
 GamePad_controller::GamePad_controller() :
-    linear(0), angular(1), linear_scale(1.0), angular_scale(1.0), pub_name("controller_vel"), nh("~")
+    linear(0), angular(1), linear_scale(1.0), angular_scale(1.0), pub_name("controller_vel"), nh("~"), twist()
 {
   //Read in the params from teleop.yaml
-  //cannot get private namespaces to work,
-  //so using this method instead
   nh.param<int>("linear_axis", linear, linear);
   nh.param<int>("angular_axis", angular, angular);
   nh.param<double>("linear_scale", linear_scale, linear_scale);
@@ -56,12 +53,11 @@ GamePad_controller::GamePad_controller() :
 }
 
 /**
- * Shutdowns internal NodeHandler and connections (ROS does this)
+ * Shutdowns internal NodeHandler
  */
 GamePad_controller::~GamePad_controller()
 {
   nh.shutdown();
-
 }
 
 /**
@@ -122,12 +118,12 @@ const std::string GamePad_controller::getPublishTopic()
  * (Callback) Function that converts the Joy message received from the
  * gamepad to a Twist message.
  *
- * The Twist message that is only generated for differential drive, so only
- * the following messages are defined:
- * <li> linear.x  = linear speed
- * <li> angular.z = angle speed
+ * The Twist message is only generated for differential drive, so only
+ * the following messages are used:
+ * <li> linear.x  = linear speed </li>
+ * <li> angular.z = angle speed </li>
  *
- * @param joy   incoming joy message
+ * @param joy incoming joy message
  */
 void GamePad_controller::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 {
@@ -135,36 +131,31 @@ void GamePad_controller::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
   ROS_DEBUG("Read gamepad command: linear %f angular %f ", joy->axes[this->getLinearAxis()],
             joy->axes[this->getAngularAxis()]);
 
-  //New twist message
-  geometry_msgs::Twist twist;
-
   twist.linear.x = linear_scale * joy->axes[this->getLinearAxis()];
   twist.angular.z = angular_scale * joy->axes[this->getAngularAxis()];
 
-  //Publish the message
-  vel_pub.publish(twist);
-
-  ROS_DEBUG("Publish twist message on topic %s, with values: linear %f, angular %f", pub_name.c_str(), twist.linear.x, twist.angular.z);
+  ROS_DEBUG("Create twist message on topic %s, with values: linear %f, angular %f", pub_name.c_str(), twist.linear.x,
+            twist.angular.z);
 }
 
 /**
  * Run this ROS node.
- * The (default) frequency that it will run is 10 Hz.
+ * The (default) frequency that it will run is 30 Hz.
  */
 void GamePad_controller::spin()
 {
   ROS_INFO("Started gamepad_controller Node");
 
-  ros::Rate loop_rate(10);       //10 Hz
+  ros::Rate loop_rate(30);       //Hz
   while (ros::ok())
   {
     //Place additional run code for ROS here.
     ros::spinOnce();
+    //Publish the message
+    vel_pub.publish(twist);
     loop_rate.sleep();
   }
 }
 
 }
-
-
 

@@ -5,27 +5,33 @@
 
 //=======================================================
 // include guard
-#ifndef MOVEMENT_INCLUDE_MOVEMENT_GAMEPAD_CONTROLLER_H_
-#define MOVEMENT_INCLUDE_MOVEMENT_GAMEPAD_CONTROLLER_H_
+#ifndef MOVEMENT_INCLUDE_MOVEMENT_GAMEPAD_CONTROLLER_H_INCLUDED
+#define MOVEMENT_INCLUDE_MOVEMENT_GAMEPAD_CONTROLLER_H_INCLUDED
 
 //=======================================================
 // predefined headers
 #include <sensor_msgs/Joy.h>
 #include <ros/ros.h>
+#include <geometry_msgs/Twist.h>
 
 namespace movement
 {
 
 /**
  * This class contains the following:
- * <li> A Nodehandler for interfacing with ROS
- * <li> A callback function to convert joy -> twist messages.
- * <li> Parameters read from teleop.yaml: linear,angular and scale
+ * <li> A Nodehandler for interfacing with ROS </li>
+ * <li> A callback function to convert joy -> twist messages. </li>
+ * <li> Parameters read from teleop.yaml: linear,angular and scale </li>
  */
 class GamePad_controller
 {
-public:
 
+//Typedefs
+//public:
+//private:
+
+//Public Functions
+public:
   /**
    * Default constructor
    */
@@ -35,7 +41,6 @@ public:
    * Default destructor
    */
   ~GamePad_controller();
-
 
   /**
    * Get the linear axis
@@ -72,15 +77,19 @@ public:
    */
   void spin();
 
+//Private Functions
 private:
-
   /**
    * (Callback) Function to convert Joy -> Twist messages.
    * @param joy  incoming joy message
    */
   void joyCallback(const sensor_msgs::Joy::ConstPtr& joy);
 
+//Public Variables
+//public:
 
+//Private Variables
+private:
   /**
    * current linear value
    */
@@ -121,9 +130,13 @@ private:
    */
   ros::Subscriber joy_sub;
 
-
+  /**.
+   * Twist message to send
+   */
+  geometry_msgs::Twist twist;
 
 };
-}
+
+}  //namespace end
 
 #endif /* MOVEMENT_INCLUDE_MOVEMENT_GAMEPAD_CONTROLLER_H_ */

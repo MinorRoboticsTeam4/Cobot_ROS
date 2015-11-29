@@ -24,6 +24,7 @@ int main(int argc, char** argv)
 
   //Initialize gamepad_controller class
   movement::GamePad_controller gamepad_controller;
+  //Run the node
   gamepad_controller.spin();
 
   return EXIT_SUCCESS;
