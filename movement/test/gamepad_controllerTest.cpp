@@ -36,23 +36,23 @@ TEST(GamepadTest, LoadParam)
 
   ros::NodeHandle test_nh;
   int linearAxis;
-  test_nh.getParam("gamepad_controller/linear_axis", linearAxis);
+  test_nh.getParam("/gamepad_controller/linear_axis", linearAxis);
   EXPECT_EQ(linearAxis,gamepad.getLinearAxis());
 
   int angularAxis;
-  test_nh.getParam("gamepad_controller/angular_axis", angularAxis);
+  test_nh.getParam("/gamepad_controller/angular_axis", angularAxis);
   EXPECT_EQ(angularAxis,gamepad.getAngularAxis());
 
   int linearScale;
-  test_nh.getParam("gamepad_controller/linear_scale", linearScale);
+  test_nh.getParam("/gamepad_controller/linear_scale", linearScale);
   EXPECT_EQ(linearScale,gamepad.getLinearScale());
 
   int angularScale;
-  test_nh.getParam("gamepad_controller/angular_scale", angularScale);
+  test_nh.getParam("/gamepad_controller/angular_scale", angularScale);
   EXPECT_EQ(angularScale,gamepad.getAngularScale());
 
   std::string pubName;
-  test_nh.getParam("gamepad_controller/pub_topic", pubName);
+  test_nh.getParam("/gamepad_controller/pub_topic", pubName);
   EXPECT_EQ(pubName,gamepad.getPublishTopic());
 
 }
@@ -65,11 +65,11 @@ TEST(GamepadTest, CallbackFunc)
   ros::NodeHandle test_nh;
   TwistSubscriber subscriber;
 
-  ros::Subscriber rosSubscriber = test_nh.subscribe("test_vel", 100, &TwistSubscriber::callback, &subscriber);
+  ros::Subscriber rosSubscriber = test_nh.subscribe("/test_vel", 100, &TwistSubscriber::callback, &subscriber);
 
   ASSERT_EQ(1, rosSubscriber.getNumPublishers());
 
-  ros::Publisher rosPublisher = test_nh.advertise<sensor_msgs::Joy>("joy", 100);
+  ros::Publisher rosPublisher = test_nh.advertise<sensor_msgs::Joy>("/joy", 100);
 
   sensor_msgs::Joy joy_msg;
   joy_msg.axes.resize(4);
@@ -81,10 +81,13 @@ TEST(GamepadTest, CallbackFunc)
   sleep(1);
   ros::spinOnce();
 
+  gamepad.spin();
+
   //"Actual" publishing
   rosPublisher.publish(joy_msg);
   sleep(1);
   ros::spinOnce();
+
 
   //Test message received and value
   ASSERT_TRUE(subscriber.received);

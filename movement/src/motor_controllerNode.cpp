@@ -1,36 +1,31 @@
 /*
  * motor_controllerNode.cpp
- *
- *  Created on: Nov 22, 2015
- *      Author: aclangerak
+ * 
  */
 
 //=======================================================
 // predefined headers
-#include <ros/ros.h>
+#include <boost/shared_ptr.hpp>
+
 //=======================================================
 // new defined headers
-#include <movement/motor_controller.h>
+#include "movement/board.h"
+#include "movement/dummyBoard.h"
+#include "movement/threeMxlBoard.h"
+#include "movement/motor_controller.h"
 
-/** @brief Main function
- *
- * @param argc  An integer argument count of the command line arguments
- * @param argv  An argument vector of the command line arguments
- * @return  EXIT_SUCCESS if exit is success
- */
 int main(int argc, char** argv)
 {
-//Initialize ros node
   ros::init(argc, argv, "motor_controller");
 
-//Initialize motor controller and open port
-  movement::Motor_controller motor_controller;
-  //motor_controller.init_connection("/dev/ttyUSB0");
-  //motor_controller.init_Motors();
 
-//Run ros node
-  motor_controller.spin();
+  movement::Board::SharedPtr board(new movement::DummyBoard);
+  board->init_connection("/dev/usb0",921600);
+  board->init_motors();
+  board->get_status_left();
 
-  return EXIT_SUCCESS;
+  movement::Motor_controller controller(board);
+  controller.spin();
+
+  return 0;
 }
-
