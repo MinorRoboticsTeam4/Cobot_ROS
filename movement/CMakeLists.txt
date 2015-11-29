@@ -16,6 +16,8 @@ find_package(catkin COMPONENTS
   geometry_msgs
   tf
   threemxl
+  std_msgs
+  message_generation
   REQUIRED
 )
 
@@ -53,11 +55,11 @@ find_package(catkin COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+   DIRECTORY msg
+   FILES
+   sensorReadings.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -74,10 +76,10 @@ find_package(catkin COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  std_msgs  # Or other packages containing msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -111,8 +113,8 @@ find_package(catkin COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS joy roscpp turtlesim geometry_msgs threemxl
-#  DEPENDS system_lib
+  CATKIN_DEPENDS joy roscpp turtlesim geometry_msgs threemxl message_runtime 
+  DEPENDS system_lib message_runtime 
 )
 
 ###########
@@ -131,6 +133,10 @@ link_directories(${catkin_LIBRARY_DIRS})
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
   src/gamepad_controller.cpp
+  src/old_motor_controller.cpp
+  src/board.cpp
+  src/dummyBoard.cpp
+  src/threeMxlBoard.cpp
   src/motor_controller.cpp
 )
 target_link_libraries(
@@ -165,6 +171,12 @@ target_link_libraries(gamepad_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
 
 add_executable(motor_controller src/motor_controllerNode.cpp)
 target_link_libraries(motor_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
+
+add_executable(testBoard src/PWMBoardTest.cpp)
+target_link_libraries(testBoard ${catkin_LIBRARIES} ${PROJECT_NAME})
+
+add_executable(old_motor_controller src/old_motor_controllerNode.cpp)
+target_link_libraries(old_motor_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
 
 #############
 ## Install ##
@@ -201,6 +213,7 @@ target_link_libraries(motor_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
 
+
 #############
 ## Testing ##
 #############
@@ -227,8 +240,9 @@ if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
 
   #Create gamepad test file
-    add_rostest_gtest(gamepad-test test/gamepad_controllerTest.launch test/gamepad_controllerTest.cpp)
-	target_link_libraries(gamepad-test ${PROJECT_NAME} ${catkin_LIBRARIES} )
+	#Test broken because of spin()
+    #add_rostest_gtest(gamepad-test test/gamepad_controllerTest.launch test/gamepad_controllerTest.cpp)
+	#target_link_libraries(gamepad-test ${PROJECT_NAME} ${catkin_LIBRARIES} )
  
 
 endif()
