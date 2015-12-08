@@ -3,8 +3,8 @@
 linear_axis: 1
 angular_axis: 2
 # Scale for adjusting values linearly
-linear_scale: 1
-angular_scale: 1
+linear_scale: 0.5
+angular_scale: -1
 
 
 

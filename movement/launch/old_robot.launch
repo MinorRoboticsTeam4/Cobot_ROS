@@ -19,9 +19,10 @@
   </node>
   
   <!-- MotorController Node -->
-   <node pkg="movement" name="motor_controller" type="motor_controller" output="screen">
+  <!-- OLD DEBUG PURPOSE -->
+   <node pkg="movement" name="old_motor_controller" type="old_motor_controller" output="screen">
    <!--Subscribe to Turtle cmd_vel for Testing -->
-   <param name="sub_topic" value="cmd_vel" type="str" />
+   <param name="sub_topic" value="turtle1/cmd_vel" type="str" />
    </node>
 
 </launch>
