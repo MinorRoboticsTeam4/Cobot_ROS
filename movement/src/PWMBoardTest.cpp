@@ -1,141 +1,216 @@
+/*
+ * PWMBoardTest.cpp
+ */
+
+//=======================================================
+// predefined headers
 #include <ros/ros.h>
 #include <threemxl/C3mxlROS.h>
+
+//=======================================================
+// new defined headers
 #include "movement/PWMBoardTest.h"
 
-double maxPWM;
-//TODO remove this errorcount code, unnessarcy
-//TODO add comments
-int timeStop = 100;   //time error is detected
+//MODE 0 = PWM
+//MODE other than 0 = SPEED
+#define MODE 0
 
-void DxlROSExample::init(char *maxpwm, char *timestop)
+PWMBoardTest::PWMBoardTest() :
+    nh("~"), motors(), maxPWM(0)
+{
+}
+
+/**
+ * (Default) Destructor
+ * Delete motor interface, close serial port, and shut down node handle
+ *
+ */
+PWMBoardTest::~PWMBoardTest()
+{
+  if (serial_port.is_port_open())
+    serial_port.port_close();
+
+  nh.shutdown();
+}
+
+/**
+ * Initialize for testing
+ * @param maxpwm maximal speed to climb to
+ */
+void PWMBoardTest::init(char *maxpwm)
 {
   CDxlConfig *config = new CDxlConfig();
 
-  if (maxpwm)
-  {
-    maxPWM = boost::lexical_cast<double>(maxpwm);
-    std::cout << "Set PWM to: " << maxPWM << std::endl;
-  }
-  if (timestop)
-  {
-    timeStop = boost::lexical_cast<int>(timestop);
-    std::cout << "Set stop time for EM message to: " << timeStop << std::endl;
-  }
+  maxPWM = boost::lexical_cast<double>(maxpwm);
+  std::cout << "Set PWM to: " << maxPWM << std::endl;
+
   ROS_INFO("Using direct connection");
-  //  motor_ = new C3mxl();
 
   config->mDxlTypeStr = "3MXL";
-  motors_ = new CDxlGroup();
+  motors = new CDxlGroup();
 
-  serial_port_.port_open("/dev/ttyUSB0", LxSerial::RS485_FTDI);
-  serial_port_.set_speed(LxSerial::S921600);
-  motors_->setSerialPort(&serial_port_);
+  serial_port.port_open("/dev/ttyUSB0", LxSerial::RS485_FTDI);
+  serial_port.set_speed(LxSerial::S921600);
+  motors->setSerialPort(&serial_port);
 
-  motors_->addNewDynamixel(config->setID(107));
-  motors_->addNewDynamixel(config->setID(106));
-  motors_->init();
-  motors_->getDynamixel(0)->set3MxlMode(PWM_MODE);
-  motors_->getDynamixel(1)->set3MxlMode(PWM_MODE);
-//  motors_->getDynamixel(0)->set3MxlMode(SPEED_MODE);
-//  motors_->getDynamixel(1)->set3MxlMode(SPEED_MODE);
+  motors->addNewDynamixel(config->setID(107));
+  motors->addNewDynamixel(config->setID(106));
+  motors->init();
+
+  if (MODE == 0)
+  {
+    motors->getDynamixel(0)->set3MxlMode(PWM_MODE);
+    motors->getDynamixel(1)->set3MxlMode(PWM_MODE);
+  }
+  else
+  {
+    motors->getDynamixel(0)->set3MxlMode(SPEED_MODE);
+    motors->getDynamixel(1)->set3MxlMode(SPEED_MODE);
+  }
   delete config;
 }
 
+/**
+ * Equals method for doubles
+ * @param a number 1
+ * @param b number 2
+ * @param epsilon maximum difference
+ * @return true if equals
+ */
 bool double_equals(double a, double b, double epsilon = 0.001)
 {
   return std::abs(a - b) < epsilon;
 }
 
-void DxlROSExample::spin()
+/**
+ * Run this Test
+ */
+void PWMBoardTest::spin()
 {
   double rate = 5.0d;
   ros::Rate loop_rate(rate); //herz;
 
   double pwmSpeed = 0.0d;
-  double stepSize = 0.2;
 
+  //Increment of each speed step
+  double stepSize = 0.25;
+
+  //Scale factor for setting speed at a lower rate
+  //then the loop
   double modStepRate = 0.2;
+  //For determining how many times the
+  //loop has "looped"
   double cntRate = 0.0d;
 
-  int errorcnt = 0;
-
+  //Positive incrementing first
   if (maxPWM > 0)
   {
-
+    //First, climb to max value
     bool toMax = true;
 
-    motors_->getDynamixel(0)->setPWM(0);
-    motors_->getDynamixel(1)->setPWM(0);
-//    motors_->getDynamixel(0)->setLinearSpeed(0);
-//    motors_->getDynamixel(1)->setLinearSpeed(0);
+    //Set initial speed
+    setSpeed(0, 0);
+    std::cout << "Current PWM/SPEED value " << pwmSpeed << std::endl;
 
     while (ros::ok())
     {
-      motors_->getDynamixel(0)->setPWM(pwmSpeed);
-      motors_->getDynamixel(1)->setPWM(pwmSpeed);
-      std::cout << "Current PWM value " << pwmSpeed << std::endl;
-//      motors_->getDynamixel(0)->setLinearSpeed(pwmSpeed);
-//      motors_->getDynamixel(1)->setLinearSpeed(pwmSpeed);
+      //Set speed to pwm speed
+      setSpeed(pwmSpeed, pwmSpeed);
+      std::cout << "Current PWM/SPEED value " << pwmSpeed << std::endl;
 
-      motors_->getDynamixel(0)->getStatus();
+      //Check for errors
+      check_EM_STOP();
 
-      int status_0 = motors_->getDynamixel(0)->presentStatus();
-
-      std::cout << "Motor 0 status" << motors_->getDynamixel(0)->translateErrorCode(status_0) << std::endl;
-
-      int status_1 = motors_->getDynamixel(1)->presentStatus();
-
-      motors_->getDynamixel(1)->getStatus();
-      std::cout << "Motor 1 status" << motors_->getDynamixel(0)->translateErrorCode(status_1) << std::endl;
-
-      std::cout << "Current PWM value " << pwmSpeed << std::endl;
-
-      if (status_1 == M3XL_STATUS_EM_STOP_ERROR)
-      {
-
-        if (errorcnt == timeStop)
-        {
-          toMax = false; //Go back to 0
-        }
-        else
-        {
-          errorcnt += 1;
-        }
-      }
-      else if (status_0 == M3XL_STATUS_EM_STOP_ERROR)
-      {
-        if (errorcnt == timeStop)
-        {
-          toMax = false; //Go back to 0
-        }
-        else
-        {
-          errorcnt += 1;
-        }
-      }
-
+      //Check if it is time for setting new speed
       if (double_equals(cntRate, rate))
       {
-        if (!(double_equals(pwmSpeed, maxPWM)) && toMax){
+        //Check if max is not reached
+        if (!(double_equals(pwmSpeed, maxPWM)) && (toMax)){
         pwmSpeed += stepSize;
-        printf("Stepping up pwmSpeed, new value: %f till %f \n: ", pwmSpeed, maxPWM);
+        printf("Stepping up Speed, new value: %f till %f \n: ", pwmSpeed, maxPWM);
       }
+      //Max is reached
       else
       {
+        //Dont go to max value anymore
         toMax = false;
 
+        //Check if 0 is not reached
         if (!double_equals(pwmSpeed, 0.0))
         {
-          motors_->getDynamixel(0)->setPWM(pwmSpeed);
-          motors_->getDynamixel(1)->setPWM(pwmSpeed);
-
-//          motors_->getDynamixel(0)->setLinearSpeed(pwmSpeed);
-//          motors_->getDynamixel(1)->setLinearSpeed(pwmSpeed);
-
-          printf("Stepping down pwmSpeed from here: %f %f \n", pwmSpeed, 0.0);
+          setSpeed(pwmSpeed,pwmSpeed);
 
           pwmSpeed -= stepSize;
+          printf("Stepping down Speed from here: %f %f \n", pwmSpeed, 0.0);
         }
+        //0 is reached, done
+        else
+        {
+          printf("Done \n");
+          break;
+        }
+      }
+
+      //Reset countrate
+      cntRate = 0.0d;
+      std::cout << "cntrate " << cntRate << std::endl;
+    }
+
+    //Now it not the time for changing speed
+    else
+    {
+      //Increment times loop has looped
+      cntRate += modStepRate;
+      std::cout << "cntrate " << cntRate << std::endl;
+    }
+
+      loop_rate.sleep();
+    }
+
+  }
+
+  //Negative incrementing(decrementing) first
+  else
+  {
+    //First go to low value
+    bool toMin = true;
+
+    //Set initial speed
+    setSpeed(0, 0);
+    std::cout << "Current PWM/SPEED value " << pwmSpeed << std::endl;
+
+    while (ros::ok())
+    {
+      //Set speed to pwm speed
+      setSpeed(pwmSpeed, pwmSpeed);
+      std::cout << "Current PWM/SPEED value " << pwmSpeed << std::endl;
+
+      //Check for errors
+      check_EM_STOP();
+
+      //Check if it is time for setting new speed
+      if (double_equals(cntRate, rate))
+      {
+        //Check if min is not reached
+        if (!(double_equals(pwmSpeed, maxPWM)) && toMin){
+        pwmSpeed -= stepSize;
+        printf("Stepping down Speed, new value: %f till %f \n: ", pwmSpeed, maxPWM);
+      }
+      //Min is reached
+      else
+      {
+        //Go only up now
+        toMin = false;
+
+        //Check if 0 is not reached
+        if (!double_equals(pwmSpeed, 0.0))
+        {
+          setSpeed(pwmSpeed,pwmSpeed);
+
+          pwmSpeed += stepSize;
+          printf("Stepping up Speed from here: %f %f \n", pwmSpeed, 0.0);
+        }
+        //0 is reached, done
         else
         {
           printf("Done \n");
@@ -144,12 +219,15 @@ void DxlROSExample::spin()
 
       }
 
+      //Reset countrate
       cntRate = 0.0d;
       std::cout << "cntrate " << cntRate << std::endl;
     }
 
+    //Now it not the time for changing speed
     else
     {
+      //Increment times loop has looped
       cntRate += modStepRate;
       std::cout << "cntrate " << cntRate << std::endl;
     }
@@ -157,133 +235,77 @@ void DxlROSExample::spin()
       loop_rate.sleep();
     }
 
+  }
+
+  setSpeed(0, 0);
+  std::cout << "Current PWM/SPEED value " << pwmSpeed << std::endl;
+
+}
+
+/**
+ * Set speed of motors
+ * @param v_left left speed (PWM or SPEED)
+ * @param v_right right speed (PWM or SPEED)
+ */
+void PWMBoardTest::setSpeed(double v_left, double v_right)
+{
+  if (MODE == 0)
+  {
+    motors->getDynamixel(0)->setPWM(v_left);
+    motors->getDynamixel(1)->setPWM(v_right);
   }
   else
   {
-    bool toMin = true;
-
-    motors_->getDynamixel(0)->setPWM(0);
-    motors_->getDynamixel(1)->setPWM(0);
-//    motors_->getDynamixel(0)->setLinearSpeed(0);
-//    motors_->getDynamixel(1)->setLinearSpeed(0);
-
-    while (ros::ok())
-    {
-      motors_->getDynamixel(0)->setPWM(pwmSpeed);
-      motors_->getDynamixel(1)->setPWM(pwmSpeed);
-//      motors_->getDynamixel(0)->setLinearSpeed(pwmSpeed);
-//      motors_->getDynamixel(1)->setLinearSpeed(pwmSpeed);
-
-      motors_->getDynamixel(0)->getStatus();
-      int status_0 = motors_->getDynamixel(0)->presentStatus();
-
-      std::cout << "Motor 0 status" << motors_->getDynamixel(0)->translateErrorCode(status_0) << std::endl;
-
-      int status_1 = motors_->getDynamixel(1)->presentStatus();
-
-      motors_->getDynamixel(1)->getStatus();
-      std::cout << "Motor 1 status" << motors_->getDynamixel(0)->translateErrorCode(status_1) << std::endl;
-
-      std::cout << "Current PWM value " << pwmSpeed << std::endl;
-
-      if (status_1 == M3XL_STATUS_EM_STOP_ERROR)
-      {
-        if (errorcnt == timeStop)
-        {
-          toMin = false; //Go back to 0
-        }
-        else
-        {
-          errorcnt += 1;
-        }
-      }
-      else if (status_0 == M3XL_STATUS_EM_STOP_ERROR)
-      {
-
-        if (errorcnt == timeStop)
-        {
-          toMin = false; //Go back to 0
-        }
-        else
-        {
-          errorcnt += 1;
-        }
-      }
-
-      if (double_equals(cntRate, rate))
-      {
-        if (!(double_equals(pwmSpeed, maxPWM)) && toMin){
-        pwmSpeed -= stepSize;
-        printf("Stepping down pwmSpeed, new value: %f till %f \n: ", pwmSpeed, maxPWM);
-      }
-      else
-      {
-        toMin = false;
-
-        if (!double_equals(pwmSpeed, 0.0))
-        {
-          motors_->getDynamixel(0)->setPWM(pwmSpeed);
-          motors_->getDynamixel(1)->setPWM(pwmSpeed);
-
-//          motors_->getDynamixel(0)->setLinearSpeed(pwmSpeed);
-//          motors_->getDynamixel(1)->setLinearSpeed(pwmSpeed);
-
-          printf("Stepping up pwmSpeed from here: %f %f \n", pwmSpeed, 0.0);
-
-          pwmSpeed += stepSize;
-        }
-        else
-        {
-          printf("Done \n");
-          break;
-        }
-
-      }
-
-      cntRate = 0.0d;
-      std::cout << "cntrate " << cntRate << std::endl;
-    }
-
-    else
-    {
-      cntRate += modStepRate;
-      std::cout << "cntrate " << cntRate << std::endl;
-    }
-
-      loop_rate.sleep();
-    }
-
+    motors->getDynamixel(0)->setLinearSpeed(v_left);
+    motors->getDynamixel(1)->setLinearSpeed(v_right);
   }
-//  motor_->setSpeed(0);
-//  motor_->set3MxlMode(STOP_MODE);
+}
 
-  motors_->getDynamixel(0)->setPWM(0.0);
-  motors_->getDynamixel(1)->setPWM(0.0);
-//  motors_->getDynamixel(0)->setLinearSpeed(0);
-//  motors_->getDynamixel(1)->setLinearSpeed(0);
+/**
+ * Check if the emergency stop is active and
+ * show other statuses
+ */
+void PWMBoardTest::check_EM_STOP()
+{
 
-//  motors_->getDynamixel(0)->set3MxlMode(STOP_MODE);
-//  motors_->getDynamixel(1)->set3MxlMode(STOP_MODE);
+  motors->getDynamixel(0)->getStatus();
+  int status_0 = motors->getDynamixel(0)->presentStatus();
+  std::cout << "Motor 0 status" << motors->getDynamixel(0)->translateErrorCode(status_0) << std::endl;
+
+  int status_1 = motors->getDynamixel(1)->presentStatus();
+  motors->getDynamixel(1)->getStatus();
+  std::cout << "Motor 1 status" << motors->getDynamixel(0)->translateErrorCode(status_1) << std::endl;
+
+  if (status_0 == M3XL_STATUS_EM_STOP_ERROR)
+  {
+    ROS_WARN("Emergency Button Pressed");
+  }
+  else if (status_1 == M3XL_STATUS_EM_STOP_ERROR)
+  {
+    ROS_WARN("Emergency Button Pressed");
+  }
 }
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "dxl_ros_example");
+  ros::init(argc, argv, "PWMBoardTest");
 
   char *maxpwm = NULL;
-  char *timeStop = NULL;
-  if (argc == 2)
-    maxpwm = argv[1];
 
-  if (argc == 3)
+  //Read in speed value
+  if (argc == 2)
   {
     maxpwm = argv[1];
-    timeStop = argv[2];
-  }
-  DxlROSExample dxl_ros_example;
+    PWMBoardTest boardTest;
 
-  dxl_ros_example.init(maxpwm, timeStop);
-  dxl_ros_example.spin();
+    boardTest.init(maxpwm);
+    //Run
+    boardTest.spin();
+  }
+  else
+  {
+    std::cout << "No speed value read, exit" << std::endl;
+  }
 
   return 0;
 }

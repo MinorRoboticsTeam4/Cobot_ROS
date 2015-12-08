@@ -1,41 +1,79 @@
-#ifndef MOVEMENT_INCLUDE_MOVEMENT_TEST3MXLBOARD_H
-#define MOVEMENT_INCLUDE_mOVEMENT_TEST3MXLBOARD_H
+/*
+ * PWMBoardTest.h
+ */
 
+//=======================================================
+// include guard
+#ifndef MOVEMENT_INCLUDE_MOVEMENT_TEST3MXLBOARD_H_INCLUDED
+#define MOVEMENT_INCLUDE_mOVEMENT_TEST3MXLBOARD_H_INCLUDED
+
+//=======================================================
+// predefined headers
 #include <ros/ros.h>
 #include <threemxl/platform/hardware/dynamixel/CDxlGeneric.h>
 #include <threemxl/platform/hardware/dynamixel/CDxlGroup.h>
 
-/// Usage example for CDynamixel and CDynamixelROS
-class DxlROSExample
+//=======================================================
+// new defined headers
+
+/**
+ * Testing class for 3mxl board
+ */
+class PWMBoardTest
 {
-  protected:
-    ros::NodeHandle nh_;   ///< ROS node handle
-    CDxlGeneric *motor_;   ///< Motor interface
-    CDxlGroup *motors_;    ///< Multiple motor interface
-    LxSerial serial_port_; ///< Serial port interface
+private:
+  /**
+   * ROS node handle
+   */
+  ros::NodeHandle nh;
+  /**
+   * Multiple motor interface
+   */
+  CDxlGroup *motors;
+  /**
+   * Serial port interface
+   */
+  LxSerial serial_port;
 
-  public:
-    /// Constructor
-    DxlROSExample() : nh_("~"), motor_(NULL),motors_() { }
+  /**
+   * Maximal PWM(or speed) the motors has to climb to
+   */
+  double maxPWM;
 
-    /// Destructor
-    /** Delete motor interface, close serial port, and shut down node handle */
-    ~DxlROSExample()
-    {
-     // if (motor_)
-      //  delete motor_;
-      if (serial_port_.is_port_open())
-        serial_port_.port_close();
+public:
+  /**
+   * (Default) Constructor
+   */
+  PWMBoardTest();
 
-      nh_.shutdown();
-    }
+  /**
+   * (Default) Destructor
+   *
+   */
+  ~PWMBoardTest();
 
-    /// Initialize node
-    void init(char *maxpwm,char *timeStop);
+  /**
+   * Initialize node
+   */
+  void init(char *maxpwm);
 
-    /// Spin
-    /** Alternatively drives the motor clockwise and counterclockwise */
-    void spin();
+  /**
+   * Set speed of motors
+   * @param v_left left speed (PWM or SPEED)
+   * @param v_right right speed (PWM or SPEED)
+   */
+  void setSpeed(double v_left, double v_right);
+
+  /**
+   * Check if the emergency stop is active and
+   * show other statuses
+   */
+  void check_EM_STOP();
+
+  /**
+   * Run this node
+   */
+  void spin();
 };
 
-#endif
+#endif /*MOVEMENT_INCLUDE_MOVEMENT_TEST3MXLBOARD_H_INCLUDED*/
