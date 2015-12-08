@@ -9,16 +9,17 @@
 
 //=======================================================
 // new defined headers
-#include "movement/board.h"
+#include "movement/board/board.h"
 
 
 namespace movement
 {
 
-
+/**
+ * (Virtual) Destructor
+ */
 Board::~Board()
 {
-  std::cout << "Destructor Board called" << std::endl;
 }
 
 
