@@ -1,0 +1,16 @@
+<launch>
+
+ <!-- Turtlesim Node-->
+ <!-- For Direction Testing -->
+  <node pkg="turtlesim" type="turtlesim_node" name="sim"/>
+
+  <!-- MotorController Node -->
+   <node pkg="movement" name="turtle_controller" type="turtle_controller" output="screen" >
+   <!--Subscribe to cmd_vel for Testing -->
+   <param name="sub_topic" value="cmd_vel" type="str" />
+   </node>
+
+
+
+
+</launch>
