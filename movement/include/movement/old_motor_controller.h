@@ -1,8 +1,8 @@
+//TODO scrap this class, deprecated
+
 /*
  * motor_controller.h
  *
- *  Created on: Nov 13, 2015
- *      Author: aclangerak
 */
 
 //=======================================================

@@ -127,7 +127,7 @@ const std::string GamePad_controller::getPublishTopic()
  */
 void GamePad_controller::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 {
-
+  //TODO inverse axis parameter??
   ROS_DEBUG("Read gamepad command: linear %f angular %f ", joy->axes[this->getLinearAxis()],
             joy->axes[this->getAngularAxis()]);
 
@@ -149,7 +149,6 @@ void GamePad_controller::spin()
   ros::Rate loop_rate(30);       //Hz
   while (ros::ok())
   {
-    //Place additional run code for ROS here.
     ros::spinOnce();
     //Publish the message
     vel_pub.publish(twist);

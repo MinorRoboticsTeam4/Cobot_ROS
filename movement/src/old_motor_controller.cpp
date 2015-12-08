@@ -157,8 +157,8 @@ void Motor_controller::cmdVelCallback(const geometry_msgs::Twist::ConstPtr &twis
   double th = -1 * twist->angular.z;                         //(rad/s)
 
   //TODO Either flip angular of joystick or flip values here
-  des_v_left = v - th * ((double)AXLE_TRACK / (double)2.0d);          //(m/s)
-  des_v_right = v + th * ((double)AXLE_TRACK / (double)2.0d);         //(m/s)
+  des_v_left = v - th * ((double)0.600d / (double)2.0d);          //(m/s)
+  des_v_right = v + th * ((double)0.600d / (double)2.0d);         //(m/s)
 
   //Reset time for timeout
   last_cmd_vel_time = ros::Time::now();
@@ -394,7 +394,7 @@ void Motor_controller::spin()
 
     //Timeout has occurred, stop
     //TODO needs verification
-    if (current_time.toSec() - last_cmd_vel_time.toSec() > CMD_VEL_TIMEOUT)
+    if (current_time.toSec() - last_cmd_vel_time.toSec() > 2.0d)
     {
       drive_linearSpeed(0, 0);
       ROS_INFO("No cmd_vel received, Timeout");
