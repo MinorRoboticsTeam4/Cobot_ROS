@@ -134,15 +134,21 @@ link_directories(${catkin_LIBRARY_DIRS})
 add_library(${PROJECT_NAME}
   src/gamepad_controller.cpp
   src/old_motor_controller.cpp
-  src/board.cpp
-  src/dummyBoard.cpp
-  src/threeMxlBoard.cpp
+  src/sensorHandler.cpp
+
+  src/board/board.cpp
+  src/board/dummyBoard.cpp
+  src/board/threeMxlBoard.cpp
+  src/board/turtleBoard.cpp
+
   src/motor_controller.cpp
+  src/driver.cpp
 )
 target_link_libraries(
 	${PROJECT_NAME}
 	${catkin_LIBRARIES}
 )
+add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 ##############################################
 ### Usage comments of Catkin CMake
 ##############################################
@@ -166,17 +172,27 @@ target_link_libraries(
 
 
 #Created Executables of the Nodes
-add_executable(gamepad_controller src/gamepad_controllerNode.cpp)
+add_executable(gamepad_controller src/nodes/gamepad_controllerNode.cpp)
 target_link_libraries(gamepad_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
 
-add_executable(motor_controller src/motor_controllerNode.cpp)
+add_executable(motor_controller src/nodes/motor_controllerNode.cpp)
+add_dependencies(motor_controller ${catkin_EXPORTED_TARGETS})
 target_link_libraries(motor_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
+
+add_executable(old_motor_controller src/nodes/old_motor_controllerNode.cpp)
+target_link_libraries(old_motor_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
+
+#Debug nodes
+add_executable(test_driver src/nodes/driverNode.cpp)
+add_dependencies(motor_controller ${catkin_EXPORTED_TARGETS})
+target_link_libraries(test_driver ${catkin_LIBRARIES} ${PROJECT_NAME})
+
+add_executable(turtle_controller src/nodes/motor_controllerTurtleNode.cpp)
+add_dependencies(motor_controller ${catkin_EXPORTED_TARGETS})
+target_link_libraries(turtle_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
 
 add_executable(testBoard src/PWMBoardTest.cpp)
 target_link_libraries(testBoard ${catkin_LIBRARIES} ${PROJECT_NAME})
-
-add_executable(old_motor_controller src/old_motor_controllerNode.cpp)
-target_link_libraries(old_motor_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
 
 #############
 ## Install ##
