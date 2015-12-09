@@ -91,14 +91,19 @@ private:
 //Private Variables
 private:
   /**
-   * current linear value
+   * Axis used for linear control
    */
-  int linear;
+  int linearAxis;
 
   /**
-   * current angular value
+   * Axis used for angular control
    */
-  int angular;
+  int angularAxis;
+
+  /**
+   * Button to be used to stop the robot
+   */
+  int stopButton;
 
   /**
    * linear scale factors

@@ -133,7 +133,6 @@ link_directories(${catkin_LIBRARY_DIRS})
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
   src/gamepad_controller.cpp
-  src/old_motor_controller.cpp
   src/sensorHandler.cpp
 
   src/board/board.cpp
@@ -178,9 +177,6 @@ target_link_libraries(gamepad_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
 add_executable(motor_controller src/nodes/motor_controllerNode.cpp)
 add_dependencies(motor_controller ${catkin_EXPORTED_TARGETS})
 target_link_libraries(motor_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
-
-add_executable(old_motor_controller src/nodes/old_motor_controllerNode.cpp)
-target_link_libraries(old_motor_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
 
 #Debug nodes
 add_executable(test_driver src/nodes/driverNode.cpp)

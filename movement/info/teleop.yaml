@@ -2,6 +2,7 @@
 # find the axis with jstest-gtk
 linear_axis: 1
 angular_axis: 2
+stop_button: 0
 # Scale for adjusting values linearly
 linear_scale: 0.5
 angular_scale: -1
