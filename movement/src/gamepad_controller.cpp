@@ -28,11 +28,14 @@ namespace movement
  *
  */
 GamePad_controller::GamePad_controller() :
-    linearAxis(0), angularAxis(1), stopButton(0),linear_scale(1.0), angular_scale(1.0), pub_name("controller_vel"), nh("~"), twist()
+    linearAxis(0), angularAxis(1), stopButton(0), linear_scale(1.0), angular_scale(1.0), pub_name("controller_vel"), nh(
+        "~"), twist(), inverse_linAxis(0), inverse_angAxis(0)
 {
   //Read in the params from teleop.yaml
   nh.param<int>("linear_axis", linearAxis, linearAxis);
+  nh.param<int>("inverse_linear_axis", inverse_linAxis, inverse_linAxis);
   nh.param<int>("angular_axis", angularAxis, angularAxis);
+  nh.param<int>("inverse_angular_axis", inverse_angAxis, inverse_angAxis);
   nh.param<int>("stop_button", stopButton, stopButton);
   nh.param<double>("linear_scale", linear_scale, linear_scale);
   nh.param<double>("angular_scale", angular_scale, angular_scale);
@@ -128,15 +131,11 @@ const std::string GamePad_controller::getPublishTopic()
  */
 void GamePad_controller::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 {
-  //TODO inverse axis parameter??
   ROS_DEBUG("Read gamepad command: linear %f angular %f ", joy->axes[this->getLinearAxis()],
             joy->axes[this->getAngularAxis()]);
 
-  std::cout << stopButton << std::endl;
-  std::cout << joy->buttons[stopButton] << std::endl;
-
   //Stop the robot
-  if(joy->buttons[stopButton] == 1.0)
+  if (joy->buttons[stopButton] == 1.0)
   {
     twist.linear.x = 0;
     twist.angular.z = 0;
@@ -145,6 +144,18 @@ void GamePad_controller::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
   {
     twist.linear.x = linear_scale * joy->axes[this->getLinearAxis()];
     twist.angular.z = angular_scale * joy->axes[this->getAngularAxis()];
+
+    //Inverse linear axis values
+    if (inverse_linAxis == 1)
+    {
+      twist.linear.x = -1 * linear_scale * joy->axes[this->getLinearAxis()];
+    }
+    //Inverse angular axis values
+    if (inverse_angAxis == 1)
+    {
+      twist.angular.z = -1 * angular_scale * joy->axes[this->getAngularAxis()];
+    }
+
   }
 
   ROS_DEBUG("Create twist message on topic %s, with values: linear %f, angular %f", pub_name.c_str(), twist.linear.x,

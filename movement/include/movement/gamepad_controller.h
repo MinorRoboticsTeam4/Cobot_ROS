@@ -106,6 +106,16 @@ private:
   int stopButton;
 
   /**
+   * Inverse linear axis readout (0 false, 1 true)
+   */
+  int inverse_linAxis;
+
+  /**
+   * Inverse angular axis readout (0 false, 1 true)
+   */
+  int inverse_angAxis;
+
+  /**
    * linear scale factors
    */
   double linear_scale;
