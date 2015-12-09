@@ -139,7 +139,7 @@ private:
     {
       return std::max(lower, std::min(n, upper));
     }
-  //TODO Add to Board interface
+
   /**
    * Translate status codes to human readable status codes
    *

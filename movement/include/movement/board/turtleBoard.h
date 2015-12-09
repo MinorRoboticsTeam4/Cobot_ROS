@@ -119,6 +119,14 @@ private:
       return std::max(lower, std::min(n, upper));
     }
 
+  /**
+   * Translate status codes to human readable status codes
+   *
+   * @param status status of the motor
+   * @return readable code of status
+   */
+  std::string translateStatus(int status);
+
 //Public Variables
 //public:
 

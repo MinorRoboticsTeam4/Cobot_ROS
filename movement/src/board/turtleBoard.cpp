@@ -163,4 +163,18 @@ int TurtleBoard::get_status_right()
   return 0;
 }
 
+/**
+ * Translate status codes to human readable status codes
+ *
+ * @param status status of the motor
+ * @return readable code of status
+ */
+std::string TurtleBoard::translateStatus(int status)
+{
+  switch(status)
+  {
+    default: return "Not Implemented" ;
+  };
+}
+
 }

@@ -132,7 +132,14 @@ public:
   virtual int get_status_right() = 0;
 
 //Private Functions
-//private:
+private:
+
+  /**
+   * Translate status codes to human readable output
+   * @param status status to translate
+   * @return human readable status
+   */
+  virtual std::string translateStatus(int status) = 0;
 
 //Public Variables
 //public:

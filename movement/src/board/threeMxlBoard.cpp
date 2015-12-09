@@ -67,7 +67,6 @@ bool ThreeMxlBoard::init_connection(std::string port_address, int baudrate)
   ROS_INFO("Opening connection on: %s : %d", port_address.c_str(), baudrate);
 
   bool is_open = serial_port.port_open("/dev/ttyUSB0", LxSerial::RS485_FTDI);
-  //TODO test stability
   serial_port.set_speed_int(baudrate);
   return is_open;
 }

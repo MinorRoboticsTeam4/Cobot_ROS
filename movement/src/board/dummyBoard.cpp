@@ -151,4 +151,20 @@ int DummyBoard::get_status_right()
   return MOTOR_OVERHEATING;
 }
 
+/**
+ * Translate status codes to human readable output
+ * @param status status to translate
+ * @return human readable status
+ */
+std::string DummyBoard::translateStatus(int status)
+{
+  switch(status)
+  {
+    case MOTOR_OK:          return "Motor OK";
+    case MOTOR_OVERHEATING: return "Motor Overheating";
+    default:                return "Unknown status code";
+  }
+}
+
+
 }

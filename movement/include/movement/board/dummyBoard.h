@@ -118,22 +118,12 @@ public:
 //Private Functions
 private:
 
-  //TODO move to .cpp
   /**
-   * Example function for implementing readable
-   * status codes
-   * @param status status of the motor
-   * @return readable code of status
+   * Translate status codes to human readable output
+   * @param status status to translate
+   * @return human readable status
    */
-  std::string translateStatus(Status status)
-  {
-    switch(status)
-    {
-      case MOTOR_OK:          return "Motor OK";
-      case MOTOR_OVERHEATING: return "Motor Overheating";
-      default:                return "Unknown status code";
-    }
-  }
+  std::string translateStatus(int status);
 
 //Public Variables
 //public:
