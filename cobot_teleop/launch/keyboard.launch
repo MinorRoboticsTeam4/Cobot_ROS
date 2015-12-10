@@ -1,0 +1,14 @@
+<launch>
+
+ <arg name="enable_turtlesim"  default="true"/>
+
+ <!-- Include Turtlesim if needed -->
+ <include if="$(arg enable_turtlesim)" file="$(find cobot_teleop)/launch/include/turtlesim.launch.xml"/>
+
+  <!-- Launches the teleop twist keyboard -->
+  <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="tteleop_twist_keyboard"  output="screen">
+   <rosparam file="$(find cobot_teleop)/info/teleop.yaml" command="load" />
+   <remap from="/cmd_vel" to="/turtle1/cmd_vel"/>
+  </node>
+
+</launch>
