@@ -1,0 +1,38 @@
+<!-- Bringup of the cobot's base 
+      This base is constructed by using the 
+      DPR4 platform which contains the 3Mxl Board
+      as controller
+-->
+
+<launch>
+  <arg name="serial_port"/>
+
+
+  <!-- Motor controller Driver -->
+  <node pkg="cobot_movement" type="" name="" respawn="true">
+    <param name="port"  value="$(arg serialport)"/>
+
+
+  </node>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</launch>
+
+
+
+

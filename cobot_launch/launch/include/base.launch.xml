@@ -1,0 +1,13 @@
+<!-- Top level launch file
+      for selecting the right launch
+      file for a particular base
+-->
+
+<launch>
+  <arg name="base"/>
+  <arg name="serial_port"/>
+  <!-- include a particular base -->
+  <include file="$(find cobot_launch)/launch/include/$(arg base)/base.launch.xml">
+    <arg name="serial_port" value="$(arg serial_port)" />
+  </include>  
+  
