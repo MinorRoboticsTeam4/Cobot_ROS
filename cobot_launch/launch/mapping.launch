@@ -1,0 +1,26 @@
+<!-- Top launch file for running the mapping(creating a map of the area)
+  for cobot
+-->
+
+<launch>
+  <arg name="threemxl_cmdTopic"     default="/cmd_vel"/>
+
+  <!-- Bringup the 3D sensor launch -->
+<!--
+  <include file="$(find cobot_launch)/launch/3dsensor.launch">
+  </include>
+-->
+  <!-- Bringup the gamepad -->
+  <include file="$(find cobot_teleop)/launch/gamepad.launch">
+    <arg name="enable_turtlesim" value="false"/>  
+    <arg name="pub_topic"        value="$(arg threemxl_cmdTopic)"/>
+  </include>
+
+  <!--Bringup the motor controller -->
+  <include file="$(find cobot_launch)/launch/include/base.launch.xml">
+    <arg name="base"             value="threemxl"/>  
+    <arg name="serial_port"      value="$(env COBOT_SERIAL_PORT)"/>  
+    <arg name="sub_topic"        value="$(arg threemxl_cmdTopic)"/>
+  </include>
+
+</launch>
