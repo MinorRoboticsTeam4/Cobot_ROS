@@ -1,3 +1,9 @@
+<!--
+    This file launches the Keyboard node that listens for
+    keyboard presses and translate them to Twist messages.
+    It also launches the turtlesim environment if needed.
+-->
+
 <launch>
 
  <arg name="enable_turtlesim"  default="true"/>

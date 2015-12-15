@@ -54,6 +54,24 @@ public:
    */
   void turn(const double distance, const double angularSpeed);
 
+  /**
+   *
+   * @return the read in commands
+   */
+  std::vector<std::string> getCommands();
+
+  /**
+   *
+   * @return set linear speed
+   */
+  double getLinearSpeed();
+
+  /**
+   *
+   * @return set angular speed
+   */
+  double getAngularSpeed();
+
 //Private Functions
 //private:
 
@@ -74,6 +92,20 @@ private:
    * Listener for the transformations
    */
   tf::TransformListener TFlistener;
+
+  /**
+   * Stores the drive commands figures
+   */
+  std::vector<std::string> commands;
+
+  /**
+   * Linear speed the driver must use
+   */
+  double linearSpeed;
+  /**
+   * Angular speed the driver must use
+   */
+  double angularSpeed;
 };
 } //namespace end
 

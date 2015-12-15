@@ -10,6 +10,7 @@
 
 //=======================================================
 // predefined headers
+#include <stdexcept>
 
 //=======================================================
 // new defined headers
@@ -52,8 +53,7 @@ struct Robot_Params
   {
     if (maxRevLimitLinSpeed < 0)
     {
-      //TODO c++ errors
-      std::cout << "maxRevLimitLinSpeed must be a positive number" << std::endl;
+      throw std::range_error("maxRevLimitLinSpeed must be a positive number");
     }
   }
   ;
@@ -78,6 +78,14 @@ struct Robot_Params
           maxLimitLinSpeed), MAX_REV_LIMIT_LINSPEED(maxRevLimitLinSpeed), MAX_LIMIT_ANGSPEED(maxLimitAngSpeed), MAX_REV_LIMIT_ANGSPEED(
           maxRevLimitAngSpeed)
   {
+    if (maxRevLimitLinSpeed < 0)
+    {
+      throw std::range_error("maxRevLimitLinSpeed must be a positive number");
+    }
+    if (maxRevLimitAngSpeed < 0)
+    {
+      throw std::range_error("maxRevLimitAngSpeed must be a positive number");
+    }
   }
   ;
 

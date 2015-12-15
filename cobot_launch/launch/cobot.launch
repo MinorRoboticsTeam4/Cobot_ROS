@@ -1,2 +1,22 @@
-#Top level launch file for bringing up all files related to getting
-#the cobot to run
+<!--Top level launch file for bringing up the (main) 
+functions of the cobot 
+-->
+
+<launch>
+  
+  <!-- Bringup the 3D sensor launch -->
+  <include file="$(find cobot_launch)/launch/3dsensor.launch">
+  </include>
+
+
+  <!-- Bringup the base controller -->
+  <include file="$(find cobot_launch)/launch/include/base.launch.xml">
+    <arg name="base"             value="$(env COBOT_BASE)"/>  
+    <arg name="serial_port"      value="$(env COBOT_SERIAL_PORT)"/>  
+    <arg name="sub_topic"        value="/cmd_vel"/> 
+  </include>
+
+
+
+</launch>
+

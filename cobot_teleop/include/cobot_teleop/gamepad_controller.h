@@ -67,12 +67,6 @@ public:
   const double getAngularScale();
 
   /**
-   * Get the topic where this is publishing to
-   * @return publishing topic
-   */
-  const std::string getPublishTopic();
-
-  /**
    * Run the ROS node.
    */
   void spin();
@@ -124,11 +118,6 @@ private:
    * angular scale factors
    */
   double angular_scale;
-
-  /**
-   * (Default) publisher topic for vel_pub
-   */
-  std::string pub_name;
 
   /**
    * Personal NodeHandler for ROS usage

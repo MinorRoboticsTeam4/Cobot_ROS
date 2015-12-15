@@ -1,9 +1,14 @@
-<launch>
+<!-- 
+Launch file for bringing up the Kinect camera
+-->
 
+<launch>
+  <!--Camera name is used to identify this camera, used for e.g. tf -->
   <arg name="camera"        default="camera"/>
   <arg name="publish_tf"    default="false"/>
 
-  <!-- Factory calibration options depth registration-->
+  <!-- Factory calibration depth registration-->
+  <!-- Needed?? -->
   <arg name="depth_registration"  default="true"/>
   <arg if="$(arg depth_registration)"        
        name="depth"      value="depth_registered"/> 
@@ -24,10 +29,10 @@
 
   <!-- Bringup of Freenect driver -->
   <include file="$(find freenect_launch)/launch/freenect.launch">
-    <arg name="camera"                value="$(arg camera)"/>
-    <arg name="publish_tf"            value="$(arg publish_tf)"/>
-    <arg name="depth_registration"    value="$(arg depth_registration"/>
-    <arg name="num_worker_threads"    value="$(arg num_worker_threads"/>
+    <arg name="camera"                           value="$(arg camera)"/>
+    <arg name="publish_tf"                       value="$(arg publish_tf)"/>
+    <arg name="depth_registration"               value="$(arg depth_registration"/>
+    <arg name="num_worker_threads"               value="$(arg num_worker_threads"/>
 
     <arg name="rgb_processing"                   value="$(arg rgb_processing)"/>
     <arg name="ir_processing"                    value="$(arg ir_processing)"/>
@@ -35,7 +40,6 @@
     <arg name="depth_registered_processing"      value="$(arg depth_registered_processing)"/>
     <arg name="disparity_processing"             value="$(arg disparity_processing)"/>
     <arg name="disparity_registered_processing"  value="$(arg disparity_registered_processing)"/>
-  
   </include>
   
 

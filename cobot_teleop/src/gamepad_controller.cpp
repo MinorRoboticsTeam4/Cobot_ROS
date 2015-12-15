@@ -22,13 +22,12 @@ namespace movement
  * GamePadTeleop initializes the variables inside and
  * setups the NodeHandler for publishing and listening.
  *
- * The default publish topic is "/controller_vel".
- * This can be changed by adding the parameter "pub_topic" with
- * the desired topic name.
+ * The default publish topic is "gamepad_controller/cmd_vel".
+ * This can be remapped to the desired topic.
  *
  */
 GamePad_controller::GamePad_controller() :
-    linearAxis(0), angularAxis(1), stopButton(0), linear_scale(1.0), angular_scale(1.0), pub_name("controller_vel"), nh(
+    linearAxis(0), angularAxis(1), stopButton(0), linear_scale(1.0), angular_scale(1.0), nh(
         "~"), twist(), inverse_linAxis(0), inverse_angAxis(0)
 {
   //Read in the params from teleop.yaml
@@ -39,19 +38,17 @@ GamePad_controller::GamePad_controller() :
   nh.param<int>("stop_button", stopButton, stopButton);
   nh.param<double>("linear_scale", linear_scale, linear_scale);
   nh.param<double>("angular_scale", angular_scale, angular_scale);
-  nh.param<std::string>("pub_topic", pub_name, pub_name);
 
-  //Publish on a global topic
-  vel_pub = nh.advertise<geometry_msgs::Twist>("/" + pub_name, 1);
+  vel_pub = nh.advertise<geometry_msgs::Twist>("cmd_vel", 1);
 
-  ROS_INFO("Publishing on topic: %s", pub_name.c_str());
+  ROS_INFO("[Gamepad] Publishing on topic: %s",  vel_pub.getTopic().c_str());
 
   //Subscribe to the messages of the gamepad
   //and call joyCallback with incoming messages.
   //Listen to global topic "joy"
   joy_sub = nh.subscribe<sensor_msgs::Joy>("/joy", 10, &GamePad_controller::joyCallback, this);
 
-  ROS_INFO("Starting gamepad with: linear %d, angular %d, "
+  ROS_INFO("[Gamepad] start with : linear %d, angular %d, "
            "linear scale %f, angular scale %f",
            linearAxis, angularAxis, linear_scale, angular_scale);
 }
@@ -108,17 +105,6 @@ const double GamePad_controller::getAngularScale()
 }
 
 /**
- * Get the topic where this is publishing to.
- * This value is either "controller_vel"(default) or from
- * config file(teleop.yaml)
- * @return publishing topic
- */
-const std::string GamePad_controller::getPublishTopic()
-{
-  return pub_name;
-}
-
-/**
  * (Callback) Function that converts the Joy message received from the
  * gamepad to a Twist message.
  *
@@ -131,7 +117,7 @@ const std::string GamePad_controller::getPublishTopic()
  */
 void GamePad_controller::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 {
-  ROS_DEBUG("Read gamepad command: linear %f angular %f ", joy->axes[this->getLinearAxis()],
+  ROS_DEBUG("[Gamepad] command: linear %f angular %f ", joy->axes[this->getLinearAxis()],
             joy->axes[this->getAngularAxis()]);
 
   //Stop the robot
@@ -158,7 +144,7 @@ void GamePad_controller::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 
   }
 
-  ROS_DEBUG("Create twist message on topic %s, with values: linear %f, angular %f", pub_name.c_str(), twist.linear.x,
+  ROS_DEBUG("[Gamepad] Create twist message on topic %s, with values: linear %f, angular %f", vel_pub.getTopic().c_str(), twist.linear.x,
             twist.angular.z);
 }
 
@@ -168,7 +154,7 @@ void GamePad_controller::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
  */
 void GamePad_controller::spin()
 {
-  ROS_INFO("Started gamepad_controller Node");
+  ROS_INFO("[Gamepad] start gamepad_controller Node");
 
   ros::Rate loop_rate(30);       //Hz
   while (ros::ok())

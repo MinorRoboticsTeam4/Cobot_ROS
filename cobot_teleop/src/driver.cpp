@@ -2,7 +2,7 @@
  * driver.cpp
  * 
  *
- * Inspired from https://code.google.com/p/drh-robotics-ros/source/browse/trunk/ros/ardros/nodes/DeadReckoning.py
+ * Inspired from http://wiki.ros.org/pr2_controllers/Tutorials/Using%20the%20base%20controller%20with%20odometry%20and%20transform%20information
  */
 
 //=======================================================
@@ -24,18 +24,22 @@ namespace movement
 /**
  * Execute rate
  */
-const double loopSpeed = 30.0d; //(Hz)
+const double loopSpeed = 90.0d; //(Hz)
 
-//TODO add configurable topic name
 /**
- * Create a Driver that publish velocity commands on topic "/cmd_vel"
+ * Create a Driver that publish velocity commands on topic "/driver/cmd_vel"
  * and listens for transformation with source: "/base_link" and target "/odom"
  */
-Driver::Driver()
+Driver::Driver() : nh("~"), linearSpeed(0.2), angularSpeed(0.2)
 {
-  vel_pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 10);
+  vel_pub = nh.advertise<geometry_msgs::Twist>("cmd_vel", 10);
+  ROS_INFO("[Driver] Publishing velocity commands on %s",vel_pub.getTopic().c_str());
 
   TFlistener.waitForTransform("/odom", "/base_link", ros::Time(), ros::Duration(4.0d));
+
+  nh.getParam("commands",commands);
+  nh.param("linearSpeed",linearSpeed,linearSpeed);
+  nh.param("angularSpeed",angularSpeed,angularSpeed);
 }
 
 /**
@@ -65,7 +69,7 @@ void Driver::drive_straight(const double distance, const double linearSpeed)
   }
   catch (tf::TransformException &ex)
   {
-    ROS_ERROR("%s", ex.what());
+    ROS_ERROR("[Driver] %s", ex.what());
     ros::Duration(1.0).sleep();
   }
 
@@ -100,7 +104,7 @@ void Driver::drive_straight(const double distance, const double linearSpeed)
       //Add the x and y components together
       double distance_moved = sqrt(pow(distance_x, 2) + pow(distance_y, 2));
 
-      std::cout << "moved: " << distance_moved << std::endl;
+     ROS_DEBUG("[Driver] moved %f",distance_moved);
 
       //Check if goal distance is reached
       //TODO find cleaner way to check
@@ -115,7 +119,7 @@ void Driver::drive_straight(const double distance, const double linearSpeed)
     }
     catch (tf::TransformException &ex)
     {
-      ROS_ERROR("%s", ex.what());
+      ROS_ERROR("[Driver] %s", ex.what());
       ros::Duration(1.0).sleep();
     }
     loop_rate.sleep();
@@ -146,7 +150,7 @@ void Driver::turn(const double angle, const double angularSpeed)
   }
   catch (tf::TransformException &ex)
   {
-    ROS_ERROR("%s", ex.what());
+    ROS_ERROR("[Driver] %s", ex.what());
     ros::Duration(1.0).sleep();
   }
 
@@ -196,7 +200,7 @@ void Driver::turn(const double angle, const double angularSpeed)
       angleTurned = (currentAngle + angleOffset) - startAngle;
       previousAngle = currentAngle;
 
-      std::cout << "Turned: " << angleTurned / PI << "PI" << std::endl;
+      ROS_DEBUG("[Driver] Turned %fPI", angleTurned / PI);
 
       if (fabs(angleTurned) >= fabs(angle))
       {
@@ -210,7 +214,7 @@ void Driver::turn(const double angle, const double angularSpeed)
     }
     catch (tf::TransformException &ex)
     {
-      ROS_ERROR("%s", ex.what());
+      ROS_ERROR("[Driver] %s", ex.what());
       ros::Duration(1.0).sleep();
     }
 
@@ -222,5 +226,29 @@ void Driver::turn(const double angle, const double angularSpeed)
   vel_pub.publish(cmdVel);
 }
 
+/**
+ * @return the commands from the parameters, given by ROS
+ */
+std::vector<std::string> Driver::getCommands()
+{
+  return commands;
+}
+
+/**
+ *
+ * @return the set linear speed
+ */
+double Driver::getLinearSpeed()
+{
+  return linearSpeed;
+}
+/**
+ *
+ * @return the set angular speed
+ */
+double Driver::getAngularSpeed()
+{
+  return angularSpeed;
+}
 }
 

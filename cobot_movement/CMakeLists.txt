@@ -168,14 +168,14 @@ add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS}
 
 
 #Created Executables of the Nodes
-add_executable(motor_controller src/nodes/motor_controllerNode.cpp)
-add_dependencies(motor_controller ${catkin_EXPORTED_TARGETS})
-target_link_libraries(motor_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
+add_executable(threemxl_platform src/nodes/threemxl_platformNode.cpp)
+add_dependencies(threemxl_platform ${catkin_EXPORTED_TARGETS})
+target_link_libraries(threemxl_platform ${catkin_LIBRARIES} ${PROJECT_NAME})
 
 #Debug nodes
-add_executable(turtle_controller src/nodes/motor_controllerTurtleNode.cpp)
-add_dependencies(turtle_controller ${catkin_EXPORTED_TARGETS})
-target_link_libraries(turtle_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
+add_executable(turtle_platform src/nodes/turtle_platformNode.cpp)
+add_dependencies(turtle_platform ${catkin_EXPORTED_TARGETS})
+target_link_libraries(turtle_platform ${catkin_LIBRARIES} ${PROJECT_NAME})
 
 add_executable(testBoard src/PWMBoardTest.cpp)
 target_link_libraries(testBoard ${catkin_LIBRARIES} ${PROJECT_NAME})

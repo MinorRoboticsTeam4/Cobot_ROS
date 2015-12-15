@@ -1,18 +1,18 @@
-<!-- Bringup of the cobot's base 
-      This base is constructed by using the 
-      DPR4 platform which contains the 3Mxl Board
-      as controller
+<!--
+      Bringup of the cobot's base 
+      This base controller controls the 
+      DPR4 platform which contains the 
+      3Mxl Board as controller
 -->
 
 <launch>
   <arg name="serial_port"/>
+  <arg name="sub_topic"/>
 
-
-  <!-- Motor controller Driver -->
-  <node pkg="cobot_movement" type="" name="" respawn="true">
-    <param name="port"  value="$(arg serialport)"/>
-
-
+  <!-- base controller including the motor controller-->
+  <node pkg="cobot_movement" type="threemxl_platform" name="threemxl_platform"  respawn="true">
+      <param name="serial_port"                         value="$(arg serial_port)"/>
+    <remap from="/threemxl_platform/cmd_vel"      to="$(arg sub_topic)" />
   </node>
 
 

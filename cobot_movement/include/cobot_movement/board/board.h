@@ -117,7 +117,6 @@ public:
    */
   virtual Robot_Params getParams() = 0;
 
-  //TODO Implement in SensorHandler
   /**
    * Interface
    *

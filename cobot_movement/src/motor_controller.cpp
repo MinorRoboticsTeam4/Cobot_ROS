@@ -21,11 +21,11 @@ namespace cobot_movement
 /**
  * Default constructor, setups the Nodehandler for publishing / listening.
  *
- * The default topic to listen to is "/cmd_vel"
- * This can be changed by adding the parameter "sub_topic" with
- * the desired topic name.
+ * The default topic to listen to is "motor_controller/cmd_vel"
+ * This can be changed by remapping.
  *
  * The default topic for publishing odometry messages is "/odom"
+ * This can be changed by remapping.
  *
  * For odometry transformations, it uses as base frame = "/base_link"
  * and for odom frame = "/odom"
@@ -34,12 +34,9 @@ namespace cobot_movement
  */
 Motor_controller::Motor_controller(Board::SharedPtr newBoard) :
     board(newBoard), nh("~"), des_v_left(0.0), des_v_right(0.0), last_cmdVel_update(), baseFrame("/base_link"), odomFrame(
-        "/odom"), sensorHandler(newBoard),loopRate(30.0d)
+        "/odom"), sensorHandler(newBoard),loopRate(90.0d)
 {
-
-  std::string sub_name;
-  nh.param<std::string>("sub_topic", sub_name, sub_name);
-  cmdVel_sub = nh.subscribe("/" + sub_name, 10, &Motor_controller::cmdVelCb, this);
+  cmdVel_sub = nh.subscribe("cmd_vel", 10, &Motor_controller::cmdVelCb, this);
   odom_pub = nh.advertise<nav_msgs::Odometry>("/odom", 10);
 }
 

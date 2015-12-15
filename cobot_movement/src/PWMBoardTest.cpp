@@ -42,9 +42,7 @@ void PWMBoardTest::init(char *maxpwm)
   CDxlConfig *config = new CDxlConfig();
 
   maxPWM = boost::lexical_cast<double>(maxpwm);
-  std::cout << "Set PWM to: " << maxPWM << std::endl;
-
-  ROS_INFO("Using direct connection");
+  ROS_INFO("Set PWM to: %f",maxPWM);
 
   config->mDxlTypeStr = "3MXL";
   motors = new CDxlGroup();
@@ -110,13 +108,12 @@ void PWMBoardTest::spin()
 
     //Set initial speed
     setSpeed(0, 0);
-    std::cout << "Current PWM/SPEED value " << pwmSpeed << std::endl;
 
     while (ros::ok())
     {
       //Set speed to pwm speed
       setSpeed(pwmSpeed, pwmSpeed);
-      std::cout << "Current PWM/SPEED value " << pwmSpeed << std::endl;
+      ROS_DEBUG("Current PWM/SPEED value %f",pwmSpeed);
 
       //Check for errors
       check_EM_STOP();
@@ -177,13 +174,13 @@ void PWMBoardTest::spin()
 
     //Set initial speed
     setSpeed(0, 0);
-    std::cout << "Current PWM/SPEED value " << pwmSpeed << std::endl;
+    ROS_DEBUG("Current PWM/SPEED value %f",pwmSpeed);
 
     while (ros::ok())
     {
       //Set speed to pwm speed
       setSpeed(pwmSpeed, pwmSpeed);
-      std::cout << "Current PWM/SPEED value " << pwmSpeed << std::endl;
+      ROS_DEBUG("Current PWM/SPEED value %f",pwmSpeed);
 
       //Check for errors
       check_EM_STOP();
@@ -238,7 +235,7 @@ void PWMBoardTest::spin()
   }
 
   setSpeed(0, 0);
-  std::cout << "Current PWM/SPEED value " << pwmSpeed << std::endl;
+  ROS_DEBUG("Current PWM/SPEED value %f",pwmSpeed);
 
 }
 
@@ -270,11 +267,11 @@ void PWMBoardTest::check_EM_STOP()
 
   motors->getDynamixel(0)->getStatus();
   int status_0 = motors->getDynamixel(0)->presentStatus();
-  std::cout << "Motor 0 status" << motors->getDynamixel(0)->translateErrorCode(status_0) << std::endl;
+  ROS_DEBUG("Motor 0 status %s", motors->getDynamixel(0)->translateErrorCode(status_0));
 
   int status_1 = motors->getDynamixel(1)->presentStatus();
   motors->getDynamixel(1)->getStatus();
-  std::cout << "Motor 1 status" << motors->getDynamixel(0)->translateErrorCode(status_1) << std::endl;
+  ROS_DEBUG("Motor 1 status %s", motors->getDynamixel(1)->translateErrorCode(status_1));
 
   if (status_0 == M3XL_STATUS_EM_STOP_ERROR)
   {
@@ -304,7 +301,7 @@ int main(int argc, char **argv)
   }
   else
   {
-    std::cout << "No speed value read, exit" << std::endl;
+    ROS_ERROR("No speed value set, exiting");
   }
 
   return 0;

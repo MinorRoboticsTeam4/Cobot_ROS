@@ -166,8 +166,8 @@ add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EX
 add_executable(gamepad_controller src/nodes/gamepad_controllerNode.cpp)
 target_link_libraries(gamepad_controller ${catkin_LIBRARIES} ${PROJECT_NAME})
 
-add_executable(driver src/nodes/driverNode.cpp)
-target_link_libraries(driver ${catkin_LIBRARIES} ${PROJECT_NAME})
+add_executable(test_driver src/nodes/driverNode.cpp)
+target_link_libraries(test_driver ${catkin_LIBRARIES} ${PROJECT_NAME})
 
 
 

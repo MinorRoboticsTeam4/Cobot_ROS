@@ -131,7 +131,7 @@ void ThreeMxlBoard::drive_linearSpeed(double v_left, double v_right)
 {
   ROS_DEBUG("Driving with leftSpeed: %f (m/s) , rightSpeed: %f (m/s)", v_left, v_right);
 
-  //TODO look into problems with steering
+  //TODO look into problems with steering if speed is clipped
   v_left = clip(v_left, getParams().MAX_REV_LIMIT_LINSPEED, getParams().MAX_LIMIT_LINSPEED);
   v_right = clip(v_right, getParams().MAX_REV_LIMIT_LINSPEED, getParams().MAX_LIMIT_LINSPEED);
 

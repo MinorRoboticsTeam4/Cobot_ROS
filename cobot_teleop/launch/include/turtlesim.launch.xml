@@ -1,6 +1,12 @@
+<!--
+    This file launches the turtlesim environment
+    with additional arguments if needed.
+-->
+
+
 <launch>
 
  <!-- Turtlesim Node-->
   <node pkg="turtlesim" type="turtlesim_node" name="sim"/> 
 
-</launch>
+</launch> 

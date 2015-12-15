@@ -28,7 +28,6 @@ class ThreeMxlBoard : public Board
 {
 //Enums
 public:
-  //TODO use more rates from the library?
   enum Baudrate
   {
     S4800 = LxSerial::S4800, S9600 = LxSerial::S9600, S19200 = LxSerial::S19200

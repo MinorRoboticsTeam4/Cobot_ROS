@@ -11,7 +11,6 @@
 #include "cobot_movement/sensorHandler.h"
 #include "cobot_movement/board/board.h"
 
-//TODO better way to filter junk
 double dist_left_junk;
 double dist_right_junk;
 double ang_left_junk;
@@ -52,7 +51,6 @@ SensorHandler::~SensorHandler()
  */
 double SensorHandler::calculateDeltaValue(double oldVal, double newVal)
 {
-  //TODO check if better function is needed
   return newVal - oldVal;
 }
 /**
