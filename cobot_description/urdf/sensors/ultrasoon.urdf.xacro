@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<robot name="ultrasoon" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find cobot_description)/urdf/constants.urdf.xacro" />
+
+
+
+
+
+
+  <xacro:macro name="ultrasoon" params="parent_link panel side parent_x parent_y parent_z parent_ox parent_oy parent_oz">
+    <link name="ultrasoon_${panel}_${side}_link">
+       <visual>
+       <origin xyz="0 0 0" rpy="${parent_ox} ${parent_oy} ${parent_oz}" />
+        <geometry>
+          <mesh filename="package://cobot_description/meshes/dae/ultrasoon.dae" />
+        </geometry>
+      </visual> 
+    </link>
+    <joint name="ultrasoon_${panel}_${side}_joint" type="fixed">
+      <parent link="${parent_link}" />  
+      <child link="ultrasoon_${panel}_${side}_link" />
+      <origin xyz="${parent_x} ${parent_y} ${parent_z" rpy="${parent_ox} ${parent_oy} ${parent_oz}" />
+    </joint>
+
+  </xacro:macro>
+
+
+
+
+</robot>

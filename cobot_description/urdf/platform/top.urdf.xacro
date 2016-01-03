@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<robot name="mesh" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="cobot_top" params="parent_link height_offset" > 
+  
+    <xacro:top parent_link="${parent_link}" height_offset="${height_offset}"/>
+
+  </xacro:macro>
+
+
+  <xacro:include filename="$(find cobot_description)/urdf/constants.urdf.xacro" />
+
+  <xacro:macro name="top" params="parent_link height_offset">
+    <link name="top_link">
+       <visual>
+       <origin xyz="0 0 0" rpy="0 0 ${pi/2.0}" />
+        <geometry>
+          <mesh filename="package://cobot_description/meshes/dae/top.dae" />
+        </geometry>
+      </visual> 
+    </link>
+
+    <joint name="top_joint" type="fixed">
+      <parent link="${parent_link}" />  
+      <child link="top_link" />
+      <origin xyz="0 0 ${height_offset}" rpy="0 0 0" />
+    </joint>
+  </xacro:macro>
+
+
+</robot>
+

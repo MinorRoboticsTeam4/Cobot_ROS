@@ -1,0 +1,272 @@
+<?xml version="1.0"?>
+
+<robot name="mesh" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <link name="base_link">
+    <visual>
+    <origin xyz="0 0 -0.05" rpy="0 0 0" />
+      <geometry>
+        <box size="0.46 .02 0.01" />
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="platform_link">
+    <visual>
+    <origin xyz="-0.23 0.285 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.46 0.57 0.09" />
+      </geometry>
+      <material name="black">
+        <color rgba="0.1 0.1 0.1 1" />
+      </material>
+    </visual>
+  </link>
+
+  <link name="powered_left_wheel_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="1.57075 0 1.57075" />
+      <geometry>
+        <cylinder radius="0.15" length="0.04" />
+      </geometry>
+      <material name="blue">
+        <color rgba="0.1 0.1 1.0 1" />
+      </material>
+    </visual> 
+  </link>
+
+  <link name="powered_right_wheel_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="1.57075 0 1.57075" />
+      <geometry>
+        <cylinder radius="0.15" length="0.04" />
+      </geometry>
+      <material name="blue">
+        <color rgba="0.1 0.1 1.0 1" />
+      </material>
+    </visual> 
+  </link>
+
+  <link name="caster_left_wheel_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="1.57075 0 1.57075" />
+      <geometry>
+        <cylinder radius="0.0875" length="0.04" />
+      </geometry>
+      <material name="blue">
+        <color rgba="0.1 0.1 1.0 1" />
+      </material>
+    </visual> 
+  </link>
+
+  <link name="caster_right_wheel_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="1.57075 0 1.57075" />
+      <geometry>
+        <cylinder radius="0.0875" length="0.04" />
+      </geometry>
+      <material name="blue">
+        <color rgba="0.1 0.1 1.0 1" />
+      </material>
+    </visual> 
+  </link>
+
+  <link name="body_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="0 0 1.57075" />
+      <geometry>
+        <mesh filename="package://cobot_description/meshes/dae/body.dae" />
+      </geometry>
+    </visual> 
+  </link>
+
+  <link name="frame_left_top_link">
+     <visual>
+     <origin xyz="0 0 0.1225" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.006" length="0.245" />
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual> 
+  </link>
+
+  <link name="frame_right_top_link">
+     <visual>
+     <origin xyz="0 0 0.1225" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.006" length="0.245" />
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual> 
+  </link>
+
+  <link name="top_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="0 0 1.57075" />
+      <geometry>
+        <mesh filename="package://cobot_description/meshes/dae/top.dae" />
+      </geometry>
+    </visual> 
+  </link>
+
+  <link name="kinect_base_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="0 0 1.57075" />
+      <geometry>
+        <box size="0.05 0.275 0.055" />
+      </geometry>
+     <material name="green">
+      <color rgba="0.1 1 0.1 1" />
+    </material>
+    </visual> 
+  </link>  
+
+  <link name="kinect_ir_sensor_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="1.57075 0 0" />
+      <geometry>
+        <cylinder radius="0.009" length="0.01" />
+      </geometry>
+     <material name="red">
+      <color rgba="1.0 0.1 0.1 1" />
+    </material>
+    </visual> 
+  </link> 
+
+  <link name="kinect_rgb_sensor_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="1.57075 0 0" />
+      <geometry>
+        <cylinder radius="0.009" length="0.01" />
+      </geometry>
+     <material name="blue">
+      <color rgba="0.1 0.1 1.0 1" />
+    </material>
+    </visual> 
+  </link>  
+
+  <link name="ultrasoon_front_left_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="0 0 1.57075" />
+      <geometry>
+        <mesh filename="package://cobot_description/meshes/dae/ultrasoon.dae" />
+      </geometry>
+    </visual> 
+  </link>
+
+  <link name="ultrasoon_front_middle_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="0 0 1.57075" />
+      <geometry>
+        <mesh filename="package://cobot_description/meshes/dae/ultrasoon.dae" />
+      </geometry>
+    </visual> 
+  </link>
+
+  <link name="ultrasoon_front_right_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="0 0 1.57075" />
+      <geometry>
+        <mesh filename="package://cobot_description/meshes/dae/ultrasoon.dae" />
+      </geometry>
+    </visual> 
+  </link>
+
+
+  <joint name="platform_base_joint" type="fixed">
+    <parent link="base_link" />  
+    <child link="platform_link" />
+    <origin xyz="0.23 -0.47 0" rpy="0 0 0" />
+  </joint>
+
+  <joint name="powered_left_wheel_base_joint" type="fixed">
+    <parent link="base_link" />  
+    <child link="powered_left_wheel_link" />
+    <origin xyz="-0.245 0 0" rpy="0 0 0" />
+  </joint>
+
+  <joint name="powered_right_wheel_base_joint" type="fixed">
+    <parent link="base_link" />  
+    <child link="powered_right_wheel_link" />
+    <origin xyz="0.245 0 0" rpy="0 0 0" />
+  </joint>
+
+  <joint name="caster_left_wheel_base_joint" type="fixed">
+    <parent link="base_link" />  
+    <child link="caster_left_wheel_link" />
+    <origin xyz="-0.23 -0.47 -0.0625" rpy="0 0 0" />
+  </joint>
+
+  <joint name="caster_right_wheel_base_joint" type="fixed">
+    <parent link="base_link" />  
+    <child link="caster_right_wheel_link" />
+    <origin xyz="0.23 -0.47 -0.0625" rpy="0 0 0" />
+  </joint>
+
+  <joint name="body_base_joint" type="fixed">
+    <parent link="platform_link" />  
+    <child link="body_link" />
+    <origin xyz="0 0 0.045" rpy="0 0 0" />
+  </joint>
+
+  <joint name="frame_left_top_body_joint" type="fixed">
+    <parent link="body_link" />  
+    <child link="frame_left_top_link" />
+    <origin xyz="-0.46 0 0.74" rpy="0 0 0" />
+  </joint>
+
+  <joint name="frame_right_top_body_joint" type="fixed">
+    <parent link="body_link" />  
+    <child link="frame_right_top_link" />
+    <origin xyz="0 0 0.74" rpy="0 0 0" />
+  </joint>
+
+  <joint name="top_frame_right_top_joint" type="fixed">
+    <parent link="frame_right_top_link" />  
+    <child link="top_link" />
+    <origin xyz="0 0 0.245" rpy="0 0 0" />
+  </joint>
+
+  <joint name="kinect_base_top_joint" type="fixed">
+    <parent link="top_link" />  
+    <child link="kinect_base_link" />
+    <origin xyz="-0.25 0.75 0" rpy="0 0 0" />
+  </joint>
+
+  <joint name="kinect_ir_sensor_kinect_base_joint" type="fixed">
+    <parent link="kinect_base_link" />  
+    <child link="kinect_ir_sensor_link" />
+    <origin xyz="-0.013 0 0" rpy="0 0 0" />
+  </joint>
+
+  <joint name="kinect_rgb_sensor_kinect_base_joint" type="fixed">
+    <parent link="kinect_base_link" />  
+    <child link="kinect_rgb_sensor_link" />
+    <origin xyz="0.013 0 0" rpy="0 0 0" />
+  </joint>
+
+  <joint name="ultrasoon_front_left_body_joint" type="fixed">
+    <parent link="body_link" />  
+    <child link="ultrasoon_front_left_link" />
+    <origin xyz="-0.05 0.57 0" rpy="0 0 0" />
+  </joint>
+
+  <joint name="ultrasoon_front_middle_body_joint" type="fixed">
+    <parent link="body_link" />  
+    <child link="ultrasoon_front_middle_link" />
+    <origin xyz="-0.23 0.57 0" rpy="0 0 0" />
+  </joint>
+
+  <joint name="ultrasoon_front_right_body_joint" type="fixed">
+    <parent link="body_link" />  
+    <child link="ultrasoon_front_right_link" />
+    <origin xyz="-0.41 0.57 0" rpy="0 0 0" />
+  </joint>
+
+
+</robot>
+

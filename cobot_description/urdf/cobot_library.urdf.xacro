@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+  Library, this includes all 'loose' urdf and xacro files of cobot.
+ -->
+<robot name="library" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Materials -->
+  <xacro:include filename="$(find cobot_description)/urdf/materials/materials.urdf.xacro"/>
+
+  <!-- Platform -->
+  <xacro:include filename="$(find cobot_description)/urdf/platform/base.urdf.xacro"/>
+  <xacro:include filename="$(find cobot_description)/urdf/platform/body.urdf.xacro"/>
+  <xacro:include filename="$(find cobot_description)/urdf/platform/top.urdf.xacro"/>
+
+  <!-- Sensors -->
+
+
+  <xacro:include filename="$(find cobot_description)/urdf/sensors/kinect.urdf.xacro"/>
+
+<!--
+  <xacro:include filename="$(find cobot_description)/urdf/sensors/ultrasoon.urdf.xacro"/>
+-->
+
+</robot>

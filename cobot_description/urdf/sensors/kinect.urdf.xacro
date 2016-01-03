@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<robot name="kinect" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find cobot_description)/urdf/constants.urdf.xacro" />
+
+  <xacro:property name="kinect_length" value="0.275" />
+  <xacro:property name="kinect_width" value="0.05" />
+  <xacro:property name="kinect_height" value="0.055" />
+
+  <xacro:property name="kinect_diameter_lens" value="0.018" />
+
+
+<xacro:macro name="kinect" params="parent_link parent_x parent_y parent_z parent_ox parent_oy parent_oz">
+
+  <link name="kinect_base_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="${parent_ox} ${parent_oy} ${parent_oz}" />
+      <geometry>
+        <box size="${kinect_length} ${kinect_width} ${kinect_height}" />
+      </geometry>
+     <material name="green" />
+    </visual> 
+  </link>  
+
+  <link name="kinect_ir_sensor_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="${parent_ox + pi/2.0} ${parent_oy} ${parent_oz}" />
+      <geometry>
+        <cylinder radius="${kinect_diameter_lens/2.0}" length="1.01" />
+      </geometry>
+     <material name="white"/>
+    </visual> 
+  </link> 
+
+  <link name="kinect_rgb_sensor_link">
+     <visual>
+     <origin xyz="0 0 0" rpy="${parent_ox + pi/2.0} ${parent_oy} ${parent_oz}" />
+      <geometry>
+        <cylinder radius="${kinect_diameter_lens/2.0}" length="1.01" />
+      </geometry>
+     <material name="black"/>
+    </visual> 
+  </link> 
+
+  <joint name="kinect_base_top_joint" type="fixed">
+    <parent link="${parent_link}" />  
+    <child link="kinect_base_link" />
+    <origin xyz="${parent_x} ${parent_y} ${parent_z}" rpy="${parent_ox} ${parent_oy} ${parent_oz}" />
+  </joint>
+
+  <joint name="kinect_ir_sensor_kinect_base_joint" type="fixed">
+    <parent link="kinect_base_link" />  
+    <child link="kinect_ir_sensor_link" />
+    <origin xyz="-0.013 0 0" rpy="0 0 0" />
+  </joint>
+
+  <joint name="kinect_rgb_sensor_kinect_base_joint" type="fixed">
+    <parent link="kinect_base_link" />  
+    <child link="kinect_rgb_sensor_link" />
+    <origin xyz="0.013 0 0" rpy="0 0 0" />
+  </joint>
+
+</xacro:macro>
+
+</robot>

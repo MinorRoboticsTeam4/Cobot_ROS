@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<robot name="cobot_navigation" xmlns:xacro="http://ros.org/wiki/xacro">
+
+ <xacro:include filename="$(find cobot_description)/urdf/cobot_library.urdf.xacro" />
+ <xacro:include filename="$(find cobot_description)/urdf/constants.urdf.xacro" />
+
+ <cobot_base />
+ <cobot_body parent_link="platform_link" platform_height="${platform_height}"/>
+ <cobot_top parent_link="frame_right_top_link" height_offset="${frame_top_length}" />
+
+ <kinect parent_link="top_link" parent_x="-0.25 " parent_y="0.75" parent_z="0" parent_ox="${pi/2.0}" parent_oy="${pi/2.0}" parent_oz="${pi/2.0}" />
+
+
+</robot>
