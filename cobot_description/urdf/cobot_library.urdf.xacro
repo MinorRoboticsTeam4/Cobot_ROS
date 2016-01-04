@@ -4,21 +4,57 @@
  -->
 <robot name="library" xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <!-- Materials -->
+  <!-- ### Materials ### -->
+  
+  <!--
+    Material constants of the robot(like colors)
+  -->  
   <xacro:include filename="$(find cobot_description)/urdf/materials/materials.urdf.xacro"/>
 
-  <!-- Platform -->
+  <!-- ### Platform ### -->
+    
+  <!--
+    Base (Platform) of the robot
+  -->
   <xacro:include filename="$(find cobot_description)/urdf/platform/base.urdf.xacro"/>
+  <!--
+    Body of the robot
+    @param parent_link name of the parent link
+    @param platform_height z-distance of the platform where the body is atached to   
+  -->
   <xacro:include filename="$(find cobot_description)/urdf/platform/body.urdf.xacro"/>
+  <!--
+    Top part of the robot
+    @param parent_link name of the parent link
+    @param height_offset z-distance relative to the parent link    
+  -->
   <xacro:include filename="$(find cobot_description)/urdf/platform/top.urdf.xacro"/>
 
-  <!-- Sensors -->
+  <!-- ### Sensors ### -->
 
-
+  <!--
+    Kinect
+    @param parent_link name of the parent link
+    @param parent_x x-coordinate relative to the parent link
+    @param parent_y y-coordinate relative to the parent link
+    @param parent_z z-coordinate relative to the parent link
+    @param parent_ox x-axis turning relative to the parent link
+    @param parent_oy y-axis turning relative to the parent link
+    @param parent_oz z-axis turning relative to the parent link    
+  -->
   <xacro:include filename="$(find cobot_description)/urdf/sensors/kinect.urdf.xacro"/>
-
-<!--
+  <!--
+    Ultrasoon 
+    @param parent_link name of the parent link
+    @param panel panel where the sensor is attached to (e.g. front,back,left_side,right_side)
+    @param side the place on the panel (e.g. left,middle,right)
+    @param parent_x x-coordinate relative to the parent link
+    @param parent_y y-coordinate relative to the parent link
+    @param parent_z z-coordinate relative to the parent link
+    @param parent_ox x-axis turning relative to the parent link
+    @param parent_oy y-axis turning relative to the parent link
+    @param parent_oz z-axis turning relative to the parent link
+  -->
   <xacro:include filename="$(find cobot_description)/urdf/sensors/ultrasoon.urdf.xacro"/>
--->
 
 </robot>

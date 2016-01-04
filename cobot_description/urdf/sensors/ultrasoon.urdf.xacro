@@ -21,7 +21,7 @@
     <joint name="ultrasoon_${panel}_${side}_joint" type="fixed">
       <parent link="${parent_link}" />  
       <child link="ultrasoon_${panel}_${side}_link" />
-      <origin xyz="${parent_x} ${parent_y} ${parent_z" rpy="${parent_ox} ${parent_oy} ${parent_oz}" />
+      <origin xyz="${parent_x} ${parent_y} ${parent_z}" rpy="${parent_ox} ${parent_oy} ${parent_oz}" />
     </joint>
 
   </xacro:macro>

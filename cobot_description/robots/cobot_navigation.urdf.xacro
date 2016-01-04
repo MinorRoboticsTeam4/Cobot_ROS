@@ -10,5 +10,6 @@
 
  <kinect parent_link="top_link" parent_x="-0.25 " parent_y="0.75" parent_z="0" parent_ox="${pi/2.0}" parent_oy="${pi/2.0}" parent_oz="${pi/2.0}" />
 
+ <ultrasoon parent_link="platform_link" panel="front" side="middle" parent_x="-0.4 " parent_y="0.75" parent_z="0" parent_ox="0" parent_oy="0" parent_oz="0" /> 
 
 </robot>
