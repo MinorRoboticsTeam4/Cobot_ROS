@@ -3,17 +3,21 @@ functions of the cobot
 -->
 
 <launch>
-  
-  <!-- Bringup the 3D sensor launch -->
-  <include file="$(find cobot_launch)/launch/3dsensor.launch">
-  </include>
-
+  <arg name="type"/>
+  <arg name="base"            default="$(env COBOT_BASE)"/>  
+  <arg name="serial_port"     default="$(env COBOT_SERIAL_PORT)"/>
 
   <!-- Bringup the base controller -->
   <include file="$(find cobot_launch)/launch/include/base.launch.xml">
-    <arg name="base"             value="$(env COBOT_BASE)"/>  
-    <arg name="serial_port"      value="$(env COBOT_SERIAL_PORT)"/>  
+    <arg name="base"             value="$(arg base)"/>  
+    <arg name="serial_port"      value="$(arg serial_port)"/>  
     <arg name="sub_topic"        value="/cmd_vel"/> 
+  </include>
+
+  <!-- Bringup common robot attributes (like model) -->
+  <include file="$(find cobot_launch)/launch/include/common_robot.launch.xml">
+    <arg name="base"            value="$(arg base)"/>
+    <arg name="type"            value="$(arg type)"/>   
   </include>
 
 

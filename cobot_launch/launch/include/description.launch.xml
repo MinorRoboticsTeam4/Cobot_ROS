@@ -1,0 +1,12 @@
+<!--
+ Robot description model loader
+-->
+<launch>
+  <arg name="base"/>
+  <arg name="type"/>
+
+  
+  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find cobot_description)/robots/cobot_$(arg base)_$(arg type).urdf.xacro'"/>
+  <param name="robot_description" command="$(arg urdf_file)" />
+ 
+</launch>
