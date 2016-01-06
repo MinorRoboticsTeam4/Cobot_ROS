@@ -6,7 +6,7 @@
 
 <launch>
 
- <arg name="enable_turtlesim"  default="true"/>
+ <arg name="enable_turtlesim"  default="false"/>
 
  <!-- Include Turtlesim if needed -->
  <include if="$(arg enable_turtlesim)" file="$(find cobot_teleop)/launch/include/turtlesim.launch.xml"/>

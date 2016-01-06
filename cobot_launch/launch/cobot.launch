@@ -3,7 +3,7 @@ functions of the cobot
 -->
 
 <launch>
-  <arg name="type"/>
+  <arg name="type"/>          <!-- Options are: manual,mapping,navigation (also found in "cobot_description/robots")-->
   <arg name="base"            default="$(env COBOT_BASE)"/>  
   <arg name="serial_port"     default="$(env COBOT_SERIAL_PORT)"/>
 

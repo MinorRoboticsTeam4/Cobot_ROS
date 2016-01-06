@@ -1,6 +1,15 @@
-# input of the joystick
+# <!-- input of the joystick -->
 # find it with the bash command:
 # ls /dev/input/
 dev: /dev/input/js0
 
+# <!-- Axes -->
+# find gamepad numbers with something like jstest-gtk
+linear_axis: 1
+angular_axis: 2
+#Inverse axis
+inverse_linear_axis: 0
+inverse_angular_axis: 0
 
+# <!-- Buttons -->
+stop_button: 0

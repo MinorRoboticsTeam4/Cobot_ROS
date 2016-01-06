@@ -4,14 +4,7 @@ of cobot on the turtlesim environment
 
 <launch>
   <arg name="turtle_cmdTopic"     default="/turtle1/cmd_vel"/>
-  
 
-
-  <!-- Bringup the gamepad -->
-  <include file="$(find cobot_teleop)/launch/gamepad.launch">
-    <arg name="enable_turtlesim" value="true"/>  
-    <arg name="pub_topic"        value="$(arg turtle_cmdTopic)"/> 
-  </include>
 
   <!-- Bringup the base controller -->
   <include file="$(find cobot_launch)/launch/include/base.launch.xml">
@@ -21,12 +14,13 @@ of cobot on the turtlesim environment
   </include>
 
   <!-- Bringup the test driver -->
+<!--
   <include file= "$(find cobot_teleop)/launch/include/driver.launch.xml"> 
     <arg name="pub_topic"       value="$(arg turtle_cmdTopic)"/>
     <arg name="commands"        value="[LINE]"/>   
     <arg name="linearSpeed"     value="0.5"/>
     <arg name="angularSpeed"    value="0.3"/>
   </include>
-
+-->
 
 </launch>

@@ -7,7 +7,7 @@
 
 <launch>
  
- <arg name="enable_turtlesim"  default="true"/>
+ <arg name="enable_turtlesim"  default="false"/>
  <arg name="pub_topic"         default="/gamepad_controller/cmd_vel"/>
 
  <!-- Include Turtlesim if needed -->

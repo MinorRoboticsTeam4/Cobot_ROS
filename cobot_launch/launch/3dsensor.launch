@@ -6,9 +6,9 @@ like rgb and ir.
 -->
 
 <launch>
-  <arg name="publish_tf"    default="true"/>  <!-- to false -->
+  <arg name="publish_tf"    default="false"/>  <!--URDF file already has this frame -->
   <arg name="3d_sensor"     default="$(env COBOT_3D_SENSOR)"/> <!-- load from shell -->
-  <arg name="camera"        default="$(arg 3d_sensor)_camera"/>
+  <arg name="camera"        default="camera"/>
 
 
   <!-- Factory calibration depth registration-->
