@@ -20,7 +20,6 @@
   <!--
     Body of the robot
     @param parent_link name of the parent link
-    @param platform_height z-distance of the platform where the body is atached to   
   -->
   <xacro:include filename="$(find cobot_description)/urdf/platform/body.urdf.xacro"/>
   <!--

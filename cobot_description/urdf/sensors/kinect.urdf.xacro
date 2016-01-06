@@ -15,7 +15,7 @@
 
   <link name="camera_rgb_frame">
      <visual>
-     <origin xyz="0 0.15 0" rpy="${parent_ox + pi/2.0} ${parent_oy} ${parent_oz}" />
+     <origin xyz="0.15 0 0" rpy="${parent_ox} ${parent_oy + pi/2} ${parent_oz}" />
       <geometry>
         <cylinder radius="${camera_diameter_lens/2.0}" length="0.3" />
       </geometry>
@@ -25,7 +25,7 @@
   
   <link name="camera_rgb_optical_frame">
      <visual>
-     <origin xyz="0 0.15 0" rpy="${parent_ox + pi/2.0} ${parent_oy} ${parent_oz}" />
+     <origin xyz="0.15 0 0" rpy="${parent_ox} ${parent_oy + pi/2} ${parent_oz}" />
       <geometry>
         <cylinder radius="${camera_diameter_lens/4.0}" length="0.3" />
       </geometry>
@@ -38,7 +38,7 @@
    <visual>
     <origin xyz="0 0 0" rpy="0 0 0"/>
      <geometry>
-       <box size="${camera_length} ${camera_width} ${camera_height}" />
+       <box size="${camera_width} ${camera_length} ${camera_height}" />
      </geometry>
     <material name="green" />
    </visual>
@@ -46,7 +46,7 @@
 
 	<link name="camera_depth_frame">
    <visual>
-     <origin xyz="0 0.15 0" rpy="${parent_ox + pi/2.0} ${parent_oy} ${parent_oz}" />
+     <origin xyz="0.15 0 0" rpy="${parent_ox} ${parent_oy + pi/2.0} ${parent_oz}" />
       <geometry>
         <cylinder radius="${camera_diameter_lens/2.0}" length="0.3" />
       </geometry>
@@ -56,7 +56,7 @@
 
 	<link name="camera_depth_optical_frame">
    <visual>
-     <origin xyz="0 0.15 0" rpy="${parent_ox + pi/2.0} ${parent_oy} ${parent_oz}" />
+     <origin xyz="0.15 0 0" rpy="${parent_ox} ${parent_oy + pi/2.0} ${parent_oz}" />
       <geometry>
         <cylinder radius="${camera_diameter_lens/4.0}" length="0.3" />
       </geometry>
@@ -77,14 +77,15 @@
      <child link="camera_rgb_optical_frame" />
    </joint>
 
+
    <joint name="camera_joint" type="fixed">
-     <origin xyz="0.007 0 0" rpy="0 0 0"/>
+     <origin xyz="0 0.0125 0" rpy="0 0 0"/>
      <parent link="camera_rgb_frame"/>
      <child link="camera_link"/>
    </joint> 
 
 	<joint name="camera_depth_joint" type="fixed">
-	  <origin xyz="0.025 0 0" rpy="0 0 0" />
+	  <origin xyz="0 0.027 0" rpy="0 0 0" />
 	  <parent link="camera_rgb_frame" />
 	  <child link="camera_depth_frame" />
 	</joint>
