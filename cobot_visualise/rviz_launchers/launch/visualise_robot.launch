@@ -1,0 +1,7 @@
+<!--
+  Launch file for visualising cobot with sensors
+-->
+
+<launch>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find cobot_visualise)/rviz_launchers/rviz/robot.rviz" />
+</launch>

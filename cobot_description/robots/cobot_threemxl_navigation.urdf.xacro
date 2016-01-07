@@ -10,16 +10,20 @@
 
  <kinect parent_link="base_link" parent_x="0.1 " parent_y="0" parent_z="1.0" parent_ox="${pi}" parent_oy="0" parent_oz="0" />
 
+<!-- Front ultrasoon sensors-->
  <ultrasoon parent_link="base_link" panel="front" side="middle" parent_x="0.10" parent_y="0" parent_z="0" parent_ox="0" parent_oy="0" parent_oz="0" /> 
  <ultrasoon parent_link="base_link" panel="front" side="left" parent_x="0.10" parent_y="-0.15" parent_z="0" parent_ox="0" parent_oy="0" parent_oz="0" /> 
  <ultrasoon parent_link="base_link" panel="front" side="right" parent_x="0.10" parent_y="0.15" parent_z="0" parent_ox="0" parent_oy="0" parent_oz="0" /> 
 
+<!-- Back ultrasoon sensors-->
  <ultrasoon parent_link="base_link" panel="back" side="middle" parent_x="-0.47" parent_y="0" parent_z="0" parent_ox="0" parent_oy="0" parent_oz="${pi}" /> 
  <ultrasoon parent_link="base_link" panel="back" side="left" parent_x="-0.47" parent_y="-0.15" parent_z="0" parent_ox="0" parent_oy="0" parent_oz="${pi}" /> 
  <ultrasoon parent_link="base_link" panel="back" side="right" parent_x="-0.47" parent_y="0.15" parent_z="0" parent_ox="0" parent_oy="0" parent_oz="${pi}" />
 
+<!-- Left side ultrasoon sensors-->
  <ultrasoon parent_link="base_link" panel="left" side="left" parent_x="-0.3" parent_y="0.23" parent_z="0" parent_ox="0" parent_oy="0" parent_oz="${pi/2}" />
 
+<!-- Right side ultrasoon sensors-->
  <ultrasoon parent_link="base_link" panel="right" side="right" parent_x="-0.3" parent_y="-0.23" parent_z="0" parent_ox="0" parent_oy="0" parent_oz="${(3*pi)/2}" />
 
 
