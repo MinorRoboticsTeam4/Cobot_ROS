@@ -7,7 +7,7 @@
   <xacro:macro name="ultrasoon" params="parent_link panel side parent_x parent_y parent_z parent_ox parent_oy parent_oz">
     <link name="ultrasoon_${panel}_${side}_link">
        <visual>
-       <origin xyz="0 0 0" rpy="${parent_ox} ${parent_oy} ${parent_oz}" />
+       <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <mesh filename="package://cobot_description/meshes/dae/ultrasoon.dae" />
         </geometry>
