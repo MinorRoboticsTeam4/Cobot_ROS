@@ -8,7 +8,7 @@
 <launch>
  
  <arg name="enable_turtlesim"  default="false"/>
- <arg name="pub_topic"         default="/gamepad_controller/cmd_vel"/>
+ <arg name="pub_topic"         default="/cmd_vel"/>
 
  <!-- Include Turtlesim if needed -->
  <include if="$(arg enable_turtlesim)" file="$(find cobot_teleop)/launch/include/turtlesim.launch.xml"/>

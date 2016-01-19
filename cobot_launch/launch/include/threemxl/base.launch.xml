@@ -9,6 +9,7 @@
   <arg name="serial_port"/>
   <arg name="sub_topic"/>
 
+
   <!-- base controller including the motor controller-->
   <node pkg="cobot_movement" type="threemxl_platform" name="threemxl_platform"  respawn="false">
       <param name="serial_port"                         value="$(arg serial_port)"/>

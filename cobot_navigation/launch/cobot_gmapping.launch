@@ -4,7 +4,7 @@
 -->
 
 <launch>
-  <!--No need for rgb or registered depth(which is combining of rgb
+  <!--No need for rgb or registered depth(which is combining the rgb
   and depth camera with transforms to a single point instead of two
   camera's. 
   Also, no depth processing because the "fake laserscan" uses the raw
@@ -21,8 +21,5 @@
 
   <!-- gmapping -->
   <include file="$(find cobot_navigation)/launch/include/gmapping.launch.xml" />
-
-  <!-- navigation stack -->
-  <include file="$(find cobot_navigation)/launch/include/move_base.launch.xml" />
 
 </launch>

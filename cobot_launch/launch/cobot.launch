@@ -20,7 +20,5 @@ functions of the cobot
     <arg name="type"            value="$(arg type)"/>   
   </include>
 
-
-
 </launch>
 

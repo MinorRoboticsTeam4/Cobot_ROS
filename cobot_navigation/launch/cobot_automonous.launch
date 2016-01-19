@@ -1,0 +1,44 @@
+<!--
+  (Top) Launch file for automonous driving. 
+-->
+<launch>
+
+  <!--No need for rgb or registered depth(which is combining the rgb
+  and depth camera with transforms to a single point instead of two
+  camera's. 
+  Also, no depth processing because the "fake laserscan" uses the raw
+  data.
+  -->
+  <include file="$(find cobot_launch)/launch/3dsensor.launch">
+    <arg name="rgb_processing"       value="false" />
+    <arg name="depth_registration"   value="false" />
+    <arg name="depth_processing"     value="false" />
+
+    <!-- Bug in ros that $(arg camera) is prepended to topic somehow -->
+    <arg name="scan_topic" value="/scan" />
+  </include>
+
+  
+  <!-- Map -->
+  <arg name="map_file"                default=""/> <!-- Location of the default map to be used is filled in here -->
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+
+  <!-- AMCL -->
+  <arg name="initial_pose_x"          default="0.0"/>
+  <arg name="initial_pose_y"          default="0.0"/>
+  <arg name="initial_pose_a"          default="0.0"/>
+  <include file="$(find cobot_navigation)/launch/include/amcl.launch.xml">
+  <arg name="initial_pose_x"          value="$(arg initial_pose_x)"/>
+  <arg name="initial_pose_y"          value="$(arg initial_pose_y)"/>
+  <arg name="initial_pose_a"          value="$(arg initial_pose_a)"/>
+  </include>
+
+
+
+
+  <!-- navigation stack -->
+  <include file="$(find cobot_navigation)/launch/include/move_base.launch.xml" />
+
+
+
+</launch>

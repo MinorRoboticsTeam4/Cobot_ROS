@@ -4,7 +4,6 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /RobotModel1
         - /TF1/Tree1
       Splitter Ratio: 0.5
     Tree Height: 531
@@ -57,81 +56,6 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        body_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        camera_depth_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        camera_depth_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        camera_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        camera_rgb_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        camera_rgb_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        caster_left_wheel_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        caster_right_wheel_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        frame_left_top_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        frame_right_top_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        platform_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        powered_left_wheel_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        powered_right_wheel_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        top_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -163,8 +87,8 @@ Visualization Manager:
       Class: rviz/LaserScan
       Color: 255; 255; 255
       Color Transformer: AxisColor
-      Decay Time: 0
-      Enabled: false
+      Decay Time: 30
+      Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
@@ -180,83 +104,7 @@ Visualization Manager:
       Topic: /scan
       Use Fixed Frame: true
       Use rainbow: true
-      Value: false
-    - Alpha: 1
-      Auto Size:
-        Auto Size Factor: 1
-        Value: true
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 3.286
-        Min Value: 0.683
-        Value: true
-      Axis: X
-      Channel Name: intensity
-      Class: rviz/DepthCloud
-      Color: 255; 255; 255
-      Color Image Topic: ""
-      Color Transformer: AxisColor
-      Color Transport Hint: raw
-      Decay Time: 0
-      Depth Map Topic: /camera/depth/image_raw
-      Depth Map Transport Hint: raw
-      Enabled: false
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 4096
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: DepthCloud
-      Occlusion Compensation:
-        Occlusion Time-Out: 30
-        Value: false
-      Position Transformer: XYZ
-      Queue Size: 5
-      Selectable: true
-      Size (Pixels): 3
-      Style: Points
-      Topic Filter: true
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: false
-    - Alpha: 1
-      Auto Size:
-        Auto Size Factor: 1
-        Value: true
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz/DepthCloud
-      Color: 255; 255; 255
-      Color Image Topic: /camera/rgb/image_color
-      Color Transformer: RGB8
-      Color Transport Hint: raw
-      Decay Time: 0
-      Depth Map Topic: /camera/depth_registered/image_raw
-      Depth Map Transport Hint: raw
-      Enabled: false
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 4096
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: Registered DepthCloud
-      Occlusion Compensation:
-        Occlusion Time-Out: 30
-        Value: false
-      Position Transformer: XYZ
-      Queue Size: 5
-      Selectable: true
-      Size (Pixels): 3
-      Style: Points
-      Topic Filter: true
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: false
+      Value: true
     - Class: rviz/Image
       Enabled: false
       Image Topic: /camera/rgb/image_color
@@ -326,15 +174,55 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: false
-    - Class: rviz/InteractiveMarkers
-      Enable Transparency: true
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 0.5
+          Buffer Length: 1
+          Class: rviz/Range
+          Color: 255; 255; 0
+          Enabled: true
+          Name: Range front left
+          Queue Size: 100
+          Topic: ""
+          Value: true
+        - Alpha: 0.5
+          Buffer Length: 1
+          Class: rviz/Range
+          Color: 255; 255; 0
+          Enabled: true
+          Name: Range front middle
+          Queue Size: 100
+          Topic: ""
+          Value: true
+        - Alpha: 0.5
+          Buffer Length: 1
+          Class: rviz/Range
+          Color: 255; 255; 0
+          Enabled: true
+          Name: Range front right
+          Queue Size: 100
+          Topic: ""
+          Value: true
+        - Alpha: 0.5
+          Buffer Length: 1
+          Class: rviz/Range
+          Color: 255; 255; 0
+          Enabled: true
+          Name: Range left side
+          Queue Size: 100
+          Topic: ""
+          Value: true
+        - Alpha: 0.5
+          Buffer Length: 1
+          Class: rviz/Range
+          Color: 255; 255; 0
+          Enabled: true
+          Name: Range right side
+          Queue Size: 100
+          Topic: ""
+          Value: true
       Enabled: false
-      Name: InteractiveMarkers
-      Show Axes: false
-      Show Descriptions: true
-      Show Visual Aids: false
-      Update Topic: /turtlebot_marker_server/update
-      Value: false
+      Name: Range sensors
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48

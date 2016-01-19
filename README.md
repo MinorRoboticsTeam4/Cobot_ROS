@@ -12,6 +12,17 @@ See the  [Starting Guide for development](https://github.com/MinorRoboticsTeam4/
 ### Moving around
 Something about what launch file(s) to use
 
+<bash>roslaunch cobot_launch cobot.launch</bash>
+
+gamepad:
+<bash>roslaunch cobot_teleop gamepad.launch</bash>
+
+(semi) autonomous driving
+<bash>roslaunch cobot_teleop test_driver.launch commands:=[<command_1>,<command_2>...,<command_n>]</bash>
+Available commands:
+LINE,SPEED LINE, SPIN, SPEED SPIN, LINE AND SPIN, TRIANGLE, SQUARE, PLUS
+Full description of the commands is found in ???
+
 ### Creating a map of the environment
 Something with Kinect placement
 Something about what launch file(s) to use

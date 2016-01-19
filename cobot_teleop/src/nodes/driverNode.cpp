@@ -29,8 +29,8 @@ int main(int argc, char** argv)
   {
     if (std::find(commands.begin(), commands.end(), "LINE") != commands.end())
     {
-      driver.drive_straight(0.5, linearSpeed);
-      driver.drive_straight(-0.5, linearSpeed);
+      driver.drive_straight(1.0, linearSpeed);
+      driver.drive_straight(-1.5, linearSpeed);
       driver.drive_straight(0.25, linearSpeed);
     }
 

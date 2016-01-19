@@ -10,7 +10,6 @@ Panels:
         - /Global Map1/Planner1
         - /Local Map1/Costmap1
         - /Local Map1/Planner1
-        - /Range Sensors1
       Splitter Ratio: 0.5
     Tree Height: 531
   - Class: rviz/Selection
@@ -143,7 +142,7 @@ Visualization Manager:
             Z: 0
           Topic: /move_base/TrajectoryPlannerROS/global_plan
           Value: true
-      Enabled: true
+      Enabled: false
       Name: Global Map
     - Class: rviz/Group
       Displays:
@@ -169,7 +168,7 @@ Visualization Manager:
             Z: 0
           Topic: /move_base/TrajectoryPlannerROS/local_plan
           Value: true
-      Enabled: true
+      Enabled: false
       Name: Local Map
     - Arrow Length: 0.2
       Class: rviz/PoseArray
@@ -178,55 +177,6 @@ Visualization Manager:
       Name: Amcl Particles
       Topic: /particlecloud
       Value: true
-    - Class: rviz/Group
-      Displays:
-        - Alpha: 0.5
-          Buffer Length: 1
-          Class: rviz/Range
-          Color: 255; 255; 255
-          Enabled: true
-          Name: Range front left
-          Queue Size: 100
-          Topic: ""
-          Value: true
-        - Alpha: 0.5
-          Buffer Length: 1
-          Class: rviz/Range
-          Color: 255; 255; 255
-          Enabled: true
-          Name: Range front middle
-          Queue Size: 100
-          Topic: ""
-          Value: true
-        - Alpha: 0.5
-          Buffer Length: 1
-          Class: rviz/Range
-          Color: 255; 255; 255
-          Enabled: true
-          Name: Range front right
-          Queue Size: 100
-          Topic: ""
-          Value: true
-        - Alpha: 0.5
-          Buffer Length: 1
-          Class: rviz/Range
-          Color: 255; 255; 255
-          Enabled: true
-          Name: Range left side
-          Queue Size: 100
-          Topic: ""
-          Value: true
-        - Alpha: 0.5
-          Buffer Length: 1
-          Class: rviz/Range
-          Color: 255; 255; 255
-          Enabled: true
-          Name: Range right side
-          Queue Size: 100
-          Topic: ""
-          Value: true
-      Enabled: true
-      Name: Range Sensors
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48

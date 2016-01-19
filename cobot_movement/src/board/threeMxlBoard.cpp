@@ -23,11 +23,11 @@ namespace cobot_movement
  * <li>  axleTrack = 0.6 m </li>
  * <li>  wheelDiameter = 0.297m </li>
  * <li>  cmdVelTimeout = 2.0s </li>
- * <li>  max linear speed = 1.0 m/s </li>
- * <li>  max reverse linear speed = 1.0 m/s </li>
+ * <li>  max linear speed = 0.5 m/s </li>
+ * <li>  max reverse linear speed = 0.5 m/s </li>
  */
 ThreeMxlBoard::ThreeMxlBoard() :
-    motors(new CDxlGroup()), robotParams(0.600d, 0.297d, 2.0d, 1.0d, 1.0d)
+    motors(new CDxlGroup()), robotParams(0.600d, 0.297d, 2.0d, 0.5d, 0.5d)
 {
 }
 
