@@ -30,7 +30,7 @@ const double loopSpeed = 90.0d; //(Hz)
  * Create a Driver that publish velocity commands on topic "/driver/cmd_vel"
  * and listens for transformation with source: "/base_link" and target "/odom"
  */
-Driver::Driver() : nh("~"), linearSpeed(0.2), angularSpeed(0.2)
+Driver::Driver() : nh("~"), linearSpeed(1.0), angularSpeed(2.0)
 {
   vel_pub = nh.advertise<geometry_msgs::Twist>("cmd_vel", 10);
   ROS_INFO("[Driver] Publishing velocity commands on %s",vel_pub.getTopic().c_str());

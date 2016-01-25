@@ -7,6 +7,8 @@
 <launch>
 
  <!-- Turtlesim Node-->
-  <node pkg="turtlesim" type="turtlesim_node" name="sim"/> 
+  <node pkg="turtlesim" type="turtlesim_node" name="sim">
+    <remap from="/turtle1/cmd_vel"  to="/cmd_vel" />
+  </node> 
 
 </launch> 

@@ -33,6 +33,17 @@ SensorHandler::SensorHandler(Board::SharedPtr currentBoard) :
 
   ang_left_junk = board->get_angularPos_left();
   ang_right_junk = board->get_angularPos_right();
+
+  arduino_sub = nh.subscribe("/arduino_topic", 10, &SensorHandler::arduinoRead, this);
+  battery_pub = nh.advertise<cobot_movement::BatteryState>("/cobotBattery",10);
+
+
+  pub_range1 = nh.advertise<sensor_msgs::Range>("/ultrasoon1", 1);
+  pub_range2 = nh.advertise<sensor_msgs::Range>("/ultrasoon2", 1);
+  pub_range3 = nh.advertise<sensor_msgs::Range>("/ultrasoon3", 1);
+  pub_range4 = nh.advertise<sensor_msgs::Range>("/ultrasoon4", 1);
+  pub_range5 = nh.advertise<sensor_msgs::Range>("/ultrasoon5", 1);
+
 }
 
 /**
@@ -63,18 +74,60 @@ double SensorHandler::calculateAverage(double val1, double val2)
 {
   return ((val1 + val2) / 2.0d);
 }
+
 /**
  * (Callback) Read the values that the Arduino has published (Arduino reads in
  * all the sensor values)
  * @param readings the values pulled from ROS
  */
-void SensorHandler::arduinoReadCb(SensorReadings::ConstPtr readings)
+//TODO look into method to "attach" new sensors to this handler
+void SensorHandler::arduinoRead(SensorReadings::ConstPtr readings)
 {
   //TODO Add a timestamp ??
   arduinoReadings.capacity = readings->capacity;
   arduinoReadings.charge = readings->charge;
+  arduinoReadings.cups = readings->cups;
+  arduinoReadings.consumptions = readings->consumptions;
+
+  std::vector<double> ultrasoon_readings = readings->ultrasoonReadings;
+
+  //Convert and publish ultrasoon readings to Range messages
+  pub_range1.publish(convertToRangeMsg(ultrasoon_readings[0],readings->header.stamp));
+  pub_range2.publish(convertToRangeMsg(ultrasoon_readings[1],readings->header.stamp));
+  pub_range3.publish(convertToRangeMsg(ultrasoon_readings[2],readings->header.stamp));
+  pub_range4.publish(convertToRangeMsg(ultrasoon_readings[3],readings->header.stamp));
+  pub_range5.publish(convertToRangeMsg(ultrasoon_readings[4],readings->header.stamp));
+
+
+  BatteryState battery;
+  battery.header.stamp = ros::Time::now();
+  battery.capacity = arduinoReadings.capacity;
+  battery.charge = arduinoReadings.charge;
+
+  battery_pub.publish(battery);
 }
-//TODO look into method to "attach" new sensors to this handler
+
+/**
+ * Convert Ultrasonic range value to a Range message
+ */
+sensor_msgs::Range SensorHandler::convertToRangeMsg(double sensor_value,  ros::Time now)
+{
+	sensor_msgs::Range range_msg;
+
+	range_msg.radiation_type = sensor_msgs::Range::ULTRASOUND;
+	range_msg.field_of_view = 0.1;  //stub value
+    range_msg.min_range = 0.0;
+	range_msg.max_range = 2.0;
+
+	range_msg.range = sensor_value;
+
+	range_msg.header.stamp = now;
+	range_msg.header.frame_id = "/ultrasound";
+
+	return range_msg;
+}
+
+
 /**
  * Read all sensors that are attached to this Handler (this includes also the board).
  * @return the read values, stored inside SensorValues
@@ -84,6 +137,7 @@ SensorValues SensorHandler::requestRead()
   SensorValues values;
 
   //TODO better way to filter junk?
+  //TODO average readings?
   values.linearPos_Left = board->get_linearPos_left() - dist_left_junk;
   values.linearPos_Right = board->get_linearPos_right() - dist_right_junk;
   values.angularPos_Left = board->get_angularPos_left() - ang_left_junk;
@@ -91,6 +145,9 @@ SensorValues SensorHandler::requestRead()
 
   values.capacity = arduinoReadings.capacity;
   values.charge = arduinoReadings.charge;
+
+  values.cups = arduinoReadings.cups;
+  values.consumptions = arduinoReadings.consumptions;
 
   return values;
 }
@@ -106,8 +163,6 @@ SensorReadings SensorHandler::createMessage(SensorValues values)
 {
   SensorReadings readings;
 
-  readings.header.stamp = ros::Time::now();
-
   double delta_dist_left = calculateDeltaValue(last_linPos_left, values.linearPos_Left);
   double delta_dist_right = calculateDeltaValue(last_linPos_right, values.linearPos_Right);
 
@@ -122,6 +177,8 @@ SensorReadings SensorHandler::createMessage(SensorValues values)
 
   readings.capacity = values.capacity;
   readings.charge = values.charge;
+
+  readings.header.stamp = ros::Time::now();
 
   return readings;
 }

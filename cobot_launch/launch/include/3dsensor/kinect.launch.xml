@@ -8,7 +8,6 @@ Launch file for bringing up the Kinect camera
   <arg name="publish_tf"    default="false"/>
 
   <!-- Factory calibration depth registration-->
-  <!-- Needed?? -->
   <arg name="depth_registration"  default="true"/>
   <arg if="$(arg depth_registration)"        
        name="depth"      value="depth_registered"/> 

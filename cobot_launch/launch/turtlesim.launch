@@ -3,7 +3,7 @@ of cobot on the turtlesim environment
 -->
 
 <launch>
-  <arg name="turtle_cmdTopic"     default="/turtle1/cmd_vel"/>
+  <arg name="turtle_cmdTopic"     default="/cmd_vel"/>
 
 
   <!-- Bringup the base controller -->
@@ -12,6 +12,7 @@ of cobot on the turtlesim environment
     <arg name="serial_port"      value="dummy"/>  
     <arg name="sub_topic"        value="$(arg turtle_cmdTopic)"/> 
   </include>
+
 
   <!-- Bringup the test driver -->
 <!--

@@ -8,8 +8,10 @@ local_costmap:
   width:                    10            #The width of the map [m]
   height:                   10            #The height of the map [m]
   resolution:               0.05          #The resolution of the map [m/cell] 
-  transform_tolerance:      0.2           #Specifies the delay in transform (tf) data that is tolerable [s].
+  transform_tolerance:      5.0           #Specifies the delay in transform (tf) data that is tolerable [s].
   
   plugins:                                #Plugins, layers to use in this costmap
     - {name: obstacle_layer,        type: "costmap_2d::VoxelLayer"}
+#    - {name: sonar_layer,           type: "range_sensor_layer::RangeSensorLayer"}
     - {name: inflation_layer,       type: "costmap_2d::InflationLayer"}
+    

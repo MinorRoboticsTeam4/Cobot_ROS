@@ -2,7 +2,7 @@
 Launch file for AMCL
 -->
 <launch>
-  <arg name="use_map_topic"       default="false" /> <!--If set, AMCL subscribes to 'map' to retrieve the map  -->
+  <arg name="use_map_topic"       default="true" /> <!--If set, AMCL subscribes to 'map' to retrieve the map  -->
   <arg name="laserscan_topic"     default="scan" /> <!--Topic to subscribe to for laser scan data -->
   <arg name="initial_pose_x"      default="0.0" /> <!--Initial pose mean (x), used to initialize filter with Gaussian distribution. [m] -->
   <arg name="initial_pose_y"      default="0.0" /> <!--Initial pose mean (y), used to initialize filter with Gaussian distribution. [m] -->
@@ -31,7 +31,7 @@ Launch file for AMCL
     <param name="initial_pose_x"       value="$(arg initial_pose_x)"/> 
     <param name="initial_pose_y"       value="$(arg initial_pose_y)"/> 
     <param name="initial_pose_a"       value="$(arg initial_pose_a)"/> 
-    <param name="gui_publish_rate"    value=""/> <!--Maximum rate (Hz) at which scans and paths are published for visualization, -1.0 to
+    <param name="gui_publish_rate"     value="10.0"/> <!--Maximum rate (Hz) at which scans and paths are published for visualization, -1.0 to
                                                      disable.  -->
     <param name="use_map_topic"       value="$(arg use_map_topic)"/>
 

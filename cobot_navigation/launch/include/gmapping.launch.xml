@@ -7,7 +7,7 @@
 -->
 
 <launch>
-  <arg name="scan_topic" default="/scan"/>
+  <arg name="scan_topic" default="scan"/>
   <arg name="base_frame" default="base_link"/>
   <arg name="odom_frame" default="odom"/>
   <arg name="map_frame" default="map"/>
@@ -18,7 +18,7 @@
     <param name="base_frame"            value="$(arg base_frame)"/> <!-- The frame attached to the mobile base. -->
     <param name="odom_frame"            value="$(arg odom_frame)"/> <!-- The frame attached to the odometry system. -->
     <param name="map_frame"             value="$(arg map_frame)"/>  <!-- The frame attached to the map.  -->
-    <param name="map_update_interval"   value="5.0"/>               <!-- How long (in seconds) between updates to the map. -->
+    <param name="map_update_interval"   value="2.0"/>              <!-- How long (in seconds) between updates to the map. -->
 
     <!-- ## Laser Parameters ## -->
     <param name="maxUrange"             value="6.0"/>              <!--The maximum usable range of the laser. [m] -->
@@ -54,7 +54,7 @@
     <param name="stt"                   value="0.02"/>              <!-- angular -> linear noise component -->
 
     <!-- ## Throttling ## -->
-    <param name="linearUpdate"          value="1.0"/>               <!--Process a scan each time the robot translates this far, [m] -->
+    <param name="linearUpdate"          value="0.5"/>               <!--Process a scan each time the robot translates this far, [m] -->
     <param name="angularUpdate"         value="0.5"/>               <!-- Process a scan each time the robot rotates this far, [rad] -->
     <param name="temporalUpdate"        value="-1.0"/>              <!-- Process a scan if the last scan processed is older than the update
                                                                          time in seconds. A value less than zero will turn time 
@@ -63,7 +63,7 @@
     <param name="resampleThreshold"     value="0.5"/>               <!--threshold at which the particles get resampled. Higher means
                                                                         more frequent resampling. Is used for e.g. Loop closing 
                                                                     -->
-    <param name="particles"             value="30"/>                <!-- number of particles. Each particle represents a possible trajectory
+    <param name="particles"             value="200"/>                <!-- number of particles. Each particle represents a possible trajectory
                                                                          that the robot has traveled
                                                                     -->
 

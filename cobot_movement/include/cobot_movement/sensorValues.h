@@ -47,6 +47,17 @@ struct SensorValues
    * the capacity of the batteries
    */
   unsigned int capacity;
+
+  /**
+   * Amount of cups left in system
+   */
+  int cups;
+
+  /**
+   * Amount of consumptions left in system
+   */
+  int consumptions;
+
 };
 
 //Typedefs

@@ -9,8 +9,8 @@
 
   <arg name="enable_turtlesim"  default="false"/>
   <arg name="commands"/> 
-  <arg name="linearSpeed"       default="0.1"/>
-  <arg name="angularSpeed"      default="0.3"/>
+  <arg name="linearSpeed"       default="0.3"/>
+  <arg name="angularSpeed"      default="1.0"/>
   <arg name="pub_topic"         default="/cmd_vel"/>
 
  <!-- Include Turtlesim if needed -->

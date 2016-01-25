@@ -4,22 +4,33 @@
 -->
 
 <launch>
+
+  <!-- ### Camera ### -->
   <!--No need for rgb or registered depth(which is combining the rgb
   and depth camera with transforms to a single point instead of two
   camera's. 
-  Also, no depth processing because the "fake laserscan" uses the raw
+  No depth processing because the "fake laserscan" uses the raw
   data.
   -->
   <include file="$(find cobot_launch)/launch/3dsensor.launch">
+<!--
     <arg name="rgb_processing"       value="false" />
     <arg name="depth_registration"   value="false" />
     <arg name="depth_processing"     value="false" />
-
-    <!-- Bug in ros that $(arg camera) is prepended to topic somehow -->
-    <arg name="scan_topic" value="/scan" />
+-->
   </include>
 
-  <!-- gmapping -->
+  <!--TF replacement for Kinect transformations
+    camera_link->base_link
+  -->
+<!--
+  <node pkg="tf" type="static_transform_publisher" name="base_to_kinect_broadcaster" args="0.075 0.025 0.33 0 0 0 base_link camera_link 100" />
+-->
+  <node pkg="tf" type="static_transform_publisher" name="base_to_kinect_broadcaster" args="0.12 0.0125 0.955 0 0 0 base_link camera_link 100" />
+
+  <!-- ### Mapping ### -->
+
   <include file="$(find cobot_navigation)/launch/include/gmapping.launch.xml" />
+
 
 </launch>

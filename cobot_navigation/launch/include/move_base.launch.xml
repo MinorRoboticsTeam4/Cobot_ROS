@@ -18,6 +18,17 @@
    <rosparam file="$(find cobot_navigation)/param/move_base_params.yaml" command="load" />
    <rosparam file="$(find cobot_navigation)/param/global_planner_params.yaml" command="load" />
    <rosparam file="$(find cobot_navigation)/param/navfn_global_planner_params.yaml" command="load" />   
+
+
+   <param name="global_costmap/global_frame"         value="$(arg global_frame_id)"/>
+   <param name="global_costmap/robot_base_frame"     value="$(arg base_frame_id)"/>
+   <param name="local_costmap/global_frame"          value="$(arg odom_frame_id)"/>
+   <param name="local_costmap/robot_base_frame"      value="$(arg base_frame_id)"/>
+   <param name="DWAPlannerROS/global_frame_id"       value="$(arg odom_frame_id)"/> 
+
+   <remap from="odom" to="$(arg odom_topic)"/>
+   <remap from="scan" to="$(arg laser_topic)"/>
+
   </node>
 
 

@@ -1,7 +1,7 @@
 # Scale for adjusting values linearly
 # Keep values positive
-linear_scale: 0.2
-angular_scale: 0.2
+linear_scale: 0.1
+angular_scale: 0.3
 
 
 

@@ -27,6 +27,11 @@ int main(int argc, char** argv)
 
   for (int i = 0; i < commands.size(); ++i)
   {
+    if (std::find(commands.begin(), commands.end(), "STRAIGHT LINE") != commands.end())
+    {
+      driver.drive_straight(1.5, linearSpeed);
+    }
+
     if (std::find(commands.begin(), commands.end(), "LINE") != commands.end())
     {
       driver.drive_straight(1.0, linearSpeed);
@@ -57,6 +62,14 @@ int main(int argc, char** argv)
         driver.turn(2 * PI, i * angularSpeed);
         driver.turn(-2 * PI, i * angularSpeed);
       }
+    }
+
+    if (std::find(commands.begin(), commands.end(), "LINE TURN") != commands.end())
+    {
+      driver.drive_straight(3.0, linearSpeed);
+      driver.turn(1 * PI, angularSpeed);
+      driver.drive_straight(3.0, linearSpeed);
+      
     }
 
     if (std::find(commands.begin(), commands.end(), "LINE AND SPIN") != commands.end())

@@ -44,6 +44,10 @@ obstacle_layer:
 
 ### Other layers
 
+sonar_layer:
+    enabled:                    true                            #Specify if this layer is enabled
+    topics: ["/ultrasoon1","/ultrasoon2","/ultrasoon3","/ultrasoon4","/ultrasoon5"]  #List of topics to subscribe to
+    
 inflation_layer:
   enabled:                    true                            #Specify if this layer is enabled
   cost_scaling_factor:        5.0                             #A scaling factor to apply to cost values during inflation. 

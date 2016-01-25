@@ -58,6 +58,7 @@ add_message_files(
    DIRECTORY msg
    FILES
    SensorReadings.msg
+   BatteryState.msg
 )
 
 ## Generate services in the 'srv' folder

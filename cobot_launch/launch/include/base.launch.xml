@@ -15,5 +15,4 @@
     <arg name="sub_topic"   value="$(arg sub_topic)"/>
   </include>  
 
-
 </launch>  

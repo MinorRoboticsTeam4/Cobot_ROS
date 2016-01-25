@@ -3,27 +3,35 @@
 -->
 <launch>
 
+  <!-- ### Camera ### -->
   <!--No need for rgb or registered depth(which is combining the rgb
   and depth camera with transforms to a single point instead of two
   camera's. 
-  Also, no depth processing because the "fake laserscan" uses the raw
+  No depth processing because the "fake laserscan" uses the raw
   data.
   -->
   <include file="$(find cobot_launch)/launch/3dsensor.launch">
     <arg name="rgb_processing"       value="false" />
     <arg name="depth_registration"   value="false" />
     <arg name="depth_processing"     value="false" />
-
-    <!-- Bug in ros that $(arg camera) is prepended to topic somehow -->
-    <arg name="scan_topic" value="/scan" />
   </include>
 
-  
-  <!-- Map -->
-  <arg name="map_file"                default=""/> <!-- Location of the default map to be used is filled in here -->
-  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+  <!--TF replacement for Kinect transformations
+    camera_link->base_link
+  -->
+  <node pkg="tf" type="static_transform_publisher" name="base_to_kinect_broadcaster" args="0.12 0.0125 0.955 0 0 0 base_link camera_link 100" />
 
-  <!-- AMCL -->
+  
+  <!-- ### Map ### -->
+<!--
+  <arg name="map_file"                default="$(find cobot_navigation)/maps/map.yaml"/> 
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+-->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find cobot_navigation)/maps/my_map.yaml"/>
+
+
+  <!-- ### AMCL ###-->
+<!--
   <arg name="initial_pose_x"          default="0.0"/>
   <arg name="initial_pose_y"          default="0.0"/>
   <arg name="initial_pose_a"          default="0.0"/>
@@ -32,7 +40,9 @@
   <arg name="initial_pose_y"          value="$(arg initial_pose_y)"/>
   <arg name="initial_pose_a"          value="$(arg initial_pose_a)"/>
   </include>
+-->
 
+  <include file="$(find cobot_navigation)/temp/amcl_diff.launch" />
 
 
 

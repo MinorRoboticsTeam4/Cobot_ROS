@@ -4,11 +4,13 @@
  <xacro:include filename="$(find cobot_description)/urdf/cobot_library.urdf.xacro" />
  <xacro:include filename="$(find cobot_description)/urdf/constants.urdf.xacro" />
 
+<!-- Cobot -->
  <cobot_base />
  <cobot_body parent_link="platform_link"/>
  <cobot_top parent_link="frame_right_top_link" height_offset="${frame_top_length}" />
 
- <kinect parent_link="base_link" parent_x="0 " parent_y="0.10" parent_z="0.35" parent_ox="0" parent_oy="0" parent_oz="0" />
+<!-- Kinect -->
+ <kinect parent_link="base_link" parent_x="0.075 " parent_y="0.0125" parent_z="0.33" parent_ox="0" parent_oy="0" parent_oz="0" />
 
 
 </robot>

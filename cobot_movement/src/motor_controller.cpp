@@ -34,7 +34,7 @@ namespace cobot_movement
  */
 Motor_controller::Motor_controller(Board::SharedPtr newBoard) :
     board(newBoard), nh("~"), des_v_left(0.0), des_v_right(0.0), last_cmdVel_update(), baseFrame("/base_link"), odomFrame(
-        "/odom"), sensorHandler(newBoard),loopRate(90.0d)
+        "/odom"), sensorHandler(newBoard),loopRate(120.0d)
 {
   cmdVel_sub = nh.subscribe("cmd_vel", 10, &Motor_controller::cmdVelCb, this);
   odom_pub = nh.advertise<nav_msgs::Odometry>("/odom", 10);
@@ -114,7 +114,11 @@ geometry_msgs::TransformStamped Motor_controller::calculateOdomTF(ros::Time prev
   double prev_angle = pos2d.theta;
   pos2d.x += cos(prev_angle) * x - sin(prev_angle) * y;
   pos2d.y += sin(prev_angle) * x + cos(prev_angle) * y;
-  pos2d.theta += delta_angle;
+  pos2d.theta -= delta_angle;
+
+//  ROS_INFO("[Controller] x value: %f", pos2d.x);
+//  ROS_INFO("[Controller] y value: %f", pos2d.y);
+//  ROS_INFO("[Controller] current angle: %f %f PI",pos2d.theta,(pos2d.theta / 3.141592653589793238462643383279502884 ));
 
   //Linear velocity
   geometry_msgs::Vector3 linearVel;

@@ -11,7 +11,9 @@
 //=======================================================
 // predefined headers
 #include <cobot_movement/SensorReadings.h>
+#include <cobot_movement/BatteryState.h>
 #include <ros/ros.h>
+#include <sensor_msgs/Range.h>
 
 //=======================================================
 // new defined headers
@@ -99,7 +101,13 @@ private:
    * all the sensor values)
    * @param readings the values pulled from ROS
    */
-  void arduinoReadCb(SensorReadings::ConstPtr readings);
+  void arduinoRead(SensorReadings::ConstPtr readings);
+
+  /**
+   * Convert value to a sensor Range message
+   */
+  sensor_msgs::Range convertToRangeMsg(double sensor_value, ros::Time now);
+
 
 //Public Variables
 //public:
@@ -142,10 +150,22 @@ private:
    * Subscriber that listens for arduino messages
    */
   ros::Subscriber arduino_sub;
+
+  ros::Publisher battery_pub;
+
   /**
    * ros interface
    */
   ros::NodeHandle nh;
+
+  /**
+   * All ultrasonic range publishers
+   */
+  ros::Publisher pub_range1;
+  ros::Publisher pub_range2;
+  ros::Publisher pub_range3;
+  ros::Publisher pub_range4;
+  ros::Publisher pub_range5;
 
 };
 

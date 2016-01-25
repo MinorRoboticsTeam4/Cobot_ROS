@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(cobot_navigation)
+
+set(PROJECT_NAME cobot_navigation)
+project(${PROJECT_NAME})
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -40,11 +42,11 @@ find_package(catkin REQUIRED COMPONENTS tf roscpp sensor_msgs)
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+ add_message_files(
+   DIRECTORY msg
+   FILES
+   ArduinoOrder.msg
+ )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -61,10 +63,10 @@ find_package(catkin REQUIRED COMPONENTS tf roscpp sensor_msgs)
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs  # Or other packages containing msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -96,10 +98,10 @@ find_package(catkin REQUIRED COMPONENTS tf roscpp sensor_msgs)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES cobot_navigation
-  CATKIN_DEPENDS tf roscpp sensor_msgs
-#  DEPENDS system_lib
+  INCLUDE_DIRS include
+  LIBRARIES ${PROJECT_NAME}
+  CATKIN_DEPENDS tf roscpp sensor_msgs message_runtime
+  DEPENDS system_lib message_runtime
 )
 
 ###########
@@ -109,6 +111,22 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 # include_directories(include)
+include_directories(SYSTEM ${catkin_INCLUDE_DIRS})
+
+include_directories(include)
+link_directories(${catkin_LIBRARY_DIRS})
+
+## Declare a C++ library
+add_library(${PROJECT_NAME}
+  src/navgoal.cpp
+  src/laptopBatteryMonitor.cpp
+)
+target_link_libraries(
+	${PROJECT_NAME}
+	${catkin_LIBRARIES}
+)
+add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} 
+                                 ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ library
 # add_library(cobot_navigation
@@ -119,6 +137,11 @@ catkin_package(
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
 # add_dependencies(cobot_navigation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+
+add_executable(orderNode src/nodes/orderNode.cpp)
+target_link_libraries(orderNode ${catkin_LIBRARIES} ${PROJECT_NAME})
+
 
 ## Declare a C++ executable
 # add_executable(cobot_navigation_node src/cobot_navigation_node.cpp)
@@ -131,6 +154,8 @@ catkin_package(
 # target_link_libraries(cobot_navigation_node
 #   ${catkin_LIBRARIES}
 # )
+
+
 
 #############
 ## Install ##
