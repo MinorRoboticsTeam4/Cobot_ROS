@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<robot name="cobot_base"  xmlns:xacro="http://ros.org/wiki/xacro">
+
+
+<!-- Combined macro's -->
+  <xacro:macro name="cobot_base">
+ 
+    <xacro:base_platform />
+    <xacro:powered_wheel parent_link="base_link" side="left" mirror="1" />
+    <xacro:powered_wheel parent_link="base_link" side="right" mirror="-1" />
+    <xacro:caster_wheel parent_link="base_link" side="left" mirror="1" />
+    <xacro:caster_wheel parent_link="base_link" side="right" mirror="-1" />
+
+  </xacro:macro>
+
+
+  <xacro:include filename="$(find cobot_description)/urdf/constants.urdf.xacro" />
+
+  <xacro:property name="platform_length" value="0.57" />
+  <xacro:property name="platform_width" value="0.46" />
+  <xacro:property name="platform_height" value="0.09" />
+
+  <xacro:property name="center_wheel_axis_to_front_platform_distance" value="0.1" />
+
+  <xacro:property name="powered_wheel_diameter" value="0.3" />
+  <xacro:property name="powered_wheel_thickness" value="0.05" />
+  <xacro:property name="powered_wheel_spacing" value="0.015" />
+
+  <xacro:property name="caster_wheel_diameter" value="0.175" />
+  <xacro:property name="caster_wheel_thickness" value="0.04" />
+ 
+    <xacro:macro name="powered_wheel" params="parent_link side mirror">
+      <link name="powered_${side}_wheel_link">
+        <visual>
+          <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+          <geometry>
+            <cylinder radius="${powered_wheel_diameter/2.0}" length="${powered_wheel_thickness}"/>
+          </geometry>
+          <material name="blue" />
+        </visual>
+      </link>
+    <xacro:powered_wheel_joint parent_link="${parent_link}" side="${side}" mirror="${mirror}" />
+    </xacro:macro>
+
+    <xacro:macro name="powered_wheel_joint" params="parent_link side mirror">
+      <joint name="powered_${side}_wheel_joint" type="fixed">
+        <parent link="${parent_link}"/>
+        <child link="powered_${side}_wheel_link"/>
+        <origin xyz="0 ${(platform_width/2.0)*mirror+powered_wheel_spacing} 0" rpy="0 0 0"/>
+      </joint>
+    </xacro:macro>
+
+    <xacro:macro name="caster_wheel" params="parent_link side mirror">
+      <link name="caster_${side}_wheel_link">
+        <visual>
+          <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+          <geometry>
+            <cylinder radius="${caster_wheel_diameter/2.0}" length="${caster_wheel_thickness}"/>
+          </geometry>
+          <material name="blue" />
+        </visual>
+      </link>
+    <xacro:caster_wheel_joint parent_link="${parent_link}" side="${side}" mirror="${mirror}" />
+    </xacro:macro>
+
+    <xacro:macro name="caster_wheel_joint" params="parent_link side mirror">
+      <joint name="caster_${side}_wheel_joint" type="fixed">
+        <parent link="${parent_link}"/>
+        <child link="caster_${side}_wheel_link"/>
+        <origin xyz="${-platform_length+center_wheel_axis_to_front_platform_distance} ${(platform_width/2.0)*mirror} -${(powered_wheel_diameter/2.0)-(caster_wheel_diameter/2.0)}" rpy="0 0 0"/>
+      </joint>
+    </xacro:macro>
+
+  <xacro:macro name="base_platform">
+
+    <!-- Maybe not needed ?? 
+    footprint lies on the ground 
+    <link name="base_footprint">
+      <visual>
+      <origin xyz="0 -0.2 0" rpy="0 0 0" />
+        <geometry>
+          <box size="${platform_width + powered_wheel_thickness*2} ${platform_length + powered_wheel_diameter/4.0 + caster_wheel_diameter/4.0} 0.001" />
+        </geometry>
+          <material name="black" />
+      </visual>
+    </link>
+  -->
+    <link name="base_link">
+      <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size=".02 ${platform_width} 0.01" />
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="platform_link">
+      <visual>
+      <origin xyz="${platform_length/2.0} ${platform_width/2.0} -${platform_height/2.0}" rpy="0 0 0" />
+        <geometry>
+          <box size="${platform_length} ${platform_width} ${platform_height}" />
+        </geometry>
+          <material name="light_grey" />
+      </visual>
+    </link>
+<!--
+    <joint name="base_joint" type="fixed">
+      <parent link="base_footprint" />  
+      <child link="base_link" />
+      <origin xyz="0 0 0.15" rpy="0 0 0" />
+    </joint>
+-->
+    <joint name="platform_joint" type="fixed">
+      <parent link="base_link" />  
+      <child link="platform_link" />
+      <origin xyz="${-platform_length+center_wheel_axis_to_front_platform_distance} -${platform_width/2.0} ${platform_height/2.0}" rpy="0 0 0" />
+    </joint>
+
+  </xacro:macro>
+
+</robot>

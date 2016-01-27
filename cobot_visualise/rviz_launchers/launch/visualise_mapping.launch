@@ -1,0 +1,7 @@
+<!--
+  Launch file for visualising map building 
+-->
+
+<launch>
+  <node pkg="rviz" name="rviz" type="rviz" args="-d $(find cobot_visualise)/rviz_launchers/rviz/mapping.rviz"/>
+</launch>

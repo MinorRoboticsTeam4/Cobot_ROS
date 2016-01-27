@@ -1,0 +1,28 @@
+<!--
+    This launch file will launch the environment for getting gamepad 
+    information from the system. It also launched the Node that translates
+    joy->twist and launches the turtlesim environment if needed
+-->
+
+
+<launch>
+ 
+ <arg name="enable_turtlesim"  default="false"/>
+ <arg name="pub_topic"         default="/cmd_vel"/>
+
+ <!-- Include Turtlesim if needed -->
+ <include if="$(arg enable_turtlesim)" file="$(find cobot_teleop)/launch/include/turtlesim.launch.xml"/>
+
+ <!-- Gamepad Joy Node -->
+  <node respawn="true" pkg="joy" name="gamepad" type="joy_node">
+   <rosparam file="$(find cobot_teleop)/info/gamepad.yaml"  command="load" />
+  </node>
+
+ <!-- Gamepad Node -->  
+  <node pkg="cobot_teleop" name="gamepad_controller" type="gamepad_controller" output="screen">
+   <rosparam file="$(find cobot_teleop)/info/gamepad.yaml"  command="load" />
+   <rosparam file="$(find cobot_teleop)/info/teleop.yaml"   command="load" />
+   <remap    from="/gamepad_controller/cmd_vel"             to="$(arg pub_topic)"/>
+  </node>
+
+</launch>

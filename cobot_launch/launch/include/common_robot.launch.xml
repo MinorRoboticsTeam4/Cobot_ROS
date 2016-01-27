@@ -1,0 +1,22 @@
+<!--
+  Launch file that includes "generic" definitions and nodes
+  for cobot(and other configurations).
+-->
+<launch>
+  <arg name="base"/>
+  <arg name="type"/>
+
+  <arg name="robot_state_pub_freq"    default="5.0"/>  
+
+  <!-- URDF file-->  
+  <include file="$(find cobot_launch)/launch/include/description.launch.xml">
+    <arg name="base"    value="$(arg base)" />
+    <arg name="type"    value="$(arg type)" />
+  </include>
+
+  <!--Create TF out of URDF file -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="$(arg robot_state_pub_freq)"/>
+  </node>
+
+</launch>

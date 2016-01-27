@@ -1,0 +1,24 @@
+<!-- Bringup of the turtles base
+      This base is constructed by using the 
+      turtlesim environment
+-->
+
+<launch>
+  <arg name="serial_port"/>
+  <arg name="sub_topic"/>
+
+  <!-- Base controller including the motor controller -->
+  <node pkg="cobot_movement" type="turtle_platform" name="turtle_platform" respawn="true" output="screen">
+      <param name="serial_port"                         value="$(arg serial_port)"/>
+      <remap from="/turtle_platform/cmd_vel"            to="$(arg sub_topic)" />
+  </node>
+
+
+
+
+
+</launch>
+
+
+
+

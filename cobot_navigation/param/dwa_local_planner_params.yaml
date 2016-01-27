@@ -1,0 +1,55 @@
+DWAPlannerROS:
+
+#Robot Configuration Parameters
+  min_vel_x:          0.0     #The minimum x velocity for the robot [m/s].
+  max_vel_x:          0.5     #The maximum x velocity for the robot [m/s].
+
+  acc_limi_x:         1.0     #The x acceleration limit of the robot [meters/sec^2] 
+  acc_lim_y:          0.0     #The y acceleration limit of the robot [meters/sec^2] 
+
+  min_vel_y:          0.0     #The minimum y velocity for the robot [m/s], 0 because robot cannot move in that direction. 
+  max_vel_y:          0.0     #The maximum y velocity for the robot [m/s], 0 because robot cannot move in that direction. 
+
+  min_trans_vel:      0.1     #The absolute value of the minimum translational velocity for the robot [m/s], >0 for error margin 
+  max_trans_vel:      0.45    #The absolute value of the maximum translational velocity for the robot [m/s]   
+
+  min_rot_vel:        0.4     #The absolute value of the minimum rotational velocity for the robot [rad/s], >0 for error margin 
+  max_rot_vel:        3.4     #The absolute value of the minimum rotational velocity for the robot [rad/s], (using max_vel / wheel_radius)
+
+
+#Goal Tolerance Parameters
+  yaw_goal_tolerance: 0.3     #The tolerance in radians for the controller in yaw/rotation when achieving its goal 
+  xy_goal_tolerance:  0.15    #The tolerance in meters for the controller in the x & y distance when achieving a goal 
+
+
+#Forward Simulation Parameters
+  sim_time:           1.7     #The amount of time to forward-simulate trajectories in seconds 
+  vx_samples:         5       #The number of samples to use when exploring the x velocity space 
+  vy_samples:         1       #The number of samples to use when exploring the y velocity space, (robot has only one sample) 
+  vtheta_samples:     20      #The number of samples to use when exploring the theta velocity space 
+
+
+# Trajectory Scoring Parameters
+  path_distance_bias:       32.0  #The weighting for how much the controller should stay close to the path it was given
+  goal_distance_bias:       24.0  #The weighting for how much the controller should attempt to reach its local goal, also controls speed 
+  occdist_scale:            0.5   #The weighting for how much the controller should attempt to avoid obstacles 
+  forward_point_distance:   0.325 #The distance from the center point of the robot to place an additional scoring point,[m]
+  stop_time_buffer:         0.2   #The amount of time that the robot must stop before a collision in order for a trajectory to be valid [s] 
+  scaling_speed:            0.25  #The absolute value of the veolicty at which to start scaling the robot's footprint, [m/s]
+  max_scaling_factor:       0.2   #The maximum factor to scale the robot's footprint by 
+
+
+# Oscillation Prevention Parameters
+  oscillation_reset_dist:  0.05  #How far the robot must travel in meters before oscillation flags are reset 
+
+# Debugging
+  #These three are needed for visualisation the local planner
+  #in e.g. rviz
+  publish_traj_pc : true        #Publish trajectory path        
+  publish_cost_grid_pc: true    #Publish costmap grid
+  global_frame_id: odom         #Frame id to attach odometry data on
+
+
+  holonomic_robot:       false #See https://en.wikipedia.org/wiki/Holonomic_%28robotics%29
+
+

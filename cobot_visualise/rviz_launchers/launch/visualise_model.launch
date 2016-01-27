@@ -1,0 +1,31 @@
+<!--
+  Launcher file for visualising urdf models.
+-->
+
+<launch>
+  <arg name="base"        default="threemxl"/>  
+  <arg name="type"        default="navigation" />
+  <arg name="urdf_model"  default=""/>
+  <arg name="full_robot"  default="false"/>
+
+  <arg name="robot_state_pub_freq"    default="5.0"/> 
+  
+  <include if="$(arg full_robot)" file="$(find cobot_launch)/launch/include/common_robot.launch.xml">
+    <arg name="base" value="$(arg base)" />
+    <arg name="type" value="$(arg type)" />
+  </include>
+
+  <arg unless="$(arg full_robot)" name="urdf_file" default="$(find xacro)/xacro.py '$(arg urdf_model)'"/>
+  <param unless="$(arg full_robot)" name="robot_description" command="$(arg urdf_file)" />
+  
+  <node unless="$(arg full_robot)" pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="$(arg robot_state_pub_freq)"/>
+  </node>
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="false"/>
+  </node>
+  
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find cobot_visualise)/rviz_launchers/rviz/model.rviz" />
+
+</launch>

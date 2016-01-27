@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+
+<robot name="kinect" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find cobot_description)/urdf/constants.urdf.xacro" />
+
+  <xacro:property name="camera_length" value="0.275" />
+  <xacro:property name="camera_width" value="0.05" />
+  <xacro:property name="camera_height" value="0.055" />
+
+  <xacro:property name="camera_diameter_lens" value="0.018" />
+
+  <xacro:property name="camera_name"        value="kinect" />
+
+
+<xacro:macro name="kinect" params="parent_link parent_x parent_y parent_z parent_ox parent_oy parent_oz">
+
+  <link name="${camera_name}_rgb_frame">
+     <visual>
+     <origin xyz="0.15 0 0" rpy="${parent_ox} ${parent_oy + pi/2} ${parent_oz}" />
+      <geometry>
+        <cylinder radius="${camera_diameter_lens/2.0}" length="0.3" />
+      </geometry>
+     <material name="black"/>
+    </visual> 
+  </link>
+  
+  <link name="${camera_name}_rgb_optical_frame">
+     <visual>
+     <origin xyz="0.15 0 0" rpy="${parent_ox} ${parent_oy + pi/2} ${parent_oz}" />
+      <geometry>
+        <cylinder radius="${camera_diameter_lens/4.0}" length="0.3" />
+      </geometry>
+     <material name="white"/>
+    </visual> 
+  </link> 
+
+
+  <link name="${camera_name}_link">
+   <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+     <geometry>
+       <box size="${camera_width} ${camera_length} ${camera_height}" />
+     </geometry>
+    <material name="green" />
+   </visual>
+  </link>
+
+	<link name="${camera_name}_depth_frame">
+   <visual>
+     <origin xyz="0.15 0 0" rpy="${parent_ox} ${parent_oy + pi/2.0} ${parent_oz}" />
+      <geometry>
+        <cylinder radius="${camera_diameter_lens/2.0}" length="0.3" />
+      </geometry>
+     <material name="black"/>
+    </visual> 
+  </link>
+
+	<link name="${camera_name}_depth_optical_frame">
+   <visual>
+     <origin xyz="0.15 0 0" rpy="${parent_ox} ${parent_oy + pi/2.0} ${parent_oz}" />
+      <geometry>
+        <cylinder radius="${camera_diameter_lens/4.0}" length="0.3" />
+      </geometry>
+     <material name="red"/>
+    </visual>
+  </link>
+
+
+  <joint name="${camera_name}_rgb_joint" type="fixed">
+    <origin xyz="${parent_x} ${parent_y} ${parent_z}" rpy="${parent_ox} ${parent_oy} ${parent_oz}" />
+    <parent link="${parent_link}" />
+    <child link="${camera_name}_rgb_frame" />
+  </joint>
+
+   <joint name="${camera_name}_rgb_optical_joint" type="fixed">
+     <origin xyz="0 0 0" rpy="0 0 0" />
+     <parent link="${camera_name}_rgb_frame" />
+     <child link="${camera_name}_rgb_optical_frame" />
+   </joint>
+
+
+   <joint name="${camera_name}_joint" type="fixed">
+     <origin xyz="0 0.0125 0" rpy="0 0 0"/>
+     <parent link="${camera_name}_rgb_frame"/>
+     <child link="${camera_name}_link"/>
+   </joint> 
+
+	<joint name="${camera_name}_depth_joint" type="fixed">
+	  <origin xyz="0 0.027 0" rpy="0 0 0" />
+	  <parent link="${camera_name}_rgb_frame" />
+	  <child link="${camera_name}_depth_frame" />
+	</joint>
+
+	<joint name="${camera_name}_depth_optical_joint" type="fixed">
+	  <origin xyz="0 0 0" rpy="0 0 0" />
+	  <parent link="${camera_name}_depth_frame" />
+	  <child link="${camera_name}_depth_optical_frame" />
+	</joint>
+
+
+</xacro:macro>
+
+</robot>

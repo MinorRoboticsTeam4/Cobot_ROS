@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+
+<robot name="cobot_body" xmlns:xacro="http://ros.org/wiki/xacro">
+
+
+  <xacro:macro name="cobot_body" params="parent_link" > 
+
+    <xacro:body />
+    <xacro:frame_top parent_link="body_link" side="left" mirror="1"/>
+    <xacro:frame_top parent_link="body_link" side="right" mirror="0"/>
+
+  </xacro:macro>
+
+
+  <xacro:include filename="$(find cobot_description)/urdf/constants.urdf.xacro" />
+
+  <xacro:property name="frame_top_length" value="0.245" />
+  <xacro:property name="frame_top_diameter" value="0.012" />
+
+  <!-- taken from mesh file -->
+  <xacro:property name="body_height" value="0.74" />
+  <xacro:property name="body_width" value="0.46" />
+
+  <xacro:macro name="frame_top" params="parent_link side mirror">
+    <link name="frame_${side}_top_link">
+     <visual>
+     <origin xyz="0 0 ${frame_top_length/2.0}" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="${frame_top_diameter/2.0}" length="${frame_top_length}" />
+      </geometry>
+      <material name="white" />
+    </visual>     
+    </link>
+
+    <joint name="frame_${side}_top_joint" type="fixed">
+      <parent link="${parent_link}" />  
+      <child link="frame_${side}_top_link" />
+      <origin xyz="0 ${body_width*mirror} ${body_height}" rpy="0 0 0" />
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="body" param="parent_link">
+   <link name="body_link">
+      <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+       <geometry>
+         <mesh filename="package://cobot_description/meshes/dae/body.dae" />
+       </geometry>
+     </visual> 
+   </link>
+
+   <joint name="body_joint" type="fixed">
+      <parent link="${parent_link}" />  
+      <child link="body_link" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+  </xacro:macro> 
+
+</robot>

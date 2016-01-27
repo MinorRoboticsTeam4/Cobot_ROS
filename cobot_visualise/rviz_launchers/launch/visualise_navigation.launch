@@ -1,0 +1,7 @@
+<!--
+  Launch file for visualising navigation
+-->
+
+<launch>
+  <node pkg="rviz" name="rviz" type="rviz" args="-d $(find cobot_visualise)/rviz_launchers/rviz/navigation.rviz"/>
+</launch>
