@@ -18,7 +18,7 @@ public:
 	Laptop_Battery_Monitor();
 	~Laptop_Battery_Monitor();
 
-	bool isCharging();
+	bool isConnectedToMains();
 	int getCurrentCapacity();
 
 private:

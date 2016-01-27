@@ -23,7 +23,7 @@ Laptop_Battery_Monitor::~Laptop_Battery_Monitor() {
 
 }
 
-bool Laptop_Battery_Monitor::isCharging()
+bool Laptop_Battery_Monitor::isConnectedToMains()
 {
    std::ifstream myfile;
    myfile.open(batt_status_path.c_str());
@@ -36,7 +36,7 @@ bool Laptop_Battery_Monitor::isCharging()
       myfile.close();
     }
 
-   if(batStatus == "Charging")
+   if(batStatus == "Charging" || batStatus == "Full")
    {
 	   return true;
    }

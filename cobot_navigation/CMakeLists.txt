@@ -46,6 +46,7 @@ find_package(catkin REQUIRED COMPONENTS tf roscpp sensor_msgs)
    DIRECTORY msg
    FILES
    ArduinoOrder.msg
+   ArduinoOrderStatus.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -120,6 +121,7 @@ link_directories(${catkin_LIBRARY_DIRS})
 add_library(${PROJECT_NAME}
   src/navgoal.cpp
   src/laptopBatteryMonitor.cpp
+  src/orderController.cpp
 )
 target_link_libraries(
 	${PROJECT_NAME}
@@ -141,6 +143,9 @@ add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS}
 
 add_executable(orderNode src/nodes/orderNode.cpp)
 target_link_libraries(orderNode ${catkin_LIBRARIES} ${PROJECT_NAME})
+
+add_executable(testPub src/testPub.cpp)
+target_link_libraries(testPub ${catkin_LIBRARIES} ${PROJECT_NAME})
 
 
 ## Declare a C++ executable

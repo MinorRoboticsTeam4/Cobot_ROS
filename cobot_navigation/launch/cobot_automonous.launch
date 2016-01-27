@@ -27,7 +27,8 @@
   <arg name="map_file"                default="$(find cobot_navigation)/maps/map.yaml"/> 
   <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
 -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find cobot_navigation)/maps/my_map.yaml"/>
+  <arg name="map_file"                default="$(find cobot_navigation)/maps/my_map.yaml"/> 
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"/>
 
 
   <!-- ### AMCL ###-->

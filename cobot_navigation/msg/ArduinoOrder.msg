@@ -1,7 +1,9 @@
 Header header
 
-int64[] containerType
-int64[] nfcID
-int64[] coffeeTypes
+int32 orderId
 
+int32 orderAmount
 
+int32[8] coffeeTypes
+int32[8] nfcID
+bool[8] isMug
