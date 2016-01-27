@@ -76,8 +76,10 @@ Then run the following:
     roslaunch cobot_launch cobot.launch
 ```
 
+mapname is the name of the map to use.
+
 ```shell
-    roslaunch cobot_navigation cobot_automonous.launch
+    roslaunch cobot_navigation cobot_automonous.launch map_file:=<mapname>
 ```
 
 
