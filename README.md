@@ -13,7 +13,7 @@ See the  [Starting Guide for development](https://github.com/MinorRoboticsTeam4/
 In order to move cobot, you need to run the following commands:
 
 ```shell
-  roslaunch cobot_launch cobot.launch
+  roslaunch cobot_launch cobot.launch type:='manual'
 ```
 
 To move Cobot with a gamepad, run:
@@ -36,7 +36,7 @@ For creating the map, first place the Kinect in the lower compartment of cobot.
 Then execute the following commands for startup the mapping:
  
 ```shell
-    roslaunch cobot_launch cobot.launch
+    roslaunch cobot_launch cobot.launch type:='mapping'
 ```
 
 ```shell
@@ -66,14 +66,15 @@ This will the map in the current directory. Move these files to the directory "c
   mv my_map.yaml <location of cobot_navigation/maps>
 ```
 
-### Creating list of navigation locations
+### Navigation and Ordering coffee
 
+#### Creating list of navigation locations
 For creating the map, first attach the Kinect to the table.
 
 Then run the following:
 
 ```shell
-    roslaunch cobot_launch cobot.launch
+    roslaunch cobot_launch cobot.launch type:='navigation'
 ```
 
 mapname is the name of the map to use.
@@ -81,6 +82,43 @@ mapname is the name of the map to use.
 ```shell
     roslaunch cobot_navigation cobot_automonous.launch map_file:=<mapname>
 ```
+
+Start the following for visualising and interacting with navigation, run:
+
+```shell
+  roslaunch cobot_visualise visualise_navigation.launch
+```
+
+In this screen, select "2d pose estimate" and drag an arrow from the current cobot position to the orientation it faces.
+
+If you want to add a navigation goal, run first:
+
+```shell
+  rostopic echo /move_base_simple/goal
+```
+
+This will output the location and orientation of the given goal.
+You can create a new navigation goal by selecting "2d nav goal" and drag an arrow on the position to travel to. 
+The direction is the orientation of cobot.
+
+#### Running the connection between the application and cobot
+
+The navigation goals that are made above must be added to the cobot server.
+
+After that, run the following:
+
+```shell
+  roslaunch cobot_api_client cobot_serverConnection.launch 
+```
+
+This starts the connection between the application and cobot.
+
+#### Order a coffee
+
+Open up the application and you can order a coffee.
+
+
+
 
 
 

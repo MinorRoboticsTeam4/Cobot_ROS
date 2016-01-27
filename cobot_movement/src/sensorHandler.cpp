@@ -89,7 +89,15 @@ void SensorHandler::arduinoRead(SensorReadings::ConstPtr readings)
   arduinoReadings.cups = readings->cups;
   arduinoReadings.consumptions = readings->consumptions;
 
-  std::vector<double> ultrasoon_readings = readings->ultrasoonReadings;
+  //TODO MOVE
+  int numOfUltrasoons = 5;
+
+  std::vector<double> ultrasoon_readings;
+  for(int i=0;i<numOfUltrasoons;i++)
+  {
+	  ultrasoon_readings.push_back(readings->ultrasoonReadings.at(i));
+  }
+
 
   //Convert and publish ultrasoon readings to Range messages
   pub_range1.publish(convertToRangeMsg(ultrasoon_readings[0],readings->header.stamp));

@@ -57,4 +57,6 @@ turtlesim
 urdf
 urdf_parser_plugin
 xacro
-xmlrpcpp
+xmlrpcp
+yocs_cmd_vel_mux
+yocs_velocity_smoother

@@ -9,6 +9,6 @@ uint16 capacity
 int32 cups
 int32 consumptions
 
-float64[] ultrasoonReadings
+float64[5] ultrasoonReadings
 
-bool[] switches
+bool[2] switches
